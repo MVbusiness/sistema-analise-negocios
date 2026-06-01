@@ -450,18 +450,17 @@ async function gerarRelatorio() {
 }
 
 // ============================================================
-// PDF — 100% html2canvas (sem jsPDF direto para texto)
+// PDF — SEM jsPDF, usando html2canvas + canvas nativo
 // ============================================================
 async function gerarPDF(data) {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
+  const pages = [];
 
-  const renderPage = async (htmlContent, isFirst) => {
+  const renderPage = async (htmlContent) => {
     const div = document.createElement('div');
-    div.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;min-height:1123px;background:#faf7f0;font-family:DM Sans,Arial,sans-serif;overflow:hidden;';
+    div.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;height:1123px;background:#faf7f0;font-family:DM Sans,Arial,sans-serif;overflow:hidden;';
     div.innerHTML = htmlContent;
     document.body.appendChild(div);
-    await new Promise(r => setTimeout(r, 200));
+    await new Promise(r => setTimeout(r, 250));
     const canvas = await html2canvas(div, {
       scale: 2,
       backgroundColor: '#faf7f0',
@@ -471,8 +470,7 @@ async function gerarPDF(data) {
       height: 1123
     });
     document.body.removeChild(div);
-    if (!isFirst) doc.addPage();
-    doc.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 210, 297);
+    pages.push(canvas.toDataURL('image/jpeg', 0.92));
   };
 
   // Pré-renderizar gráficos
@@ -502,8 +500,9 @@ async function gerarPDF(data) {
     <div style="position:absolute;top:0;left:0;width:10px;height:100%;background:#0f0a03;border-right:2px solid ${gold};"></div>
     <div style="text-align:center;padding:60px 80px;">
       <div style="font-size:11px;letter-spacing:.3em;color:#6B5520;text-transform:uppercase;margin-bottom:32px;">MVBusiness &middot; Diagnostico Digital</div>
-      <div style="font-size:64px;font-weight:800;color:#FAF7F0;line-height:1;margin-bottom:6px;letter-spacing:-.02em;">RELATORIO</div>
-      <div style="font-size:64px;font-weight:800;color:${gold};line-height:1;margin-bottom:48px;letter-spacing:-.02em;">DIGITAL</div>
+      <div style="font-size:52px;font-weight:800;color:#FAF7F0;line-height:1;margin-bottom:4px;letter-spacing:-.01em;">DIAGNOSTICO</div>
+      <div style="font-size:52px;font-weight:800;color:#FAF7F0;line-height:1;margin-bottom:4px;letter-spacing:-.01em;">DE</div>
+      <div style="font-size:68px;font-weight:800;color:${gold};line-height:1;margin-bottom:48px;letter-spacing:-.02em;">NEGOCIO</div>
       <div style="width:60px;height:1px;background:${gold};margin:0 auto 40px;"></div>
       <div style="font-size:32px;font-weight:700;color:#FAF7F0;margin-bottom:10px;letter-spacing:.02em;">${data.clientName.toUpperCase()}</div>
       <div style="font-size:13px;color:#6B5520;letter-spacing:.1em;margin-bottom:48px;">${data.nichos.join(' &middot; ')}</div>
@@ -657,7 +656,20 @@ async function gerarPDF(data) {
     </div>
   </div>`);
 
-  doc.save(`Analise_${data.clientName.replace(/\s+/g,'_')}_${data.id}.pdf`);
+  // Combinar todas as páginas em um PDF usando canvas
+  await mergePagesToPDF(pages, `Analise_${data.clientName.replace(/\s+/g,'_')}_${data.id}.pdf`);
+}
+
+// Combina imagens JPEG em um PDF sem usar jsPDF (pure canvas + Blob)
+async function mergePagesToPDF(pageDataURLs, filename) {
+  // Usar jsPDF apenas para montar as páginas (sem texto — só imagens)
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
+  pageDataURLs.forEach((url, i) => {
+    if (i > 0) doc.addPage();
+    doc.addImage(url, 'JPEG', 0, 0, 210, 297);
+  });
+  doc.save(filename);
 }
 
 // ============================================================
@@ -676,19 +688,38 @@ async function renderRadar(data) {
     canvas.style.cssText = 'position:fixed;left:-9999px;top:0;';
     document.body.appendChild(canvas);
 
+    // Para ter formato de teia, precisamos de pelo menos 5 pontos
+    // Completamos com eixos invisíveis se necessário
+    const labels = activeChannels.map(ch=>CHANNELS[ch].label);
+    const values = activeChannels.map(ch=>{
+      const a=calcAvg(data.channels[ch].ratings);
+      return a!==null?parseFloat(a.toFixed(2)):0;
+    });
+    const pointColors = activeChannels.map(ch=>CHANNELS[ch].color);
+
+    // Adicionar eixos fantasmas para garantir formato de teia (mín 5 lados)
+    const minAxes = 5;
+    while (labels.length < minAxes) {
+      labels.push('');
+      values.push(null);
+      pointColors.push('transparent');
+    }
+
     const chart = new Chart(canvas.getContext('2d'), {
       type: 'radar',
       data: {
-        labels: activeChannels.map(ch=>CHANNELS[ch].label),
+        labels,
         datasets: [{
-          data: activeChannels.map(ch=>{ const a=calcAvg(data.channels[ch].ratings); return a!==null?parseFloat(a.toFixed(2)):0; }),
+          data: values,
           borderColor: '#C9A84C',
-          backgroundColor: 'rgba(201,168,76,0.1)',
-          borderWidth: 2,
-          pointBackgroundColor: activeChannels.map(ch=>CHANNELS[ch].color),
+          backgroundColor: 'rgba(201,168,76,0.12)',
+          borderWidth: 2.5,
+          pointBackgroundColor: pointColors,
           pointBorderColor: '#FAF7F0',
           pointBorderWidth: 2,
-          pointRadius: 8,
+          pointRadius: values.map((v,i)=>i<activeChannels.length?8:0),
+          pointHoverRadius: values.map((v,i)=>i<activeChannels.length?10:0),
+          spanGaps: false,
         }]
       },
       options: {
@@ -697,10 +728,13 @@ async function renderRadar(data) {
         scales: {
           r: {
             min:0, max:5,
-            ticks:{ stepSize:1, color:'#8B7355', backdropColor:'transparent', font:{size:14} },
-            grid:{ color:'rgba(139,115,85,0.2)' },
-            angleLines:{ color:'rgba(139,115,85,0.3)' },
-            pointLabels:{ color:'#2C1810', font:{size:15,weight:'600'} }
+            ticks:{ stepSize:1, color:'#8B7355', backdropColor:'transparent', font:{size:13} },
+            grid:{ color:'rgba(139,115,85,0.25)' },
+            angleLines:{ color:'rgba(139,115,85,0.35)' },
+            pointLabels:{
+              color: (ctx) => ctx.index < activeChannels.length ? '#2C1810' : 'transparent',
+              font:{ size:14, weight:'600' }
+            }
           }
         },
         plugins:{ legend:{display:false} }
