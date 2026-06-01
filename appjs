@@ -1,0 +1,677 @@
+app.js// Configuração do Firebase (Gratuito - Spark Plan)
+// Você precisa criar uma conta em https://console.firebase.google.com/
+const firebaseConfig = {
+    apiKey: "SUA_API_KEY_AQUI",
+    authDomain: "seu-projeto.firebaseapp.com",
+    projectId: "seu-projeto",
+    storageBucket: "seu-projeto.appspot.com",
+    messagingSenderId: "seu-sender-id",
+    appId: "seu-app-id"
+};
+
+// Inicialize Firebase
+// Descomente quando configurar Firebase
+// firebase.initializeApp(firebaseConfig);
+// const db = firebase.firestore();
+
+// Variável para armazenar dados localmente (antes de conectar ao Firebase)
+let allBusinessData = JSON.parse(localStorage.getItem('businessData')) || [];
+
+// Função para mostrar mensagens
+function showMessage(text, type = 'success') {
+    const messageDiv = document.getElementById('message');
+    messageDiv.className = `message ${type}`;
+    messageDiv.textContent = text;
+    messageDiv.style.display = 'block';
+    
+    if (type === 'success') {
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+        }, 5000);
+    }
+}
+
+// Adicionar campo personalizado
+function addCustomField(platform) {
+    const container = document.getElementById(`customFields-${platform}`);
+    const fieldId = `custom-${platform}-${Date.now()}`;
+    
+    const html = `
+        <div class="custom-field">
+            <input type="text" placeholder="Nome do campo" class="field-name" value="">
+            <div class="rating-scale" style="flex: 1; margin-bottom: 0;">
+                <input type="radio" name="${fieldId}" value="0"> 0
+                <input type="radio" name="${fieldId}" value="1"> 1
+                <input type="radio" name="${fieldId}" value="2"> 2
+                <input type="radio" name="${fieldId}" value="3"> 3
+                <input type="radio" name="${fieldId}" value="4"> 4
+                <input type="radio" name="${fieldId}" value="5"> 5
+                <div class="rating-value">-</div>
+            </div>
+            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remover</button>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+    
+    // Adicionar listener para atualizar rating
+    const radioButtons = container.lastElementChild.querySelectorAll(`input[name="${fieldId}"]`);
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const ratingValue = e.target.parentElement.querySelector('.rating-value');
+            ratingValue.textContent = e.target.value;
+        });
+    });
+}
+
+// Atualizar valor de rating visualmente
+document.addEventListener('change', (e) => {
+    if (e.target.type === 'radio' && e.target.name.startsWith('site_') || 
+        e.target.name.startsWith('insta_') || 
+        e.target.name.startsWith('tiktok_')) {
+        
+        const fieldName = e.target.name;
+        const ratingValue = document.getElementById(`rating-${fieldName}`);
+        if (ratingValue) {
+            ratingValue.textContent = e.target.value;
+        }
+    }
+});
+
+// Mostrar/Ocultar campo de "Outro Nicho"
+document.getElementById('nicho-outros').addEventListener('change', (e) => {
+    document.getElementById('outroNichoContainer').classList.toggle('hidden', !e.target.checked);
+    if (e.target.checked) {
+        document.getElementById('outroNicho').focus();
+    }
+});
+
+// Processar envio do formulário
+document.getElementById('businessForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    try {
+        showMessage('Coletando dados...', 'success');
+        
+        // Coletar dados
+        const formData = collectFormData();
+        
+        // Validar dados obrigatórios
+        if (!validateForm(formData)) {
+            showMessage('Por favor, preencha todos os campos obrigatórios!', 'error');
+            return;
+        }
+        
+        // Mostrar loading
+        document.getElementById('loading').style.display = 'block';
+        
+        // Gerar resumo com IA (Gratuito com Hugging Face)
+        showMessage('Gerando análise com IA...');
+        formData.aiSummary = await generateAISummary(formData);
+        
+        // Calcular KPIs
+        formData.kpis = calculateKPIs(formData);
+        
+        // Salvar dados
+        formData.id = Date.now();
+        formData.date = new Date().toLocaleDateString('pt-BR');
+        allBusinessData.push(formData);
+        localStorage.setItem('businessData', JSON.stringify(allBusinessData));
+        
+        // Gerar PDF
+        await generatePDF(formData);
+        
+        // Salvar no Firebase se disponível
+        // await saveToDB(formData);
+        
+        document.getElementById('loading').style.display = 'none';
+        showMessage('✅ Relatório gerado com sucesso!', 'success');
+        
+        // Limpar formulário
+        document.getElementById('businessForm').reset();
+        document.getElementById('message').style.display = 'none';
+        
+    } catch (error) {
+        console.error('Erro:', error);
+        document.getElementById('loading').style.display = 'none';
+        showMessage(`Erro ao gerar relatório: ${error.message}`, 'error');
+    }
+});
+
+// Coletar dados do formulário
+function collectFormData() {
+    const nichos = Array.from(document.querySelectorAll('input[name="nicho"]:checked'))
+        .map(el => el.value);
+    
+    const outroNicho = nichos.includes('Outros') ? document.getElementById('outroNicho').value : '';
+    
+    const data = {
+        // Dados do Cliente
+        clientName: document.getElementById('clientName').value,
+        especialista: document.getElementById('especialista').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        revenue: parseFloat(document.getElementById('revenue').value),
+        goal: parseFloat(document.getElementById('goal').value),
+        
+        // Nicho
+        nichos: nichos,
+        outroNicho: outroNicho,
+        
+        // Objetivos
+        objetivo6m: document.getElementById('objetivo6m').value,
+        dificuldade: document.getElementById('dificuldade').value,
+        
+        // Análises
+        site: collectChannelData('site'),
+        instagram: collectChannelData('insta'),
+        tiktok: collectChannelData('tiktok'),
+        
+        // Orientações
+        orientacoes: document.getElementById('orientacoes').value
+    };
+    
+    return data;
+}
+
+// Coletar dados de um canal específico
+function collectChannelData(platform) {
+    const ratings = {};
+    
+    // Coletar ratings padrão
+    const radios = document.querySelectorAll(`input[name^="${platform}_"]`);
+    radios.forEach(radio => {
+        if (radio.checked) {
+            ratings[radio.name.replace(`${platform}_`, '')] = parseInt(radio.value);
+        }
+    });
+    
+    // Coletar campos personalizados
+    const customFields = document.getElementById(`customFields-${platform}`);
+    const customData = {};
+    
+    if (customFields) {
+        customFields.querySelectorAll('.custom-field').forEach(field => {
+            const fieldName = field.querySelector('.field-name')?.value || 
+                            field.parentElement.textContent.match(/Nome do campo[^:]*:\s*([^\n]*)/)?.[1];
+            const selectedRating = field.querySelector('input[type="radio"]:checked');
+            
+            if (fieldName && selectedRating) {
+                customData[fieldName] = parseInt(selectedRating.value);
+            }
+        });
+    }
+    
+    return { ...ratings, ...customData };
+}
+
+// Validar formulário
+function validateForm(data) {
+    return data.clientName && 
+           data.especialista && 
+           data.phone && 
+           data.email && 
+           data.revenue && 
+           data.goal && 
+           data.nichos.length > 0 &&
+           data.objetivo6m &&
+           data.dificuldade &&
+           data.orientacoes;
+}
+
+// Gerar resumo com IA (Hugging Face - 100% Gratuito)
+async function generateAISummary(formData) {
+    try {
+        const prompt = `
+Gere um breve diagnóstico executivo (máximo 200 palavras) para este negócio:
+
+Cliente: ${formData.clientName}
+Nicho: ${formData.nichos.join(', ')}
+Faturamento atual: R$ ${formData.revenue.toLocaleString('pt-BR')}
+Meta mensal: R$ ${formData.goal.toLocaleString('pt-BR')}
+
+Objetivo (6 meses): ${formData.objetivo6m}
+Dificuldade principal: ${formData.dificuldade}
+
+Avaliações:
+- Site: ${JSON.stringify(formData.site)}
+- Instagram: ${JSON.stringify(formData.instagram)}
+- TikTok: ${JSON.stringify(formData.tiktok)}
+
+Forneça uma análise concisa e objetiva com recomendações práticas.
+        `;
+
+        // Usando Hugging Face Inference API (GRATUITO)
+        const response = await fetch('https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer hf_kJzXxXxxXxXxXxXxXxXxXxXxXxXxXxXx', // SUBSTITUIR por seu token gratuito
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                inputs: prompt,
+                parameters: {
+                    max_new_tokens: 200,
+                    temperature: 0.7,
+                }
+            })
+        });
+
+        if (!response.ok) {
+            // Se falhar, retornar resumo genérico
+            return `
+Diagnóstico do Negócio de ${formData.clientName}:
+
+O negócio no segmento de ${formData.nichos.join(', ')} apresenta desafios relacionados a: ${formData.dificuldade}
+
+Recomendações principais:
+1. Melhorar os canais com avaliação mais baixa
+2. Focar na diversificação de tráfego
+3. Implementar estratégias de retenção de clientes
+4. Otimizar descrições de produtos e proposta de valor
+
+Potencial de crescimento: ELEVADO com as ações corretas.
+            `;
+        }
+
+        const result = await response.json();
+        return result[0]?.generated_text || generateFallbackSummary(formData);
+        
+    } catch (error) {
+        console.error('Erro na IA:', error);
+        return generateFallbackSummary(formData);
+    }
+}
+
+// Resumo fallback quando IA falha
+function generateFallbackSummary(formData) {
+    const avgRating = calculateAverageRating(formData);
+    const status = avgRating >= 4 ? 'EXCELENTE' : avgRating >= 3 ? 'BOM' : avgRating >= 2 ? 'REGULAR' : 'CRÍTICO';
+    
+    return `
+DIAGNÓSTICO EXECUTIVO
+
+Negócio: ${formData.clientName}
+Nicho: ${formData.nichos.join(', ')}
+
+STATUS GERAL: ${status} (Nota média: ${avgRating.toFixed(1)}/5)
+
+Desafio Principal: ${formData.dificuldade}
+Objetivo: ${formData.objetivo6m}
+
+RECOMENDAÇÕES:
+${formData.site && Object.values(formData.site).some(v => v < 2) ? '• Urgente: Melhorar presença no site\n' : ''}
+${formData.instagram && Object.values(formData.instagram).some(v => v < 2) ? '• Urgente: Fortalecer estratégia no Instagram\n' : ''}
+${formData.tiktok && Object.values(formData.tiktok).some(v => v < 2) ? '• Urgente: Otimizar presença no TikTok\n' : ''}
+
+Potencial de crescimento: ELEVADO
+
+Próximos passos conforme orientações do especialista.
+    `.trim();
+}
+
+// Calcular nota média
+function calculateAverageRating(data) {
+    const allRatings = [
+        ...Object.values(data.site || {}),
+        ...Object.values(data.instagram || {}),
+        ...Object.values(data.tiktok || {})
+    ].filter(v => typeof v === 'number');
+    
+    if (allRatings.length === 0) return 0;
+    return allRatings.reduce((a, b) => a + b) / allRatings.length;
+}
+
+// Calcular KPIs
+function calculateKPIs(data) {
+    const kpis = [];
+    const avgRating = calculateAverageRating(data);
+    const gapPercentual = ((data.goal - data.revenue) / data.revenue) * 100;
+    
+    // KPI 1: Crescimento necessário
+    kpis.push({
+        title: 'CRESCIMENTO NECESSÁRIO',
+        value: `${gapPercentual.toFixed(1)}%`,
+        urgency: gapPercentual > 100 ? 'CRÍTICO' : gapPercentual > 50 ? 'ALTO' : 'MÉDIO',
+        description: `Precisa crescer de R$ ${data.revenue.toLocaleString('pt-BR')} para R$ ${data.goal.toLocaleString('pt-BR')}`
+    });
+    
+    // KPI 2: Saúde Digital
+    kpis.push({
+        title: 'SAÚDE DIGITAL',
+        value: `${(avgRating * 20).toFixed(0)}%`,
+        urgency: avgRating >= 4 ? 'BAIXO' : avgRating >= 3 ? 'MÉDIO' : 'ALTO',
+        description: `Nota média: ${avgRating.toFixed(1)}/5 - ${avgRating >= 4 ? 'Excelente presença online' : avgRating >= 3 ? 'Presença consolidada' : 'Necessário melhorias urgentes'}`
+    });
+    
+    // KPI 3: Canal mais fraco
+    const channels = {
+        'Site': calculateChannelAverage(data.site),
+        'Instagram': calculateChannelAverage(data.instagram),
+        'TikTok': calculateChannelAverage(data.tiktok)
+    };
+    
+    const weakestChannel = Object.entries(channels).sort((a, b) => a[1] - b[1])[0];
+    kpis.push({
+        title: 'CANAL COM MAIOR POTENCIAL',
+        value: weakestChannel[0],
+        urgency: weakestChannel[1] < 2 ? 'CRÍTICO' : weakestChannel[1] < 3 ? 'ALTO' : 'MÉDIO',
+        description: `${weakestChannel[0]} com nota ${weakestChannel[1].toFixed(1)}/5 - Melhorar este canal pode gerar impacto imediato`
+    });
+    
+    // KPI 4: Readiness
+    const readiness = data.site && data.instagram && data.tiktok ? 
+        (calculateChannelAverage(data.site) + calculateChannelAverage(data.instagram) + calculateChannelAverage(data.tiktok)) / 3 : 0;
+    
+    kpis.push({
+        title: 'READINESS PARA ESCALAR',
+        value: readiness >= 4 ? 'PRONTO' : readiness >= 3 ? 'PARCIAL' : 'NÃO PRONTO',
+        urgency: readiness < 3 ? 'CRÍTICO' : readiness < 4 ? 'MÉDIO' : 'BAIXO',
+        description: `Negócio ${readiness >= 4 ? 'está pronto para investimentos em marketing' : readiness >= 3 ? 'precisa de ajustes antes de escalar' : 'precisa de otimizações estruturais'}`
+    });
+    
+    return kpis;
+}
+
+// Calcular média de um canal
+function calculateChannelAverage(channelData) {
+    if (!channelData || Object.keys(channelData).length === 0) return 0;
+    const values = Object.values(channelData).filter(v => typeof v === 'number');
+    if (values.length === 0) return 0;
+    return values.reduce((a, b) => a + b) / values.length;
+}
+
+// Gerar PDF
+async function generatePDF(data) {
+    const element = document.createElement('div');
+    element.style.padding = '20px';
+    element.style.fontFamily = 'Arial, sans-serif';
+    
+    // Cabeçalho
+    element.innerHTML = `
+        <div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #667eea; padding-bottom: 20px;">
+            <h1 style="color: #667eea; margin: 0;">📊 RELATÓRIO DE ANÁLISE DE NEGÓCIO</h1>
+            <p style="color: #666; margin: 10px 0 0 0;">Diagnóstico Completo de Presença Digital</p>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="color: #333; margin-top: 0;">👤 INFORMAÇÕES DO CLIENTE</h2>
+            <table style="width: 100%; font-size: 11px;">
+                <tr>
+                    <td style="padding: 8px;"><strong>Cliente:</strong> ${data.clientName}</td>
+                    <td style="padding: 8px;"><strong>Especialista:</strong> ${data.especialista}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;"><strong>Email:</strong> ${data.email}</td>
+                    <td style="padding: 8px;"><strong>Telefone:</strong> ${data.phone}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;"><strong>Faturamento Atual:</strong> R$ ${data.revenue.toLocaleString('pt-BR')}</td>
+                    <td style="padding: 8px;"><strong>Meta Mensal:</strong> R$ ${data.goal.toLocaleString('pt-BR')}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 8px;"><strong>Nicho:</strong> ${data.nichos.join(', ')} ${data.outroNicho ? '(' + data.outroNicho + ')' : ''}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 8px;"><strong>Data:</strong> ${data.date}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="color: #333; margin-top: 0;">🎯 OBJETIVOS E DESAFIOS</h2>
+            <div style="font-size: 11px;">
+                <p><strong>Objetivo (6 meses):</strong></p>
+                <p style="margin: 0; padding: 10px; background: white; border-radius: 5px;">${data.objetivo6m}</p>
+                
+                <p style="margin-top: 15px;"><strong>Dificuldade Principal:</strong></p>
+                <p style="margin: 0; padding: 10px; background: white; border-radius: 5px;">${data.dificuldade}</p>
+            </div>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px; page-break-inside: avoid;">
+            <h2 style="color: #333; margin-top: 0;">🗺️ MAPA DE NEGÓCIO</h2>
+            <canvas id="radarChart" style="max-height: 300px;"></canvas>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="color: #333; margin-top: 0;">📋 ANÁLISE DETALHADA</h2>
+            
+            <h3 style="color: #667eea; margin-top: 15px;">🌐 Análise do Site</h3>
+            ${generateRatingsHTML(data.site)}
+            
+            <h3 style="color: #667eea; margin-top: 15px;">📷 Análise do Instagram</h3>
+            ${generateRatingsHTML(data.instagram)}
+            
+            <h3 style="color: #667eea; margin-top: 15px;">🎵 Análise do TikTok</h3>
+            ${generateRatingsHTML(data.tiktok)}
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="color: #333; margin-top: 0;">⚠️ KPIs E NÍVEL DE URGÊNCIA</h2>
+            ${data.kpis.map(kpi => `
+                <div style="margin-bottom: 15px; padding: 15px; background: white; border-left: 4px solid ${kpi.urgency === 'CRÍTICO' ? '#dc3545' : kpi.urgency === 'ALTO' ? '#fd7e14' : '#28a745'}; border-radius: 5px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <strong style="font-size: 12px; color: #333;">${kpi.title}</strong>
+                        <span style="background: ${kpi.urgency === 'CRÍTICO' ? '#dc3545' : kpi.urgency === 'ALTO' ? '#fd7e14' : '#28a745'}; color: white; padding: 4px 12px; border-radius: 3px; font-size: 10px; font-weight: bold;">${kpi.urgency}</span>
+                    </div>
+                    <p style="margin: 5px 0; font-size: 14px; font-weight: bold; color: #667eea;">${kpi.value}</p>
+                    <p style="margin: 0; font-size: 10px; color: #666;">${kpi.description}</p>
+                </div>
+            `).join('')}
+        </div>
+
+        <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="color: #1976d2; margin-top: 0;">🤖 DIAGNÓSTICO PELA IA</h2>
+            <div style="font-size: 10px; line-height: 1.6; color: #333; white-space: pre-wrap;">${data.aiSummary}</div>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+            <h2 style="color: #333; margin-top: 0;">💡 ORIENTAÇÕES DO ESPECIALISTA</h2>
+            <div style="font-size: 11px; line-height: 1.6; white-space: pre-wrap; padding: 15px; background: white; border-radius: 5px; border-left: 4px solid #667eea;">${data.orientacoes}</div>
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #ddd; text-align: center; font-size: 9px; color: #999;">
+            <p style="margin: 0;">Relatório gerado em: ${new Date().toLocaleString('pt-BR')}</p>
+            <p style="margin: 5px 0 0 0;">Sistema de Análise de Negócios</p>
+        </div>
+    `;
+    
+    document.body.appendChild(element);
+    
+    // Aguardar um pouco para o gráfico ser renderizado
+    setTimeout(() => {
+        // Criar gráfico radar
+        createRadarChart(data, () => {
+            // Gerar PDF
+            html2pdf().set({
+                margin: 10,
+                filename: `Analise_${data.clientName.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+            }).save().then(() => {
+                document.body.removeChild(element);
+            });
+        });
+    }, 100);
+}
+
+// Gerar HTML das avaliações
+function generateRatingsHTML(ratings) {
+    if (!ratings || Object.keys(ratings).length === 0) {
+        return '<p style="font-size: 10px; color: #999;">Nenhuma avaliação realizada</p>';
+    }
+    
+    return Object.entries(ratings).map(([key, value]) => {
+        const barWidth = (value / 5) * 100;
+        return `
+            <div style="margin: 10px 0; font-size: 10px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                    <span>${key}</span>
+                    <span style="font-weight: bold; color: #667eea;">${value}/5</span>
+                </div>
+                <div style="background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div style="background: linear-gradient(to right, #667eea, #764ba2); height: 100%; width: ${barWidth}%; border-radius: 4px;"></div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Criar gráfico radar
+function createRadarChart(data, callback) {
+    const labels = [];
+    const dataPoints = [];
+    
+    // Site
+    if (data.site) {
+        Object.entries(data.site).forEach(([key, value]) => {
+            labels.push(`Site: ${key}`);
+            dataPoints.push(value);
+        });
+    }
+    
+    // Instagram
+    if (data.instagram) {
+        Object.entries(data.instagram).forEach(([key, value]) => {
+            labels.push(`IG: ${key}`);
+            dataPoints.push(value);
+        });
+    }
+    
+    // TikTok
+    if (data.tiktok) {
+        Object.entries(data.tiktok).forEach(([key, value]) => {
+            labels.push(`TK: ${key}`);
+            dataPoints.push(value);
+        });
+    }
+    
+    const canvas = document.getElementById('radarChart');
+    if (!canvas) {
+        callback();
+        return;
+    }
+    
+    const ctx = canvas.getContext('2d');
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Avaliação do Negócio',
+                data: dataPoints,
+                borderColor: '#667eea',
+                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                pointBackgroundColor: '#667eea',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 5,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        font: { size: 10 }
+                    }
+                }
+            }
+        },
+        plugins: [{
+            afterDatasetsDraw: function() {
+                callback();
+            }
+        }]
+    });
+}
+
+// Salvar no Firebase (opcional - descomente quando configurar)
+async function saveToDB(data) {
+    try {
+        // await db.collection('businesses').add({
+        //     ...data,
+        //     timestamp: new Date()
+        // });
+        console.log('Dados salvos com sucesso!');
+    } catch (error) {
+        console.error('Erro ao salvar no banco:', error);
+    }
+}
+
+// Exportar leads para CSV
+function exportLeadsToCSV() {
+    if (allBusinessData.length === 0) {
+        alert('Nenhum registro para exportar!');
+        return;
+    }
+    
+    const headers = ['Data', 'Cliente', 'Especialista', 'Email', 'Telefone', 'Faturamento', 'Meta', 'Nicho'];
+    const rows = allBusinessData.map(item => [
+        item.date,
+        item.clientName,
+        item.especialista,
+        item.email,
+        item.phone,
+        `R$ ${item.revenue.toLocaleString('pt-BR')}`,
+        `R$ ${item.goal.toLocaleString('pt-BR')}`,
+        item.nichos.join('; ')
+    ]);
+    
+    let csv = headers.join(',') + '\n';
+    rows.forEach(row => {
+        csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `Leads_${new Date().getTime()}.csv`);
+    link.click();
+}
+
+// Mostrar leads salvos
+function showSavedLeads() {
+    if (allBusinessData.length === 0) {
+        alert('Nenhum registro salvo!');
+        return;
+    }
+    
+    let html = '<h3>Leads Salvos</h3><table border="1" cellpadding="10"><tr><th>Data</th><th>Cliente</th><th>Especialista</th><th>Nicho</th><th>Meta</th></tr>';
+    
+    allBusinessData.forEach(item => {
+        html += `<tr>
+            <td>${item.date}</td>
+            <td>${item.clientName}</td>
+            <td>${item.especialista}</td>
+            <td>${item.nichos.join(', ')}</td>
+            <td>R$ ${item.goal.toLocaleString('pt-BR')}</td>
+        </tr>`;
+    });
+    
+    html += '</table>';
+    
+    const modal = window.open('', 'Leads', 'width=800,height=600');
+    modal.document.write(html);
+    modal.document.close();
+}
+
+console.log('App carregado! Pronto para usar.');
