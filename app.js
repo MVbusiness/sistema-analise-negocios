@@ -81,7 +81,6 @@ const CHANNELS = {
 const state = {
   ratings: { site:{}, insta:{}, tiktok:{}, whatsapp:{} },
   disabled: { site:false, insta:false, tiktok:false, whatsapp:false },
-  logoDataURL: null,
 };
 
 // Init
@@ -92,27 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ?.addEventListener('change', function() {
       document.getElementById('outroNichoBox').style.display = this.checked ? 'block' : 'none';
     });
-  setupLogoUpload();
 });
 
-// ============================================================
-// LOGO UPLOAD
-// ============================================================
-function setupLogoUpload() {
-  const logoInput = document.getElementById('logoUpload');
-  if (!logoInput) return;
-  logoInput.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      state.logoDataURL = ev.target.result;
-      const preview = document.getElementById('logoPreview');
-      if (preview) {
-        preview.src = ev.target.result;
-        preview.style.display = 'block';
-        document.getElementById('logoPlaceholder').style.display = 'none';
-      }
     };
     reader.readAsDataURL(file);
   });
@@ -218,9 +198,7 @@ function collectData() {
     objetivo6m: document.getElementById('objetivo6m').value.trim(),
     dificuldade: document.getElementById('dificuldade').value.trim(),
     orientacoes: document.getElementById('orientacoes').value.trim(),
-    logoDataURL: state.logoDataURL,
-    nomeEmpresa: document.getElementById('nomeEmpresa')?.value?.trim() || '',
-    corPrimaria: document.getElementById('corPrimaria')?.value || '#C9A84C',
+
     channels: {}
   };
   Object.keys(CHANNELS).forEach(ch => {
@@ -690,13 +668,6 @@ function drawCapa(doc, data, W) {
   doc.setFillColor(201, 168, 76);
   doc.rect(8, 0, 1.5, 297, 'F');
 
-  // Logo da empresa (se tiver)
-  if (data.logoDataURL) {
-    try {
-      doc.addImage(data.logoDataURL, 22, 30, 50, 25, '', 'FAST');
-    } catch(e) { console.warn('Erro ao inserir logo:', e); }
-  }
-
   // Texto decorativo topo
   doc.setFont('helvetica','normal');
   doc.setFontSize(7);
@@ -1087,10 +1058,5 @@ function limparForm() {
     document.getElementById(`customFields-${ch}`).innerHTML='';
     buildChannel(ch);
   });
-  state.logoDataURL = null;
-  const preview = document.getElementById('logoPreview');
-  if (preview) { preview.style.display='none'; }
-  const ph = document.getElementById('logoPlaceholder');
-  if (ph) ph.style.display='block';
   window.scrollTo(0,0);
 }
