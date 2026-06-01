@@ -1,16 +1,14 @@
 // ============================================================
-// CONFIGURAÇÃO DOS CAMPOS DE ANÁLISE POR CANAL
+// CONFIGURAÇÃO DOS CANAIS
 // ============================================================
 const CHANNELS = {
   site: {
-    label: 'Site / Loja Virtual',
-    icon: '🌐',
-    color: '#00d4ff',
+    label: 'Site / Loja Virtual', icon: '🌐', color: '#00c9ff',
     potencia: 'Potência do Site',
     fields: [
       'Design e UX (experiência do usuário)',
       'Proposta de valor clara',
-      'Qualidade das imagens / vídeos de produto',
+      'Qualidade das imagens de produto',
       'Uso de vídeos na exibição de produto',
       'Descrição de produtos completa e atrativa',
       'Formas de pagamento disponíveis',
@@ -25,13 +23,11 @@ const CHANNELS = {
       'Página "Quem Somos" estruturada',
       'Política de troca e devolução',
       'Banners atualizados com CTA',
-      'Planejamento de ações / campanhas construídas',
+      'Planejamento de ações e campanhas',
     ]
   },
   insta: {
-    label: 'Instagram',
-    icon: '📷',
-    color: '#ff6b6b',
+    label: 'Instagram', icon: '📷', color: '#ff6b9d',
     potencia: 'Potência do Instagram',
     fields: [
       'Identidade visual consistente',
@@ -49,9 +45,7 @@ const CHANNELS = {
     ]
   },
   tiktok: {
-    label: 'TikTok / TikTok Shop',
-    icon: '🎵',
-    color: '#a8ff78',
+    label: 'TikTok / TikTok Shop', icon: '🎵', color: '#a8ff78',
     potencia: 'Potência do TikTok',
     fields: [
       'Consistência e frequência de vídeos',
@@ -59,196 +53,132 @@ const CHANNELS = {
       'Uso de tendências relevantes',
       'Qualidade de produção dos vídeos',
       'Loja criada no TikTok Shop',
-      'Quantidade de produtos cadastrados no TikTok Shop',
+      'Quantidade de produtos cadastrados',
       'Uso de afiliados e quantidade',
-      'Prática de Live na plataforma',
+      'Prática de Lives na plataforma',
       'Cadastro em promoções da plataforma',
       'Integração de produtos (catálogo)',
-      'Engajamento (comentários, duetos, compartilhamentos)',
+      'Engajamento (comentários, duetos)',
     ]
   },
   whatsapp: {
-    label: 'WhatsApp',
-    icon: '💬',
-    color: '#25d366',
+    label: 'WhatsApp', icon: '💬', color: '#25d366',
     potencia: 'Potência do WhatsApp',
     fields: [
       'Captação e criação de grupos de clientes',
       'Estratégias de ofertas exclusivas no canal',
-      'Engajamento e relacionamento com leads captados',
+      'Engajamento e relacionamento com leads',
       'Uso de mensagens com API oficial',
       'Volume de ofertas criadas no canal',
-      'Uso de catálogo de produtos no WhatsApp',
+      'Uso de catálogo de produtos',
       'Frequência de broadcasts / disparos',
       'Automação de mensagens (chatbot)',
     ]
   }
 };
 
-// ============================================================
-// ESTADO GLOBAL
-// ============================================================
+// Estado global
 const state = {
-  ratings: { site: {}, insta: {}, tiktok: {}, whatsapp: {} },
-  disabled: { site: false, insta: false, tiktok: false, whatsapp: false },
-  customFields: { site: [], insta: [], tiktok: [], whatsapp: [] },
+  ratings: { site:{}, insta:{}, tiktok:{}, whatsapp:{} },
+  disabled: { site:false, insta:false, tiktok:false, whatsapp:false },
 };
 
-// ============================================================
-// INICIALIZAÇÃO
-// ============================================================
+// Init
 document.addEventListener('DOMContentLoaded', () => {
   Object.keys(CHANNELS).forEach(ch => buildChannel(ch));
   loadLeads();
-
-  document.getElementById('nichoOutros').closest('.nicho-item')
-    .querySelector('input').addEventListener('change', function() {
+  document.querySelector('#nichoGrid input[value="Outros"]')
+    ?.addEventListener('change', function() {
       document.getElementById('outroNichoBox').style.display = this.checked ? 'block' : 'none';
     });
 });
 
 // ============================================================
-// CONSTRUIR CAMPOS DE RATING
+// CONSTRUIR RATINGS
 // ============================================================
 function buildChannel(ch) {
   const container = document.getElementById(`${ch}Ratings`);
-  const cfg = CHANNELS[ch];
   container.innerHTML = '';
-
-  cfg.fields.forEach((fieldName, i) => {
+  CHANNELS[ch].fields.forEach((fieldName, i) => {
     const key = `${ch}_${i}`;
     state.ratings[ch][key] = null;
-    container.appendChild(buildRatingBlock(ch, key, fieldName, cfg.color));
+    container.appendChild(buildRatingBlock(ch, key, fieldName));
   });
 }
 
-function buildRatingBlock(ch, key, label, color) {
+function buildRatingBlock(ch, key, label) {
+  const color = CHANNELS[ch].color;
   const div = document.createElement('div');
   div.className = 'rating-block';
   div.id = `block-${key}`;
-
-  const row = document.createElement('div');
-  row.className = 'rating-row';
-
-  const lbl = document.createElement('div');
-  lbl.className = 'rating-label';
-  lbl.textContent = label;
-
-  const stars = document.createElement('div');
-  stars.className = 'rating-stars';
-
-  for (let v = 0; v <= 5; v++) {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = `star-btn star-${v}`;
-    btn.textContent = v;
-    btn.dataset.val = v;
-    btn.onclick = () => setRating(ch, key, v, color);
-    stars.appendChild(btn);
-  }
-
-  const badge = document.createElement('div');
-  badge.className = 'rating-badge';
-  badge.id = `badge-${key}`;
-  badge.textContent = '—';
-
-  row.appendChild(lbl);
-  row.appendChild(stars);
-  row.appendChild(badge);
-  div.appendChild(row);
+  div.innerHTML = `
+    <div class="rating-row">
+      <div class="rating-label">${label}</div>
+      <div class="rating-stars" id="stars-${key}">
+        ${[0,1,2,3,4,5].map(v=>`<button type="button" class="star-btn star-${v}" data-val="${v}" onclick="setRating('${ch}','${key}',${v},'${color}')">${v}</button>`).join('')}
+      </div>
+      <div class="rating-badge" id="badge-${key}">—</div>
+    </div>`;
   return div;
 }
 
 function setRating(ch, key, val, color) {
   state.ratings[ch][key] = val;
-  const block = document.getElementById(`block-${key}`);
-  block.querySelectorAll('.star-btn').forEach(b => {
-    b.classList.remove('active');
-    if (parseInt(b.dataset.val) === val) b.classList.add('active');
+  document.querySelectorAll(`#stars-${key} .star-btn`).forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.val) === val);
   });
   const badge = document.getElementById(`badge-${key}`);
-  badge.textContent = val + '/5';
+  badge.textContent = `${val}/5`;
   badge.style.background = color + '22';
   badge.style.color = color;
 }
 
-// ============================================================
-// TOGGLE CANAL
-// ============================================================
 function toggleChannel(ch, disabled) {
   state.disabled[ch] = disabled;
-  const content = document.getElementById(`${ch}Content`);
-  content.classList.toggle('disabled', disabled);
+  document.getElementById(`${ch}Content`).classList.toggle('disabled', disabled);
 }
 
-// ============================================================
-// CAMPO PERSONALIZADO
-// ============================================================
 function addCustomField(ch) {
   const container = document.getElementById(`customFields-${ch}`);
   const id = `custom_${ch}_${Date.now()}`;
   const color = CHANNELS[ch].color;
-
   const div = document.createElement('div');
   div.className = 'custom-rating';
   div.id = id;
-
-  const inp = document.createElement('input');
-  inp.type = 'text';
-  inp.placeholder = 'Nome do campo personalizado';
-  inp.className = 'custom-name';
-
-  const stars = document.createElement('div');
-  stars.className = 'rating-stars';
-  for (let v = 0; v <= 5; v++) {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = `star-btn star-${v}`;
-    btn.textContent = v;
-    btn.dataset.val = v;
+  div.innerHTML = `
+    <input type="text" class="custom-name" placeholder="Nome do campo personalizado">
+    <div class="rating-stars">
+      ${[0,1,2,3,4,5].map(v=>`<button type="button" class="star-btn star-${v}" data-val="${v}">${v}</button>`).join('')}
+    </div>
+    <div class="rating-badge">—</div>
+    <button class="remove-btn" onclick="this.parentElement.remove()">x</button>`;
+  container.appendChild(div);
+  div.querySelectorAll('.star-btn').forEach(btn => {
     btn.onclick = () => {
       div.querySelectorAll('.star-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const badge = div.querySelector('.rating-badge');
-      badge.textContent = v + '/5';
+      badge.textContent = btn.dataset.val + '/5';
       badge.style.background = color + '22';
       badge.style.color = color;
     };
-    stars.appendChild(btn);
-  }
-
-  const badge = document.createElement('div');
-  badge.className = 'rating-badge';
-  badge.textContent = '—';
-
-  const rem = document.createElement('button');
-  rem.className = 'remove-btn';
-  rem.textContent = '✕';
-  rem.onclick = () => div.remove();
-
-  div.appendChild(inp);
-  div.appendChild(stars);
-  div.appendChild(badge);
-  div.appendChild(rem);
-  container.appendChild(div);
+  });
 }
 
 // ============================================================
 // TABS
 // ============================================================
 function showTab(tab) {
-  document.getElementById('tab-form').style.display = tab === 'form' ? 'block' : 'none';
-  document.getElementById('tab-leads').style.display = tab === 'leads' ? 'block' : 'none';
-  if (tab === 'leads') loadLeads();
+  document.getElementById('tab-form').style.display = tab==='form'?'block':'none';
+  document.getElementById('tab-leads').style.display = tab==='leads'?'block':'none';
+  if (tab==='leads') loadLeads();
 }
 
 // ============================================================
 // COLETAR DADOS
 // ============================================================
 function collectData() {
-  const nichos = [...document.querySelectorAll('input[name="nicho"]:checked')].map(el => el.value);
-  const outroNicho = nichos.includes('Outros') ? document.getElementById('outroNicho').value : '';
-
+  const nichos = [...document.querySelectorAll('input[name="nicho"]:checked')].map(el=>el.value);
   const data = {
     id: Date.now(),
     date: new Date().toLocaleDateString('pt-BR'),
@@ -256,626 +186,506 @@ function collectData() {
     especialista: document.getElementById('especialista').value.trim(),
     phone: document.getElementById('phone').value.trim(),
     email: document.getElementById('email').value.trim(),
-    revenue: parseFloat(document.getElementById('revenue').value) || 0,
-    goal: parseFloat(document.getElementById('goal').value) || 0,
-    nichos, outroNicho,
+    revenue: parseFloat(document.getElementById('revenue').value)||0,
+    goal: parseFloat(document.getElementById('goal').value)||0,
+    nichos,
+    outroNicho: nichos.includes('Outros') ? document.getElementById('outroNicho').value : '',
     objetivo6m: document.getElementById('objetivo6m').value.trim(),
     dificuldade: document.getElementById('dificuldade').value.trim(),
     orientacoes: document.getElementById('orientacoes').value.trim(),
     channels: {}
   };
-
-  // Coletar ratings por canal
   Object.keys(CHANNELS).forEach(ch => {
-    const cfg = CHANNELS[ch];
     const ratings = {};
-    const disabled = state.disabled[ch];
-
-    if (!disabled) {
-      // campos padrão
-      cfg.fields.forEach((fieldName, i) => {
-        const key = `${ch}_${i}`;
-        const val = state.ratings[ch][key];
-        if (val !== null && val !== undefined) ratings[fieldName] = val;
+    if (!state.disabled[ch]) {
+      CHANNELS[ch].fields.forEach((name,i) => {
+        const v = state.ratings[ch][`${ch}_${i}`];
+        if (v !== null && v !== undefined) ratings[name] = v;
       });
-
-      // campos personalizados
       document.querySelectorAll(`#customFields-${ch} .custom-rating`).forEach(div => {
         const name = div.querySelector('.custom-name')?.value?.trim();
         const active = div.querySelector('.star-btn.active');
         if (name && active) ratings[name] = parseInt(active.dataset.val);
       });
     }
-
-    data.channels[ch] = { disabled, ratings };
+    data.channels[ch] = { disabled: state.disabled[ch], ratings };
   });
-
   return data;
 }
 
-function validateData(data) {
-  if (!data.clientName) return 'Nome do cliente é obrigatório';
-  if (!data.especialista) return 'Nome do especialista é obrigatório';
-  if (!data.phone || data.phone === '+55') return 'Telefone é obrigatório';
-  if (!data.email) return 'Email é obrigatório';
-  if (!data.revenue) return 'Faturamento é obrigatório';
-  if (!data.goal) return 'Objetivo financeiro é obrigatório';
-  if (!data.nichos.length) return 'Selecione pelo menos um nicho';
-  if (!data.objetivo6m) return 'Objetivo de 6 meses é obrigatório';
-  if (!data.dificuldade) return 'Dificuldade principal é obrigatória';
-  if (!data.orientacoes) return 'Orientações do especialista são obrigatórias';
+function validateData(d) {
+  if (!d.clientName) return 'Nome do cliente é obrigatório';
+  if (!d.especialista) return 'Nome do especialista é obrigatório';
+  if (!d.phone || d.phone==='+55') return 'Telefone é obrigatório';
+  if (!d.email) return 'Email é obrigatório';
+  if (!d.revenue) return 'Faturamento é obrigatório';
+  if (!d.goal) return 'Objetivo financeiro é obrigatório';
+  if (!d.nichos.length) return 'Selecione pelo menos um nicho';
+  if (!d.objetivo6m) return 'Objetivo de 6 meses é obrigatório';
+  if (!d.dificuldade) return 'Dificuldade principal é obrigatória';
+  if (!d.orientacoes) return 'Orientacoes do especialista são obrigatórias';
   return null;
 }
 
 // ============================================================
-// CALCULAR KPIs
+// KPIs
 // ============================================================
 function calcAvg(obj) {
-  const vals = Object.values(obj).filter(v => typeof v === 'number');
-  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+  const vals = Object.values(obj).filter(v=>typeof v==='number');
+  return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
 }
 
 function calcKPIs(data) {
-  const gap = data.goal > 0 ? ((data.goal - data.revenue) / data.revenue) * 100 : 0;
+  const gap = data.goal>0 ? ((data.goal-data.revenue)/data.revenue)*100 : 0;
   const avgs = {};
-  let totalScores = [], totalCount = 0;
-
+  const scores = [];
   Object.keys(CHANNELS).forEach(ch => {
-    const ch_data = data.channels[ch];
-    if (!ch_data.disabled && Object.keys(ch_data.ratings).length > 0) {
-      const avg = calcAvg(ch_data.ratings);
-      avgs[ch] = avg;
-      if (avg !== null) { totalScores.push(avg); totalCount++; }
-    } else {
-      avgs[ch] = null;
-    }
+    const d = data.channels[ch];
+    if (!d.disabled && Object.keys(d.ratings).length) {
+      const a = calcAvg(d.ratings);
+      avgs[ch] = a;
+      if (a!==null) scores.push(a);
+    } else avgs[ch] = null;
   });
-
-  const globalAvg = totalScores.length ? totalScores.reduce((a, b) => a + b, 0) / totalScores.length : 0;
-  const saudeDigital = (globalAvg / 5) * 100;
-
-  // Canal mais fraco
-  let weakestCh = null, weakestVal = Infinity;
-  Object.entries(avgs).forEach(([ch, avg]) => {
-    if (avg !== null && avg < weakestVal) { weakestVal = avg; weakestCh = ch; }
-  });
-
+  const globalAvg = scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : 0;
+  const saude = (globalAvg/5)*100;
+  let weakCh=null, weakVal=Infinity;
+  Object.entries(avgs).forEach(([ch,a])=>{ if(a!==null && a<weakVal){weakVal=a;weakCh=ch;} });
   const readiness = globalAvg;
-
   return [
-    {
-      title: 'CRESCIMENTO NECESSÁRIO',
-      value: `${gap.toFixed(1)}%`,
-      urgency: gap > 100 ? 'critico' : gap > 50 ? 'alto' : 'medio',
-      desc: `De R$ ${data.revenue.toLocaleString('pt-BR')} → R$ ${data.goal.toLocaleString('pt-BR')} por mês`
-    },
-    {
-      title: 'SAÚDE DIGITAL',
-      value: `${saudeDigital.toFixed(0)}%`,
-      urgency: saudeDigital < 40 ? 'critico' : saudeDigital < 60 ? 'alto' : saudeDigital < 80 ? 'medio' : 'baixo',
-      desc: `Nota média geral: ${globalAvg.toFixed(1)}/5 em todos os canais avaliados`
-    },
-    {
-      title: 'CANAL COM MAIOR POTENCIAL',
-      value: weakestCh ? CHANNELS[weakestCh].label : 'N/A',
-      urgency: weakestVal < 2 ? 'critico' : weakestVal < 3 ? 'alto' : 'medio',
-      desc: weakestCh ? `${CHANNELS[weakestCh].label} com nota ${weakestVal.toFixed(1)}/5 — maior oportunidade de melhoria` : 'Todos os canais desativados'
-    },
-    {
-      title: 'READINESS PARA ESCALAR',
-      value: readiness < 2 ? 'NÃO PRONTO' : readiness < 3 ? 'PARCIAL' : readiness < 4 ? 'PRONTO' : 'EXCELENTE',
-      urgency: readiness < 2 ? 'critico' : readiness < 3 ? 'alto' : readiness < 4 ? 'medio' : 'baixo',
-      desc: readiness < 2 ? 'Negócio precisa de reestruturação antes de escalar investimentos' : readiness < 3 ? 'Pequenos ajustes e pode começar a escalar com cautela' : 'Negócio estruturado, escalar com confiança'
-    }
+    { title:'CRESCIMENTO NECESSARIO', value:`${gap.toFixed(1)}%`, urgency: gap>100?'critico':gap>50?'alto':'medio', desc:`De R$ ${data.revenue.toLocaleString('pt-BR')} para R$ ${data.goal.toLocaleString('pt-BR')} por mes` },
+    { title:'SAUDE DIGITAL', value:`${saude.toFixed(0)}%`, urgency: saude<40?'critico':saude<60?'alto':saude<80?'medio':'baixo', desc:`Nota media geral: ${globalAvg.toFixed(1)}/5 em todos os canais avaliados` },
+    { title:'CANAL COM MAIOR POTENCIAL', value: weakCh ? CHANNELS[weakCh].label : 'N/A', urgency: weakVal<2?'critico':weakVal<3?'alto':'medio', desc: weakCh ? `${CHANNELS[weakCh].label} com nota ${weakVal.toFixed(1)}/5 — maior oportunidade` : 'Todos os canais desativados' },
+    { title:'READINESS PARA ESCALAR', value: readiness<2?'NAO PRONTO':readiness<3?'PARCIAL':readiness<4?'PRONTO':'EXCELENTE', urgency: readiness<2?'critico':readiness<3?'alto':readiness<4?'medio':'baixo', desc: readiness<2?'Necessita reestruturacao antes de escalar':readiness<3?'Pequenos ajustes antes de escalar':'Estruturado — escalar com confianca' },
   ];
 }
 
 // ============================================================
-// GERAR RELATÓRIO
-// ============================================================
-async function gerarRelatorio() {
-  const data = collectData();
-  const err = validateData(data);
-  if (err) { showMsg(err, 'error'); return; }
-
-  document.getElementById('loadingOverlay').classList.add('show');
-
-  try {
-    data.kpis = calcKPIs(data);
-    data.aiSummary = gerarDiagnostico(data);
-
-    // Salvar no banco (localStorage)
-    salvarLead(data);
-
-    // Gerar PDF
-    await gerarPDF(data);
-
-    document.getElementById('loadingOverlay').classList.remove('show');
-    showMsg('✅ Relatório gerado e PDF baixado com sucesso!', 'success');
-    document.getElementById('tab-form').scrollTo(0,0);
-    window.scrollTo(0,0);
-  } catch (e) {
-    document.getElementById('loadingOverlay').classList.remove('show');
-    showMsg('Erro ao gerar relatório: ' + e.message, 'error');
-    console.error(e);
-  }
-}
-
-// ============================================================
-// DIAGNÓSTICO AUTOMÁTICO (sem API externa)
+// DIAGNÓSTICO
 // ============================================================
 function gerarDiagnostico(data) {
   const avgsText = Object.keys(CHANNELS).map(ch => {
     const d = data.channels[ch];
-    if (d.disabled) return null;
+    if (d.disabled || !Object.keys(d.ratings).length) return null;
     const avg = calcAvg(d.ratings);
-    if (avg === null) return null;
-    const status = avg >= 4 ? 'excelente' : avg >= 3 ? 'bom' : avg >= 2 ? 'regular' : 'crítico';
-    return `${CHANNELS[ch].label}: ${avg.toFixed(1)}/5 (${status})`;
+    if (avg===null) return null;
+    const s = avg>=4?'excelente':avg>=3?'bom':avg>=2?'regular':'critico';
+    return `${CHANNELS[ch].label}: ${avg.toFixed(1)}/5 (${s})`;
   }).filter(Boolean).join(' | ');
+  const gap = data.goal>0?((data.goal-data.revenue)/data.revenue*100).toFixed(0):0;
+  return `DIAGNOSTICO EXECUTIVO — ${data.clientName}
 
-  const gap = data.goal > 0 ? ((data.goal - data.revenue) / data.revenue * 100).toFixed(0) : 0;
-
-  return `DIAGNÓSTICO EXECUTIVO — ${data.clientName}
-
-Negócio no nicho de ${data.nichos.join(', ')} com faturamento atual de R$ ${data.revenue.toLocaleString('pt-BR')}/mês e meta de R$ ${data.goal.toLocaleString('pt-BR')}/mês (gap de ${gap}%).
+Negocio no nicho de ${data.nichos.join(', ')} com faturamento atual de R$ ${data.revenue.toLocaleString('pt-BR')}/mes e meta de R$ ${data.goal.toLocaleString('pt-BR')}/mes (gap de ${gap}%).
 
 CANAIS AVALIADOS
-${avgsText || 'Nenhum canal avaliado'}
+${avgsText||'Nenhum canal avaliado'}
 
-PRINCIPAL DESAFIO IDENTIFICADO
+PRINCIPAL DESAFIO
 ${data.dificuldade}
 
-OBJETIVO DECLARADO (6 MESES)
+OBJETIVO (6 MESES)
 ${data.objetivo6m}
 
-ANÁLISE DOS KPIs
-• Crescimento necessário: ${data.kpis[0].value} — Nível ${data.kpis[0].urgency.toUpperCase()}
-• Saúde digital: ${data.kpis[1].value} — Nível ${data.kpis[1].urgency.toUpperCase()}
-• Canal prioritário: ${data.kpis[2].value} — Nível ${data.kpis[2].urgency.toUpperCase()}
-• Readiness: ${data.kpis[3].value}
+ANALISE DOS KPIs
+${data.kpis.map(k=>`• ${k.title}: ${k.value} — ${k.urgency.toUpperCase()}`).join('\n')}
 
-RECOMENDAÇÃO
-Foque nos canais com menor pontuação para gerar o maior impacto no menor tempo. Com as otimizações corretas, o gap de ${gap}% é alcançável em 6 meses.`.trim();
+RECOMENDACAO
+Foque nos canais com menor pontuacao para gerar o maior impacto no menor tempo. Com as otimizacoes corretas, o gap de ${gap}% e alcancavel em 6 meses.`;
 }
 
 // ============================================================
-// SALVAR NO BANCO (localStorage — pode integrar Firebase depois)
+// BANCO DE DADOS
 // ============================================================
 function salvarLead(data) {
-  const leads = JSON.parse(localStorage.getItem('mvbusiness_leads') || '[]');
-  const idx = leads.findIndex(l => l.id === data.id);
-  if (idx >= 0) leads[idx] = data; else leads.push(data);
+  const leads = JSON.parse(localStorage.getItem('mvbusiness_leads')||'[]');
+  const idx = leads.findIndex(l=>l.id===data.id);
+  if(idx>=0) leads[idx]=data; else leads.push(data);
   localStorage.setItem('mvbusiness_leads', JSON.stringify(leads));
 }
-
-function getLeads() {
-  return JSON.parse(localStorage.getItem('mvbusiness_leads') || '[]');
-}
+function getLeads() { return JSON.parse(localStorage.getItem('mvbusiness_leads')||'[]'); }
 
 function loadLeads() {
   const leads = getLeads();
-  const tbody = document.getElementById('leadsBody');
-  if (!leads.length) {
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:40px;">Nenhum lead cadastrado ainda</td></tr>';
-    return;
-  }
-  tbody.innerHTML = leads.reverse().map(l => {
-    const avgs = Object.keys(CHANNELS).map(ch => {
-      const d = l.channels?.[ch];
-      if (!d || d.disabled || !Object.keys(d.ratings || {}).length) return null;
-      return calcAvg(d.ratings);
-    }).filter(v => v !== null);
-    const globalScore = avgs.length ? (avgs.reduce((a,b)=>a+b,0)/avgs.length).toFixed(1) : '—';
+  filteredLeadsCache = leads;
 
-    return `<tr>
-      <td>${l.date}</td>
-      <td><strong>${l.clientName}</strong></td>
-      <td>${l.especialista}</td>
-      <td>${l.phone}</td>
-      <td>${l.email}</td>
-      <td><span class="badge badge-info">${l.nichos?.[0] || '—'}</span></td>
-      <td>R$ ${(l.revenue||0).toLocaleString('pt-BR')}</td>
-      <td>R$ ${(l.goal||0).toLocaleString('pt-BR')}</td>
-      <td><strong>${globalScore}/5</strong></td>
-      <td><button class="btn btn-outline" style="padding:6px 14px;font-size:.8rem;" onclick="redownloadPDF(${l.id})">📄 PDF</button></td>
-    </tr>`;
-  }).join('');
+  // Popular select de especialistas
+  const sel = document.getElementById('filterEspecialista');
+  if (sel) {
+    const especialistas = [...new Set(leads.map(l=>l.especialista).filter(Boolean))].sort();
+    const currentVal = sel.value;
+    sel.innerHTML = '<option value="">Todos</option>' + especialistas.map(e=>`<option value="${e}">${e}</option>`).join('');
+    if (currentVal) sel.value = currentVal;
+  }
+
+  // Aplicar filtro atual (ou mostrar todos)
+  applyFilter();
 }
 
 function redownloadPDF(id) {
-  const leads = getLeads();
-  const lead = leads.find(l => l.id === id);
-  if (!lead) { alert('Lead não encontrado!'); return; }
-  lead.kpis = lead.kpis || calcKPIs(lead);
-  lead.aiSummary = lead.aiSummary || gerarDiagnostico(lead);
+  const lead = getLeads().find(l=>l.id===id);
+  if (!lead) { alert('Lead nao encontrado!'); return; }
+  lead.kpis = lead.kpis||calcKPIs(lead);
+  lead.aiSummary = lead.aiSummary||gerarDiagnostico(lead);
   document.getElementById('loadingOverlay').classList.add('show');
-  gerarPDF(lead).then(() => document.getElementById('loadingOverlay').classList.remove('show'));
+  gerarPDF(lead).then(()=>document.getElementById('loadingOverlay').classList.remove('show'));
 }
 
-// ============================================================
-// EXPORTAR CSV
-// ============================================================
 function exportCSV() {
   const leads = getLeads();
   if (!leads.length) { alert('Nenhum lead para exportar!'); return; }
-
   const headers = ['Data','Cliente','Especialista','Email','Telefone','Nicho','Faturamento','Meta','Score Site','Score Instagram','Score TikTok','Score WhatsApp'];
   const rows = leads.map(l => {
     const scores = Object.keys(CHANNELS).map(ch => {
       const d = l.channels?.[ch];
-      if (!d || d.disabled || !Object.keys(d.ratings||{}).length) return '—';
-      const avg = calcAvg(d.ratings);
-      return avg !== null ? avg.toFixed(1) : '—';
+      if(!d||d.disabled||!Object.keys(d.ratings||{}).length) return '—';
+      const a=calcAvg(d.ratings); return a!==null?a.toFixed(1):'—';
     });
-    return [
-      l.date, l.clientName, l.especialista, l.email, l.phone,
-      l.nichos?.join('; '), l.revenue, l.goal, ...scores
-    ];
+    return [l.date,l.clientName,l.especialista,l.email,l.phone,l.nichos?.join('; '),l.revenue,l.goal,...scores];
   });
-
-  const csv = [headers, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
-  const blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8'});
+  const csv = [headers,...rows].map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
+  a.href = URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));
   a.download = `MVBusiness_Leads_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.csv`;
   a.click();
 }
 
 // ============================================================
-// GERAR PDF COMPLETO COM CANVAS
+// GERAR RELATORIO
+// ============================================================
+async function gerarRelatorio() {
+  const data = collectData();
+  const err = validateData(data);
+  if (err) { showMsg(err,'error'); return; }
+  document.getElementById('loadingOverlay').classList.add('show');
+  try {
+    data.kpis = calcKPIs(data);
+    data.aiSummary = gerarDiagnostico(data);
+    salvarLead(data);
+    await gerarPDF(data);
+    document.getElementById('loadingOverlay').classList.remove('show');
+    showMsg('Relatorio gerado e PDF baixado com sucesso!','success');
+    window.scrollTo(0,0);
+  } catch(e) {
+    document.getElementById('loadingOverlay').classList.remove('show');
+    showMsg('Erro: '+e.message,'error');
+    console.error(e);
+  }
+}
+
+// ============================================================
+// PDF — renderiza HTML off-screen e captura com html2canvas
 // ============================================================
 async function gerarPDF(data) {
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const W = 210, M = 14;
-  let y = 0;
+  const doc = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
 
-  const addPage = () => { doc.addPage(); y = 20; };
-  const checkY = (needed = 20) => { if (y + needed > 280) addPage(); };
+  // Cria container invisível para renderizar cada página
+  const container = document.createElement('div');
+  container.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#0d0d0f;font-family:DM Sans,sans-serif;';
+  document.body.appendChild(container);
+
+  const addPageFromHTML = async (html, isFirst=false) => {
+    container.innerHTML = html;
+    await new Promise(r=>setTimeout(r,300));
+    const canvas = await html2canvas(container, {scale:2, backgroundColor:'#0d0d0f', logging:false, useCORS:true});
+    if (!isFirst) doc.addPage();
+    const imgData = canvas.toDataURL('image/jpeg',0.92);
+    doc.addImage(imgData,'JPEG',0,0,210,297);
+  };
 
   // ---- CAPA ----
-  doc.setFillColor(13, 13, 15);
-  doc.rect(0, 0, W, 297, 'F');
+  await addPageFromHTML(pageCapa(data), true);
 
-  // Gradiente simulado (retângulos)
-  for (let i = 0; i < 60; i++) {
-    const alpha = (60-i)/60;
-    doc.setFillColor(124, 92, 252);
-    doc.setGState(doc.GState({opacity: alpha * 0.3}));
-    doc.rect(0, i*3, W, 3, 'F');
-  }
-  doc.setGState(doc.GState({opacity: 1}));
+  // ---- DADOS + KPIs ----
+  await addPageFromHTML(pageDadosKPIs(data));
 
-  doc.setTextColor(240, 240, 245);
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(28);
-  doc.text('RELATÓRIO DE ANÁLISE', W/2, 70, {align:'center'});
-  doc.setFontSize(18);
-  doc.setTextColor(124, 92, 252);
-  doc.text('DE NEGÓCIO DIGITAL', W/2, 82, {align:'center'});
+  // ---- MAPA DE NEGOCIO (radar) ----
+  const radarHTML = await pageRadar(data);
+  await addPageFromHTML(radarHTML);
 
-  doc.setTextColor(200, 200, 220);
-  doc.setFontSize(13);
-  doc.text(data.clientName.toUpperCase(), W/2, 100, {align:'center'});
-
-  doc.setFontSize(9);
-  doc.setTextColor(120, 120, 140);
-  doc.text(`Especialista: ${data.especialista}  |  Data: ${data.date}`, W/2, 112, {align:'center'});
-
-  // Nicho pill
-  doc.setFillColor(124, 92, 252);
-  doc.setGState(doc.GState({opacity:0.2}));
-  doc.roundedRect(W/2-40, 120, 80, 12, 6, 6, 'F');
-  doc.setGState(doc.GState({opacity:1}));
-  doc.setTextColor(124, 92, 252);
-  doc.setFontSize(9);
-  doc.text(data.nichos.join(', '), W/2, 128, {align:'center'});
-
-  // Rodapé capa
-  doc.setTextColor(80, 80, 100);
-  doc.setFontSize(8);
-  doc.text('MVBusiness · Sistema de Análise de Negócios Digitais', W/2, 285, {align:'center'});
-
-  // ---- PÁGINA 2: DADOS + KPIs ----
-  doc.addPage();
-  y = 20;
-
-  const drawSectionTitle = (title, color=[124,92,252]) => {
-    checkY(14);
-    doc.setFillColor(...color);
-    doc.setGState(doc.GState({opacity:0.15}));
-    doc.roundedRect(M, y, W-M*2, 10, 3, 3, 'F');
-    doc.setGState(doc.GState({opacity:1}));
-    doc.setTextColor(...color);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(10);
-    doc.text(title, M+4, y+7);
-    y += 14;
-  };
-
-  const drawField = (label, value) => {
-    checkY(8);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(8);
-    doc.setTextColor(120,120,140);
-    doc.text(label.toUpperCase(), M, y);
-    doc.setFont('helvetica','normal');
-    doc.setTextColor(220,220,235);
-    doc.setFontSize(9);
-    doc.text(String(value), M+50, y);
-    y += 7;
-  };
-
-  drawSectionTitle('👤 DADOS DO CLIENTE');
-  drawField('Cliente', data.clientName);
-  drawField('Especialista', data.especialista);
-  drawField('Telefone', data.phone);
-  drawField('Email', data.email);
-  drawField('Faturamento atual', `R$ ${data.revenue.toLocaleString('pt-BR')}/mês`);
-  drawField('Meta mensal', `R$ ${data.goal.toLocaleString('pt-BR')}/mês`);
-  drawField('Nicho', data.nichos.join(', ') + (data.outroNicho ? ` (${data.outroNicho})` : ''));
-  y += 4;
-
-  drawSectionTitle('🎯 OBJETIVOS E DESAFIOS');
-  const wrapText = (text, maxW) => doc.splitTextToSize(text, maxW);
-  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(120,120,140);
-  doc.text('OBJETIVO 6 MESES', M, y); y+=5;
-  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(220,220,235);
-  const objLines = wrapText(data.objetivo6m, W-M*2);
-  objLines.forEach(l => { checkY(5); doc.text(l, M, y); y+=5; });
-  y+=3;
-  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(120,120,140);
-  doc.text('PRINCIPAL DIFICULDADE', M, y); y+=5;
-  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(220,220,235);
-  const difLines = wrapText(data.dificuldade, W-M*2);
-  difLines.forEach(l => { checkY(5); doc.text(l, M, y); y+=5; });
-  y += 6;
-
-  // ---- KPIs ----
-  drawSectionTitle('⚠️ KPIs E NÍVEL DE URGÊNCIA');
-  const urgColors = { critico:[255,71,87], alto:[255,165,2], medio:[241,196,15], baixo:[46,213,115] };
-
-  data.kpis.forEach(kpi => {
-    checkY(28);
-    const [r,g,b] = urgColors[kpi.urgency] || [124,92,252];
-    doc.setFillColor(r,g,b);
-    doc.setGState(doc.GState({opacity:.08}));
-    doc.roundedRect(M, y, W-M*2, 24, 4,4,'F');
-    doc.setGState(doc.GState({opacity:1}));
-    doc.setFillColor(r,g,b);
-    doc.roundedRect(M, y, 3, 24, 2,2,'F');
-
-    doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(r,g,b);
-    doc.text(kpi.urgency.toUpperCase(), M+6, y+6);
-
-    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(220,220,235);
-    doc.text(kpi.title, M+6, y+13);
-
-    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(r,g,b);
-    doc.text(kpi.value, W-M-2, y+10, {align:'right'});
-
-    doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(140,140,160);
-    doc.text(kpi.desc, M+6, y+20);
-
-    y += 28;
-  });
-
-  // ---- PÁGINA 3: GRÁFICO RADAR ----
-  await drawRadarPage(doc, data);
-
-  // ---- PÁGINAS: ANÁLISE POR CANAL (barras) ----
+  // ---- CANAIS (barras) ----
   for (const ch of Object.keys(CHANNELS)) {
-    const chData = data.channels[ch];
-    if (chData.disabled || !Object.keys(chData.ratings).length) continue;
-    await drawChannelPage(doc, ch, chData, data);
+    const d = data.channels[ch];
+    if (d.disabled || !Object.keys(d.ratings).length) continue;
+    const html = await pageCanal(ch, d, data);
+    await addPageFromHTML(html);
   }
 
-  // ---- PÁGINA: DIAGNÓSTICO + ORIENTAÇÕES ----
-  doc.addPage(); y = 20;
+  // ---- DIAGNOSTICO + ORIENTACOES ----
+  await addPageFromHTML(pageDiagnostico(data));
 
-  drawSectionTitle('🤖 DIAGNÓSTICO EXECUTIVO');
-  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(200,200,220);
-  const diagLines = wrapText(data.aiSummary, W-M*2);
-  diagLines.forEach(l => { checkY(5); doc.text(l, M, y); y+=5; });
-  y += 6;
-
-  checkY(20);
-  drawSectionTitle('💡 ORIENTAÇÕES DO ESPECIALISTA', [124,92,252]);
-  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(200,200,220);
-  const orLines = wrapText(data.orientacoes, W-M*2);
-  orLines.forEach(l => { checkY(5); doc.text(l, M, y); y+=5; });
-
-  // Rodapé todas as páginas
-  const totalPages = doc.getNumberOfPages();
-  for (let i=1; i<=totalPages; i++) {
-    doc.setPage(i);
-    if (i>1) {
-      doc.setFillColor(13,13,15);
-      doc.rect(0,285,W,12,'F');
-      doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(80,80,100);
-      doc.text(`MVBusiness · Análise de ${data.clientName} · ${data.date}`, M, 292);
-      doc.text(`Pág. ${i}/${totalPages}`, W-M, 292, {align:'right'});
-    }
-  }
-
-  doc.save(`Analise_${data.clientName.replace(/\s+/g,'_')}_${Date.now()}.pdf`);
+  document.body.removeChild(container);
+  doc.save(`Analise_${data.clientName.replace(/\s+/g,'_')}_${data.id}.pdf`);
 }
 
-// ---- RADAR ----
-async function drawRadarPage(doc, data) {
-  doc.addPage();
+// ============================================================
+// TEMPLATES HTML DAS PÁGINAS
+// ============================================================
 
-  // Criar canvas off-screen para o radar
+const baseStyle = `
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body,div{font-family:'DM Sans',Arial,sans-serif;color:#f0f0f5;background:#0d0d0f;}
+    .page{width:794px;min-height:1123px;background:#0d0d0f;overflow:hidden;position:relative;}
+  </style>`;
+
+function pageCapa(data) {
+  const nichoText = data.nichos.join(', ') + (data.outroNicho ? ` (${data.outroNicho})` : '');
+  return `${baseStyle}<div class="page" style="background:linear-gradient(160deg,#0d0d0f 0%,#1a1040 50%,#0d0d0f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#00c9ff,#7c5cfc,#ff6b9d,#a8ff78,#25d366);"></div>
+    <div style="text-align:center;padding:60px;">
+      <div style="font-size:11px;letter-spacing:.25em;color:#7c5cfc;text-transform:uppercase;margin-bottom:24px;">MVBusiness · Sistema de Analise</div>
+      <div style="font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:10px;">RELATORIO DE</div>
+      <div style="font-family:'Syne',sans-serif;font-size:52px;font-weight:800;background:linear-gradient(90deg,#00c9ff,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:40px;">ANALISE DIGITAL</div>
+      <div style="width:80px;height:2px;background:linear-gradient(90deg,#7c5cfc,#00c9ff);margin:0 auto 40px;"></div>
+      <div style="font-size:28px;font-weight:700;color:#fff;margin-bottom:8px;">${data.clientName.toUpperCase()}</div>
+      <div style="font-size:14px;color:#7c5cfc;margin-bottom:40px;">${nichoText}</div>
+      <div style="display:flex;gap:40px;justify-content:center;margin-bottom:60px;">
+        <div style="text-align:center;"><div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Especialista</div><div style="font-size:15px;color:#ccc;">${data.especialista}</div></div>
+        <div style="width:1px;background:#333;"></div>
+        <div style="text-align:center;"><div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Data</div><div style="font-size:15px;color:#ccc;">${data.date}</div></div>
+        <div style="width:1px;background:#333;"></div>
+        <div style="text-align:center;"><div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Faturamento</div><div style="font-size:15px;color:#ccc;">R$ ${data.revenue.toLocaleString('pt-BR')}</div></div>
+      </div>
+      <div style="border:1px solid #222;border-radius:16px;padding:24px 40px;display:inline-block;">
+        <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Meta Mensal</div>
+        <div style="font-size:32px;font-weight:800;color:#7c5cfc;">R$ ${data.goal.toLocaleString('pt-BR')}</div>
+      </div>
+    </div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#25d366,#a8ff78,#7c5cfc,#ff6b9d,#00c9ff);"></div>
+  </div>`;
+}
+
+function pageDadosKPIs(data) {
+  const urgBg = {critico:'rgba(255,71,87,.12)',alto:'rgba(255,165,2,.12)',medio:'rgba(241,196,15,.12)',baixo:'rgba(46,213,115,.12)'};
+  const urgClr = {critico:'#ff4757',alto:'#ffa502',medio:'#f1c40f',baixo:'#2ed573'};
+  return `${baseStyle}<div class="page" style="padding:60px 50px;">
+    <div style="font-size:9px;letter-spacing:.2em;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px;">MVBusiness · Relatorio de Analise</div>
+    <div style="height:1px;background:linear-gradient(90deg,#7c5cfc,transparent);margin-bottom:36px;"></div>
+
+    <div style="font-family:'Syne',sans-serif;font-size:11px;letter-spacing:.15em;color:#555;text-transform:uppercase;margin-bottom:16px;">Dados do Cliente</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px;">
+      ${[['CLIENTE',data.clientName],['ESPECIALISTA',data.especialista],['TELEFONE',data.phone],['EMAIL',data.email],['FATURAMENTO ATUAL','R$ '+data.revenue.toLocaleString('pt-BR')+'/mes'],['META MENSAL','R$ '+data.goal.toLocaleString('pt-BR')+'/mes'],['NICHO',data.nichos.join(', ')+(data.outroNicho?' ('+data.outroNicho+')':'')]].map(([k,v])=>`
+        <div style="background:#16161a;border:1px solid #1e1e24;border-radius:10px;padding:14px 18px;">
+          <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">${k}</div>
+          <div style="font-size:13px;color:#e0e0f0;">${v}</div>
+        </div>`).join('')}
+    </div>
+
+    <div style="font-family:'Syne',sans-serif;font-size:11px;letter-spacing:.15em;color:#555;text-transform:uppercase;margin-bottom:16px;">Objetivos e Desafios</div>
+    <div style="background:#16161a;border:1px solid #1e1e24;border-radius:10px;padding:18px;margin-bottom:10px;">
+      <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Objetivo 6 Meses</div>
+      <div style="font-size:12px;color:#c0c0d8;line-height:1.6;">${data.objetivo6m}</div>
+    </div>
+    <div style="background:#16161a;border:1px solid #1e1e24;border-radius:10px;padding:18px;margin-bottom:36px;">
+      <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Principal Dificuldade</div>
+      <div style="font-size:12px;color:#c0c0d8;line-height:1.6;">${data.dificuldade}</div>
+    </div>
+
+    <div style="font-family:'Syne',sans-serif;font-size:11px;letter-spacing:.15em;color:#555;text-transform:uppercase;margin-bottom:16px;">KPIs e Nivel de Urgencia</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      ${data.kpis.map(k=>`
+        <div style="background:${urgBg[k.urgency]};border:1px solid ${urgClr[k.urgency]}33;border-left:3px solid ${urgClr[k.urgency]};border-radius:10px;padding:18px;">
+          <div style="font-size:9px;color:${urgClr[k.urgency]};text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:6px;">${k.urgency.toUpperCase()}</div>
+          <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">${k.title}</div>
+          <div style="font-size:22px;font-weight:800;color:${urgClr[k.urgency]};margin-bottom:6px;">${k.value}</div>
+          <div style="font-size:10px;color:#666;line-height:1.5;">${k.desc}</div>
+        </div>`).join('')}
+    </div>
+    <div style="position:absolute;bottom:20px;right:50px;font-size:9px;color:#333;">${data.date} · ${data.clientName}</div>
+  </div>`;
+}
+
+async function pageRadar(data) {
+  // Criar canvas para o radar
   const canvas = document.createElement('canvas');
-  canvas.width = 600; canvas.height = 600;
-  canvas.style.position = 'absolute'; canvas.style.left = '-9999px';
+  canvas.width = 500; canvas.height = 500;
+  canvas.style.position = 'absolute';
+  canvas.style.left = '-9999px';
   document.body.appendChild(canvas);
 
-  const labels = [], datasets = [];
-
-  Object.keys(CHANNELS).forEach(ch => {
-    const chData = data.channels[ch];
-    if (chData.disabled || !Object.keys(chData.ratings).length) return;
-    const avg = calcAvg(chData.ratings);
-    labels.push(CHANNELS[ch].label);
-    datasets.push(avg ?? 0);
+  const activeChannels = Object.keys(CHANNELS).filter(ch => {
+    const d = data.channels[ch];
+    return !d.disabled && Object.keys(d.ratings).length > 0;
   });
 
-  if (labels.length) {
-    const ctx = canvas.getContext('2d');
-    new Chart(ctx, {
+  const labels = activeChannels.map(ch => CHANNELS[ch].label);
+  const values = activeChannels.map(ch => {
+    const avg = calcAvg(data.channels[ch].ratings);
+    return avg !== null ? parseFloat(avg.toFixed(2)) : 0;
+  });
+  const colors = activeChannels.map(ch => CHANNELS[ch].color);
+
+  let radarDataURL = '';
+  if (labels.length >= 2) {
+    const chart = new Chart(canvas.getContext('2d'), {
       type: 'radar',
       data: {
         labels,
         datasets: [{
-          label: 'Pontuação',
-          data: datasets,
+          data: values,
           borderColor: '#7c5cfc',
-          backgroundColor: 'rgba(124,92,252,0.2)',
-          borderWidth: 2,
-          pointBackgroundColor: labels.map((_, i) => {
-            const colors = ['#00d4ff','#ff6b6b','#a8ff78','#25d366'];
-            return colors[i] || '#7c5cfc';
-          }),
-          pointRadius: 6,
+          backgroundColor: 'rgba(124,92,252,0.15)',
+          borderWidth: 2.5,
+          pointBackgroundColor: colors,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 8,
         }]
       },
       options: {
         animation: false,
-        scales: { r: { min:0, max:5, ticks:{stepSize:1,color:'#888'}, grid:{color:'#333'}, angleLines:{color:'#333'}, pointLabels:{color:'#ccc',font:{size:14}} } },
+        scales: { r: { min:0, max:5, ticks:{stepSize:1,color:'#555',backdropColor:'transparent',font:{size:14}}, grid:{color:'#222'}, angleLines:{color:'#333'}, pointLabels:{color:'#aaa',font:{size:16,weight:'600'}} } },
         plugins: { legend:{display:false} }
       }
     });
-
-    await new Promise(r => setTimeout(r, 800));
-    const img = canvas.toDataURL('image/png');
-
-    doc.setFillColor(13,13,15); doc.rect(0,0,210,297,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(124,92,252);
-    doc.text('🗺️  MAPA DE NEGÓCIO', 105, 22, {align:'center'});
-    doc.setFontSize(8); doc.setTextColor(120,120,140);
-    doc.text('Visão geral da presença digital por canal', 105, 30, {align:'center'});
-    doc.addImage(img, 'PNG', 30, 38, 150, 150);
-
-    // Legenda cores
-    let lx = 14, ly = 198;
-    Object.keys(CHANNELS).forEach((ch, i) => {
-      const chData = data.channels[ch];
-      if (chData.disabled) return;
-      const colors = ['#00d4ff','#ff6b6b','#a8ff78','#25d366'];
-      const [r,g,b] = hexToRgb(colors[i] || '#7c5cfc');
-      doc.setFillColor(r,g,b); doc.circle(lx+3, ly-1, 2, 'F');
-      doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(180,180,200);
-      doc.text(CHANNELS[ch].label, lx+8, ly);
-      lx += 50; if (lx > 180) { lx=14; ly+=10; }
-    });
+    await new Promise(r=>setTimeout(r,500));
+    radarDataURL = canvas.toDataURL('image/png');
+    chart.destroy();
   }
   document.body.removeChild(canvas);
+
+  const legendItems = activeChannels.map(ch =>
+    `<div style="display:flex;align-items:center;gap:8px;"><div style="width:12px;height:12px;border-radius:50%;background:${CHANNELS[ch].color};"></div><span style="font-size:12px;color:#aaa;">${CHANNELS[ch].label}: <strong style="color:#fff;">${values[activeChannels.indexOf(ch)].toFixed(1)}/5</strong></span></div>`
+  ).join('');
+
+  return `${baseStyle}<div class="page" style="padding:60px 50px;">
+    <div style="font-size:9px;letter-spacing:.2em;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px;">MVBusiness · Relatorio de Analise</div>
+    <div style="height:1px;background:linear-gradient(90deg,#7c5cfc,transparent);margin-bottom:36px;"></div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;margin-bottom:8px;">MAPA DE NEGOCIO</div>
+      <div style="font-size:12px;color:#555;">Visao geral da presenca digital por canal — pontuacao de 0 a 5</div>
+    </div>
+    ${radarDataURL
+      ? `<div style="text-align:center;"><img src="${radarDataURL}" style="width:460px;height:460px;object-fit:contain;" /></div>`
+      : `<div style="text-align:center;padding:80px;color:#555;">Minimo de 2 canais necessario para o grafico radar</div>`}
+    <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:30px;">${legendItems}</div>
+    <div style="position:absolute;bottom:20px;right:50px;font-size:9px;color:#333;">${data.date} · ${data.clientName}</div>
+  </div>`;
 }
 
-// ---- BARRAS POR CANAL ----
-async function drawChannelPage(doc, ch, chData, data) {
-  doc.addPage();
-
+async function pageCanal(ch, chData, data) {
+  const cfg = CHANNELS[ch];
   const canvas = document.createElement('canvas');
-  canvas.width = 700; canvas.height = 350;
-  canvas.style.position='absolute'; canvas.style.left='-9999px';
+  canvas.width = 700; canvas.height = 340;
+  canvas.style.position = 'absolute';
+  canvas.style.left = '-9999px';
   document.body.appendChild(canvas);
 
-  const cfg = CHANNELS[ch];
   const labels = Object.keys(chData.ratings);
   const values = Object.values(chData.ratings);
-  const color = cfg.color;
-  const [r,g,b] = hexToRgb(color);
+  const avg = calcAvg(chData.ratings);
 
-  const ctx = canvas.getContext('2d');
-  new Chart(ctx, {
+  const chart = new Chart(canvas.getContext('2d'), {
     type: 'bar',
     data: {
-      labels: labels.map(l => l.length > 30 ? l.substring(0,28)+'…' : l),
+      labels: labels.map(l => l.length > 35 ? l.substring(0,33) + '…' : l),
       datasets: [{
-        label: 'Nota',
         data: values,
-        backgroundColor: color + 'bb',
-        borderColor: color,
+        backgroundColor: cfg.color + '99',
+        borderColor: cfg.color,
         borderWidth: 1.5,
-        borderRadius: 6,
+        borderRadius: 5,
+        borderSkipped: false,
       }]
     },
     options: {
       animation: false,
       indexAxis: 'y',
       scales: {
-        x: { min:0, max:5, ticks:{stepSize:1,color:'#888'}, grid:{color:'#333'} },
-        y: { ticks:{color:'#ccc',font:{size:11}}, grid:{color:'#222'} }
+        x: { min:0, max:5, ticks:{stepSize:1,color:'#666',font:{size:13}}, grid:{color:'#222'} },
+        y: { ticks:{color:'#bbb',font:{size:12}}, grid:{color:'#1a1a1a'} }
       },
       plugins: { legend:{display:false} }
     }
   });
-
-  await new Promise(r => setTimeout(r, 600));
-  const img = canvas.toDataURL('image/png');
+  await new Promise(r=>setTimeout(r,400));
+  const chartURL = canvas.toDataURL('image/png');
+  chart.destroy();
   document.body.removeChild(canvas);
 
-  doc.setFillColor(13,13,15); doc.rect(0,0,210,297,'F');
+  const statusInfo = (v) => {
+    if(v===0) return ['NAO AVALIADO','#555'];
+    if(v<=1) return ['CRITICO','#ff4757'];
+    if(v<=2) return ['FRACO','#ffa502'];
+    if(v<=3) return ['REGULAR','#f1c40f'];
+    if(v<=4) return ['BOM','#2ed573'];
+    return ['OTIMO','#00c9ff'];
+  };
 
-  // Faixa colorida topo
-  doc.setFillColor(r,g,b); doc.setGState(doc.GState({opacity:.2}));
-  doc.rect(0,0,210,18,'F');
-  doc.setGState(doc.GState({opacity:1}));
+  const tableRows = labels.map((label, i) => {
+    const [status, color] = statusInfo(values[i]);
+    const pct = (values[i]/5)*100;
+    return `<tr style="border-bottom:1px solid #1a1a1a;">
+      <td style="padding:9px 12px;font-size:11px;color:#c0c0d8;">${label}</td>
+      <td style="padding:9px 12px;text-align:center;"><div style="display:flex;align-items:center;gap:8px;"><div style="flex:1;height:6px;background:#1e1e24;border-radius:3px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${cfg.color};border-radius:3px;"></div></div><span style="font-size:11px;font-weight:700;color:${cfg.color};min-width:28px;">${values[i]}/5</span></div></td>
+      <td style="padding:9px 12px;text-align:center;font-size:10px;font-weight:700;color:${color};">${status}</td>
+    </tr>`;
+  }).join('');
 
-  doc.setFont('helvetica','bold'); doc.setFontSize(13); doc.setTextColor(r,g,b);
-  doc.text(cfg.potencia, 14, 12);
+  const pctAvg = avg !== null ? (avg/5)*100 : 0;
 
-  const avg = calcAvg(chData.ratings);
-  doc.setFontSize(9); doc.setTextColor(180,180,200);
-  doc.text(`Média: ${avg !== null ? avg.toFixed(1) : '—'}/5`, 196, 12, {align:'right'});
+  return `${baseStyle}<div class="page" style="padding:50px;">
+    <div style="font-size:9px;letter-spacing:.2em;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px;">MVBusiness · Relatorio de Analise</div>
+    <div style="height:1px;background:linear-gradient(90deg,#7c5cfc,transparent);margin-bottom:28px;"></div>
 
-  // Barra de progresso da média
-  doc.setFillColor(40,40,55); doc.rect(14, 20, 182, 5, 'F');
-  if (avg !== null) {
-    doc.setFillColor(r,g,b); doc.rect(14, 20, 182*(avg/5), 5, 'F');
-  }
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:${cfg.color};">${cfg.potencia}</div>
+        <div style="font-size:11px;color:#555;margin-top:4px;">${cfg.label}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:10px;color:#555;margin-bottom:4px;">MEDIA GERAL</div>
+        <div style="font-size:28px;font-weight:800;color:${cfg.color};">${avg!==null?avg.toFixed(1):'—'}<span style="font-size:14px;color:#555;">/5</span></div>
+      </div>
+    </div>
 
-  doc.addImage(img, 'PNG', 10, 30, 190, 110);
+    <div style="height:8px;background:#1e1e24;border-radius:4px;overflow:hidden;margin-bottom:24px;">
+      <div style="height:100%;width:${pctAvg}%;background:linear-gradient(90deg,${cfg.color}88,${cfg.color});border-radius:4px;"></div>
+    </div>
 
-  // Tabela detalhada
-  let ty = 150;
-  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(120,120,140);
-  doc.text('ITEM AVALIADO', 14, ty);
-  doc.text('NOTA', 155, ty);
-  doc.text('STATUS', 175, ty);
-  ty += 4;
-  doc.setFillColor(40,40,55); doc.rect(14, ty, 182, 0.5, 'F');
-  ty += 5;
+    <img src="${chartURL}" style="width:100%;height:220px;object-fit:contain;border-radius:8px;background:#0f0f12;padding:10px;margin-bottom:20px;" />
 
-  labels.forEach((label, i) => {
-    if (ty > 278) { doc.addPage(); ty=20; }
-    const val = values[i];
-    const statusText = val <= 1 ? 'CRÍTICO' : val <= 2 ? 'FRACO' : val <= 3 ? 'REGULAR' : val <= 4 ? 'BOM' : 'ÓTIMO';
-    const [sr,sg,sb] = val<=1?[255,71,87]:val<=2?[255,165,2]:val<=3?[241,196,15]:val<=4?[46,213,115]:[0,212,255];
-
-    if (i%2===0) { doc.setFillColor(20,20,28); doc.rect(14,ty-3,182,7,'F'); }
-    doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(200,200,220);
-    doc.text(label.length>55?label.substring(0,53)+'…':label, 14, ty);
-    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(r,g,b);
-    doc.text(`${val}/5`, 155, ty);
-    doc.setTextColor(sr,sg,sb);
-    doc.text(statusText, 175, ty);
-    ty += 8;
-  });
+    <table style="width:100%;border-collapse:collapse;background:#16161a;border-radius:10px;overflow:hidden;">
+      <thead><tr style="background:#1e1e24;">
+        <th style="padding:10px 12px;text-align:left;font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;">Item Avaliado</th>
+        <th style="padding:10px 12px;text-align:center;font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;">Nota</th>
+        <th style="padding:10px 12px;text-align:center;font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;">Status</th>
+      </tr></thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+    <div style="position:absolute;bottom:20px;right:50px;font-size:9px;color:#333;">${data.date} · ${data.clientName}</div>
+  </div>`;
 }
 
-function hexToRgb(hex) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  return [r,g,b];
+function pageDiagnostico(data) {
+  const lines = data.aiSummary.split('\n').map(l => l.trim() ? `<p style="margin-bottom:8px;font-size:12px;color:${l===l.toUpperCase()&&l.length>4?'#7c5cfc':'#c0c0d8'};font-weight:${l===l.toUpperCase()&&l.length>4?'700':'400'};line-height:1.6;">${l}</p>` : '<br>').join('');
+  return `${baseStyle}<div class="page" style="padding:60px 50px;">
+    <div style="font-size:9px;letter-spacing:.2em;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px;">MVBusiness · Relatorio de Analise</div>
+    <div style="height:1px;background:linear-gradient(90deg,#7c5cfc,transparent);margin-bottom:36px;"></div>
+
+    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;margin-bottom:6px;">Diagnostico Executivo</div>
+    <div style="font-size:11px;color:#555;margin-bottom:24px;">Analise gerada automaticamente com base nos dados coletados</div>
+    <div style="background:#16161a;border:1px solid #1e1e24;border-radius:12px;padding:28px;margin-bottom:32px;">
+      ${lines}
+    </div>
+
+    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;margin-bottom:6px;">Orientacoes do Especialista</div>
+    <div style="font-size:11px;color:#555;margin-bottom:24px;">${data.especialista} · ${data.date}</div>
+    <div style="background:linear-gradient(135deg,rgba(124,92,252,.08),rgba(0,201,255,.05));border:1px solid rgba(124,92,252,.2);border-radius:12px;padding:28px;">
+      ${data.orientacoes.split('\n').map(l=>`<p style="font-size:12px;color:#c0c0d8;line-height:1.7;margin-bottom:6px;">${l||'&nbsp;'}</p>`).join('')}
+    </div>
+
+    <div style="margin-top:40px;padding-top:20px;border-top:1px solid #1e1e24;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:10px;color:#333;">MVBusiness · Sistema de Analise de Negocios Digitais</div>
+      <div style="font-size:10px;color:#333;">${data.date}</div>
+    </div>
+  </div>`;
 }
 
 // ============================================================
-// UTILITÁRIOS
+// UTILS
 // ============================================================
 function showMsg(text, type='success') {
   const el = document.getElementById('msg');
@@ -883,24 +693,187 @@ function showMsg(text, type='success') {
   el.className = `msg ${type}`;
   el.style.display = 'block';
   window.scrollTo(0,0);
-  if (type === 'success') setTimeout(() => el.style.display='none', 5000);
+  if(type==='success') setTimeout(()=>el.style.display='none',5000);
 }
 
 function limparForm() {
-  if (!confirm('Tem certeza que deseja limpar todos os campos?')) return;
-  document.querySelectorAll('input[type=text], input[type=email], input[type=tel], input[type=number], textarea').forEach(el => {
-    el.value = el.id === 'phone' ? '+55' : '';
+  if (!confirm('Limpar todos os campos?')) return;
+  document.querySelectorAll('input[type=text],input[type=email],input[type=tel],input[type=number],textarea').forEach(el=>{
+    el.value = el.id==='phone'?'+55':'';
   });
-  document.querySelectorAll('input[name=nicho]').forEach(el => el.checked = false);
-  document.getElementById('outroNichoBox').style.display = 'none';
-
-  Object.keys(CHANNELS).forEach(ch => {
-    state.ratings[ch] = {};
-    state.disabled[ch] = false;
-    document.getElementById(`${ch}Disabled`).checked = false;
+  document.querySelectorAll('input[name=nicho]').forEach(el=>el.checked=false);
+  document.getElementById('outroNichoBox').style.display='none';
+  Object.keys(CHANNELS).forEach(ch=>{
+    state.ratings[ch]={};
+    state.disabled[ch]=false;
+    document.getElementById(`${ch}Disabled`).checked=false;
     document.getElementById(`${ch}Content`).classList.remove('disabled');
-    document.getElementById(`customFields-${ch}`).innerHTML = '';
+    document.getElementById(`customFields-${ch}`).innerHTML='';
     buildChannel(ch);
   });
   window.scrollTo(0,0);
 }
+
+// ============================================================
+// FILTRO E MÉTRICAS DE LEADS
+// ============================================================
+
+// Estado do filtro atual (usado no exportCSV)
+let filteredLeadsCache = [];
+
+function parseDate(dateStr) {
+  // Suporta DD/MM/YYYY (formato pt-BR)
+  if (!dateStr) return null;
+  const parts = dateStr.split('/');
+  if (parts.length === 3) {
+    return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
+  }
+  return new Date(dateStr);
+}
+
+function toInputDate(date) {
+  // Converte Date para YYYY-MM-DD (formato do input date)
+  return date.toISOString().split('T')[0];
+}
+
+function setQuickFilter(type) {
+  const today = new Date();
+  const from = new Date();
+  if (type === 'today') {
+    from.setHours(0,0,0,0);
+  } else if (type === 'week') {
+    from.setDate(today.getDate() - 7);
+  } else if (type === 'month') {
+    from.setDate(today.getDate() - 30);
+  }
+  document.getElementById('filterFrom').value = toInputDate(from);
+  document.getElementById('filterTo').value = toInputDate(today);
+  applyFilter();
+}
+
+function clearFilter() {
+  document.getElementById('filterFrom').value = '';
+  document.getElementById('filterTo').value = '';
+  document.getElementById('filterEspecialista').value = '';
+  applyFilter();
+}
+
+function applyFilter() {
+  const fromVal = document.getElementById('filterFrom').value;
+  const toVal = document.getElementById('filterTo').value;
+  const especialista = document.getElementById('filterEspecialista').value;
+
+  const fromDate = fromVal ? new Date(fromVal + 'T00:00:00') : null;
+  const toDate = toVal ? new Date(toVal + 'T23:59:59') : null;
+
+  const allLeads = getLeads();
+
+  const filtered = allLeads.filter(lead => {
+    const leadDate = parseDate(lead.date);
+    if (!leadDate) return true;
+    if (fromDate && leadDate < fromDate) return false;
+    if (toDate && leadDate > toDate) return false;
+    if (especialista && lead.especialista !== especialista) return false;
+    return true;
+  });
+
+  filteredLeadsCache = filtered;
+  renderLeadsTable(filtered);
+  renderMetrics(filtered, fromVal, toVal);
+}
+
+function renderMetrics(leads, fromVal, toVal) {
+  const total = leads.length;
+  document.getElementById('metricTotal').textContent = total;
+
+  // Score médio
+  const scores = leads.map(l => {
+    const chScores = Object.keys(CHANNELS).map(ch => {
+      const d = l.channels?.[ch];
+      if (!d || d.disabled || !Object.keys(d.ratings||{}).length) return null;
+      return calcAvg(d.ratings);
+    }).filter(v => v !== null);
+    return chScores.length ? chScores.reduce((a,b)=>a+b,0)/chScores.length : null;
+  }).filter(v => v !== null);
+
+  const avgScore = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
+  document.getElementById('metricAvgScore').textContent = scores.length ? avgScore + '/5' : '—';
+
+  // Faturamento médio
+  const revenues = leads.filter(l=>l.revenue>0).map(l=>l.revenue);
+  const avgRevenue = revenues.length ? revenues.reduce((a,b)=>a+b,0)/revenues.length : null;
+  document.getElementById('metricAvgRevenue').textContent = avgRevenue
+    ? 'R$ ' + Math.round(avgRevenue).toLocaleString('pt-BR')
+    : '—';
+
+  // Meta média
+  const goals = leads.filter(l=>l.goal>0).map(l=>l.goal);
+  const avgGoal = goals.length ? goals.reduce((a,b)=>a+b,0)/goals.length : null;
+  document.getElementById('metricAvgGoal').textContent = avgGoal
+    ? 'R$ ' + Math.round(avgGoal).toLocaleString('pt-BR')
+    : '—';
+
+  // Resultado do filtro
+  const resultBar = document.getElementById('filterResult');
+  const resultText = document.getElementById('filterResultText');
+  if (fromVal || toVal) {
+    resultBar.style.display = 'block';
+    const de = fromVal ? new Date(fromVal+'T00:00:00').toLocaleDateString('pt-BR') : '—';
+    const ate = toVal ? new Date(toVal+'T23:59:59').toLocaleDateString('pt-BR') : 'hoje';
+    resultText.textContent = `${total} formulário${total!==1?'s':''} preenchido${total!==1?'s':''} de ${de} ate ${ate}`;
+  } else {
+    resultBar.style.display = 'none';
+  }
+}
+
+function renderLeadsTable(leads) {
+  const tbody = document.getElementById('leadsBody');
+  if (!leads.length) {
+    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:40px;">Nenhum lead no período selecionado</td></tr>';
+    return;
+  }
+  tbody.innerHTML = leads.slice().reverse().map(l => {
+    const scores = Object.keys(CHANNELS).map(ch => {
+      const d = l.channels?.[ch];
+      if (!d || d.disabled || !Object.keys(d.ratings||{}).length) return null;
+      return calcAvg(d.ratings);
+    }).filter(v=>v!==null);
+    const gs = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
+    const scoreColor = gs === '—' ? 'var(--muted)' : parseFloat(gs) >= 4 ? '#2ed573' : parseFloat(gs) >= 3 ? '#f1c40f' : parseFloat(gs) >= 2 ? '#ffa502' : '#ff4757';
+    return `<tr>
+      <td style="white-space:nowrap;">${l.date}</td>
+      <td><strong>${l.clientName}</strong></td>
+      <td style="color:var(--muted);">${l.especialista}</td>
+      <td style="white-space:nowrap;">${l.phone}</td>
+      <td style="color:var(--muted);font-size:.85rem;">${l.email}</td>
+      <td><span class="badge badge-info">${l.nichos?.[0]||'—'}</span></td>
+      <td style="white-space:nowrap;">R$ ${(l.revenue||0).toLocaleString('pt-BR')}</td>
+      <td style="white-space:nowrap;">R$ ${(l.goal||0).toLocaleString('pt-BR')}</td>
+      <td><strong style="color:${scoreColor};">${gs !== '—' ? gs+'/5' : '—'}</strong></td>
+      <td><button class="btn btn-outline" style="padding:6px 14px;font-size:.8rem;" onclick="redownloadPDF(${l.id})">PDF</button></td>
+    </tr>`;
+  }).join('');
+}
+
+// Sobrescrever exportCSV para usar o filtro atual
+const _origExportCSV = exportCSV;
+// redefine exportCSV para exportar apenas filtrados
+window.exportCSV = function() {
+  const leads = filteredLeadsCache.length > 0 ? filteredLeadsCache : getLeads();
+  if (!leads.length) { alert('Nenhum lead para exportar no período!'); return; }
+  const headers = ['Data','Cliente','Especialista','Email','Telefone','Nicho','Faturamento','Meta','Score Site','Score Instagram','Score TikTok','Score WhatsApp'];
+  const rows = leads.map(l => {
+    const scores = Object.keys(CHANNELS).map(ch => {
+      const d = l.channels?.[ch];
+      if(!d||d.disabled||!Object.keys(d.ratings||{}).length) return '—';
+      const a=calcAvg(d.ratings); return a!==null?a.toFixed(1):'—';
+    });
+    return [l.date,l.clientName,l.especialista,l.email,l.phone,l.nichos?.join('; '),l.revenue,l.goal,...scores];
+  });
+  const csv = [headers,...rows].map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download = `MVBusiness_Leads_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.csv`;
+  a.click();
+};
+
