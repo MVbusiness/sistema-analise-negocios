@@ -1,0 +1,3608 @@
+# 📚 SISTEMA DE ANÁLISE DE NEGÓCIOS - ÍNDICE COMPLETO
+
+## 🚀 COMEÇAR AQUI
+
+Se você é novo, siga esta ordem:
+
+1. **PRIMEIRO:** Leia este arquivo (você está aqui!)
+2. **SEGUNDO:** Escolha entre:
+   - Deploy no Vercel? → `GUIA_VERCEL.md`
+   - Quer entender a tecnologia? → `README.md`
+3. **TERCEIRO:** Configure conforme instruções
+4. **QUARTO:** Compartilhe URL com closers → `GUIA_CLOSERS.md`
+
+---
+
+## 📁 ESTRUTURA DE ARQUIVOS
+
+```
+📦 Sistema de Análise
+│
+├── 🎨 INTERFACE
+│   ├── index.html          ← Formulário da aplicação
+│   └── app.js              ← Lógica e cálculos
+│
+├── 📖 DOCUMENTAÇÃO
+│   ├── ⭐ GUIA_VERCEL.md       (COMECE AQUI!)
+│   ├── README.md           (Guia técnico completo)
+│   ├── GUIA_GPT.md         (Integrar com IA OpenAI)
+│   ├── GUIA_CLOSERS.md     (Manual para usadores)
+│   ├── DOCUMENTACAO_KPIS.md(Como funcionam os KPIs)
+│   └── INDICE.md           (Este arquivo)
+│
+└── 📊 DADOS
+    └── Salvos em LocalStorage (no navegador)
+    └── Opcionalmente em Firebase
+```
+
+---
+
+## 🎯 ROADMAP RÁPIDO
+
+### 👤 Você é o Proprietário/Gerente?
+
+**SEU CAMINHO:**
+
+1. **Hoje (10 min):**
+   - Leia `GUIA_VERCEL.md` até PASSO 5
+   - Faça deploy no Vercel
+
+2. **Amanhã (10 min):**
+   - Leia `GUIA_GPT.md` 
+   - Configure OpenAI (recebe $5 grátis)
+   - Atualize `app.js` com API Key
+
+3. **Dia 3 (5 min):**
+   - Leia `GUIA_CLOSERS.md`
+   - Imprima ou compartilhe com seus closers
+   - Comece a usar!
+
+4. **Semana 1 (30 min):**
+   - Configure Firebase (banco de dados)
+   - Treine closers
+   - Analise primeiros PDFs
+
+---
+
+### 💼 Você é um Closer/Vendedor?
+
+**SEU CAMINHO:**
+
+1. **HOJE:**
+   - Abra o link da aplicação (que seu gerente vai passar)
+   - Leia `GUIA_CLOSERS.md` rapidinho
+   - Faça seu primeiro teste
+
+2. **PRÓXIMAS ANÁLISES:**
+   - Use o formulário para cada cliente
+   - Gere PDF e entregue
+   - Feche mais vendas!
+
+---
+
+### 👨‍💻 Você é Desenvolvedor/Técnico?
+
+**SEU CAMINHO:**
+
+1. **Arquitetura:**
+   - Leia `README.md` (seção "ESTRUTURA DO PROJETO")
+   
+2. **Implementar:**
+   - Clone os arquivos
+   - Configure Firebase (leia README.md)
+   - Configure GPT (leia GUIA_GPT.md)
+   - Faça deploy (GUIA_VERCEL.md ou alternativas)
+
+3. **Otimizar:**
+   - Implemente servidor backend seguro
+   - Adicione autenticação de usuários
+   - Crie dashboard de leads
+   - Integre com CRM
+
+---
+
+## 📑 DESCRIÇÃO DE CADA ARQUIVO
+
+### 🎨 `index.html`
+- **O que é:** Interface visual do formulário
+- **Para quem:** Closers preenchem isso
+- **O que contém:** 
+  - Campos de cliente (nome, telefone, email)
+  - Seleção de nicho
+  - Análise de 3 canais (Site, Instagram, TikTok)
+  - Campo de orientações
+  - Botão para gerar PDF
+
+---
+
+### ⚙️ `app.js`
+- **O que é:** Coração da aplicação
+- **Para quem:** Gerentes/Desenvolvedores editam
+- **O que contém:**
+  - Validação de formulário
+  - Coleta de dados
+  - Cálculo de KPIs
+  - Chamada à IA (GPT/Hugging Face)
+  - Geração de PDF
+  - Salvamento em Firebase
+
+---
+
+### ⭐ `GUIA_VERCEL.md` 
+- **Para quem:** Proprietários que querem colocar online RÁPIDO
+- **Tempo:** 10 minutos
+- **Resultado:** Sua app na internet, grátis
+- **Passo a passo:** Criar GitHub → Upload arquivos → Deploy Vercel
+
+---
+
+### 📖 `README.md`
+- **Para quem:** Técnicos e curiosos
+- **O que contém:** 
+  - Estrutura técnica completa
+  - Como configurar Firebase
+  - Como configurar Hugging Face
+  - Opções de deployment
+  - Troubleshooting detalhado
+- **Tempo para ler:** 30 min
+
+---
+
+### 🤖 `GUIA_GPT.md`
+- **Para quem:** Quer IA inteligente (RECOMENDADO!)
+- **O que contém:**
+  - Como criar conta OpenAI
+  - Como gerar API Key
+  - Como integrar no app.js
+  - Como segurança
+  - Exemplos de diagnósticos
+- **Custo:** $5 grátis no OpenAI
+- **Tempo:** 15 min para configurar
+
+---
+
+### 👥 `GUIA_CLOSERS.md`
+- **Para quem:** Seus closers/vendedores
+- **O que contém:**
+  - Passo a passo de preenchimento
+  - Escala de notas (0-5) explicada
+  - Exemplos práticos
+  - Dicas importantes
+  - Checklist antes de entregar
+- **Tempo de leitura:** 10 min
+- **Imprimir:** SIM, é prático!
+
+---
+
+### 📊 `DOCUMENTACAO_KPIS.md`
+- **Para quem:** Quer entender os KPIs a fundo
+- **O que contém:**
+  - Como cada KPI é calculado
+  - Fórmulas matemáticas
+  - Exemplos numéricos
+  - Como interpretar
+  - Exercícios práticos
+- **Tempo de leitura:** 20 min
+
+---
+
+## 🔧 COMO USAR OS ARQUIVOS
+
+### Arquivo → Ação
+
+| Arquivo | Ação |
+|---------|------|
+| `index.html` | Deixar no servidor (Vercel) |
+| `app.js` | Deixar no servidor (Vercel) |
+| `README.md` | Ler para configurar |
+| `GUIA_VERCEL.md` | Seguir para fazer deploy |
+| `GUIA_GPT.md` | Seguir para ativar IA |
+| `GUIA_CLOSERS.md` | Imprimir e dar aos closers |
+| `DOCUMENTACAO_KPIS.md` | Ler para entender melhor |
+
+---
+
+## 🌍 URLS IMPORTANTES
+
+### Plataformas a Usar:
+
+| Plataforma | URL | Propósito |
+|-----------|-----|----------|
+| GitHub | https://github.com/signup | Hospedar código |
+| Vercel | https://vercel.com | Hospedar aplicação |
+| Firebase | https://console.firebase.google.com | Banco de dados |
+| OpenAI | https://platform.openai.com | IA para resumos |
+| Hugging Face | https://huggingface.co | IA alternativa |
+
+---
+
+## ✅ CHECKLIST DE IMPLEMENTAÇÃO
+
+- [ ] Leu este arquivo (INDICE.md)
+- [ ] Decidiu quem vai fazer deploy (gerente ou técnico)
+- [ ] Seguiu `GUIA_VERCEL.md` até PASSO 5
+- [ ] Testou a aplicação (abriu a URL)
+- [ ] Leu `GUIA_GPT.md` e configurou OpenAI
+- [ ] Atualizou `app.js` com API Key
+- [ ] Imprimiu `GUIA_CLOSERS.md` para closers
+- [ ] Treinou closers
+- [ ] Gerou primeiro PDF
+- [ ] Entregou ao cliente
+- [ ] Cliente aprovou
+
+---
+
+## 🎓 PLANO DE APRENDIZADO (2 SEMANAS)
+
+### SEMANA 1: Setup
+
+**Segunda:**
+- 9h: Leia `GUIA_VERCEL.md`
+- 10h: Crie GitHub + Vercel
+- 11h: Deploy realizado
+
+**Terça:**
+- 9h: Leia `GUIA_GPT.md`
+- 10h: Crie OpenAI + gere API Key
+- 11h: Configure no `app.js`
+
+**Quarta:**
+- 9h: Teste a aplicação
+- 10h: Gere primeiro PDF
+- 11h: Ajuste conforme necessário
+
+**Quinta:**
+- 9h: Treine closers com `GUIA_CLOSERS.md`
+- 10h: Pratiquem preenchimento
+- 11h: Testem geração de PDF
+
+**Sexta:**
+- Análises reais começam!
+
+### SEMANA 2: Operação
+
+**Cada dia:**
+- Closers fazem análises
+- Você monitora qualidade
+- Ajusta recomendações conforme feedback
+
+**Viernes:**
+- Review da semana
+- Métricas de sucesso
+- Planejamento de melhorias
+
+---
+
+## 💰 INVESTIMENTO TOTAL
+
+| Item | Custo | Período | Total |
+|------|-------|---------|-------|
+| Vercel | Grátis | Permanente | R$ 0 |
+| GitHub | Grátis | Permanente | R$ 0 |
+| Firebase | Grátis* | 1º ano | R$ 0 |
+| OpenAI | $5 grátis | ~10 dias | R$ 0 |
+| **TOTAL** | | | **R$ 0** |
+
+*Firebase é grátis até 1GB de dados. Com 300 análises/mês = ~10GB/ano
+
+---
+
+## 🎁 O QUE VOCÊ GANHA
+
+✅ Aplicação profissional  
+✅ Relatórios em PDF  
+✅ IA gerando diagnósticos  
+✅ KPIs automáticos  
+✅ Banco de dados dos leads  
+✅ Pronto para usar  
+✅ 100% customizável  
+✅ Grátis!
+
+---
+
+## 🚨 PRÓXIMOS PASSOS
+
+### 👉 AGORA MESMO:
+
+1. Abra `GUIA_VERCEL.md`
+2. Siga até PASSO 5
+3. Sua app estará online em 10 minutos
+
+### 👉 DEPOIS:
+
+1. Configure GPT (GUIA_GPT.md)
+2. Compartilhe com closers (GUIA_CLOSERS.md)
+3. Comece a usar!
+
+---
+
+## 📞 SUPORTE
+
+Se tiver dúvida sobre qual arquivo ler:
+
+**Questão:** "Como coloco online?"  
+**Resposta:** `GUIA_VERCEL.md`
+
+**Questão:** "Como ativar IA?"  
+**Resposta:** `GUIA_GPT.md`
+
+**Questão:** "Como um closer usa?"  
+**Resposta:** `GUIA_CLOSERS.md`
+
+**Questão:** "Como funciona o KPI?"  
+**Resposta:** `DOCUMENTACAO_KPIS.md`
+
+**Questão:** "Entendi nada, começo por onde?"  
+**Resposta:** Você já está aqui! Leia este INDICE.md → GUIA_VERCEL.md
+
+---
+
+## 🏆 META
+
+Você conseguiu! Você agora tem:
+
+✨ **Um sistema de análise profissional**  
+✨ **100% gratuito**  
+✨ **Com IA inteligente**  
+✨ **Pronto para usar com seus closers**  
+✨ **Que gera PDFs automáticos**  
+✨ **E calcula KPIs inteligentes**
+
+**Parabéns! 🎉**
+
+---
+
+**Versão:** 1.0  
+**Atualizado:** Junho 2026  
+**Desenvolvido por:** Sistema de Análise de Negócios
+
+---
+
+## 🎯 PRIMEIRO PASSO: ABRA `GUIA_VERCEL.md` AGORA!
+
+Não leia mais nada. Vá lá e coloque seu app online em 10 minutos!
+
+→ **[Próximo Arquivo: GUIA_VERCEL.md]** ←
+
+# 🚀 DEPLOY EM 10 MINUTOS NO VERCEL (Mais Fácil!)
+
+## ⚡ O QUE É VERCEL?
+
+Vercel é um serviço **100% GRATUITO** que hospeda sua aplicação web online. 
+Você não precisa ter servidor, ele cuida de tudo.
+
+---
+
+## 📋 PRÉ-REQUISITOS
+
+1. ✅ Conta no GitHub (criar em 2 minutos)
+2. ✅ Os 3 arquivos: `index.html`, `app.js`, `README.md`
+3. ✅ Que é tudo!
+
+---
+
+## 🎯 PASSO 1: CRIAR CONTA NO GITHUB
+
+**Se já tem GitHub, pule para PASSO 2**
+
+1. Acesse: **https://github.com/signup**
+2. Preencha:
+   - Email (pode ser pessoal)
+   - Senha
+   - Usuário (ex: `seu-nome-negocio`)
+3. Clique em "Create account"
+4. Resolva o captcha
+5. Confirme o email
+
+---
+
+## 📁 PASSO 2: CRIAR REPOSITÓRIO NO GITHUB
+
+1. Acesse: **https://github.com/new**
+2. Preencha:
+   - **Repository name:** `sistema-analise-negocios`
+   - **Description:** "Sistema de análise de negócios com IA"
+   - **Public** (deixar marcado)
+3. Clique em "Create repository"
+
+---
+
+## 📤 PASSO 3: FAZER UPLOAD DOS ARQUIVOS
+
+### Opção A: Direto no GitHub (Mais Fácil)
+
+1. Na página do repositório criado, clique em "Add file" → "Create new file"
+2. Na caixa de texto, COPIE o conteúdo de `index.html`
+3. Clique no nome do arquivo (canto superior) e escreva: `index.html`
+4. Clique em "Commit changes"
+
+5. Repita para `app.js`:
+   - "Add file" → "Create new file"
+   - Cole o conteúdo de `app.js`
+   - Nome: `app.js`
+   - "Commit changes"
+
+### Opção B: Usar Git Desktop (Se tiver no PC)
+
+```bash
+# No terminal da pasta com seus arquivos:
+git init
+git add .
+git commit -m "Primeira versão"
+git remote add origin https://github.com/seu-usuario/sistema-analise-negocios.git
+git push -u origin main
+```
+
+---
+
+## 🌐 PASSO 4: CONECTAR NO VERCEL
+
+1. Acesse: **https://vercel.com/signup**
+2. Clique em "Continue with GitHub"
+3. Autorize a conexão
+4. Você será redirecionado ao Vercel
+
+---
+
+## 🚀 PASSO 5: FAZER DEPLOY
+
+1. No Vercel, clique em "New Project" ou "Add New..."
+2. Selecione seu repositório "sistema-analise-negocios"
+3. Clique em "Import"
+4. **Confirme as opções:**
+   - Framework: "Other" (deixar padrão)
+   - Root Directory: "./" (padrão)
+5. Clique em "Deploy"
+6. **Aguarde 2-3 minutos...**
+
+---
+
+## ✅ PRONTO!
+
+Sua app estará em:
+```
+https://sistema-analise-negocios.vercel.app
+```
+
+**Você pode personalizar a URL:**
+1. No Vercel, vá em "Settings"
+2. Clique em "Domains"
+3. Coloque um nome (ex: `meu-dominio.vercel.app`)
+
+---
+
+## 📱 TESTAR A APLICAÇÃO
+
+1. Acesse a URL acima
+2. Preencha um formulário
+3. Clique em "Gerar Relatório em PDF"
+4. Se o PDF baixar = **Funcionou!** ✅
+
+---
+
+## 🔄 ATUALIZAR A APLICAÇÃO
+
+Se precisar fazer mudanças:
+
+1. Edite os arquivos no GitHub
+   - Clique no arquivo
+   - Clique em "Edit this file" (ícone de lápis)
+   - Faça as mudanças
+   - "Commit changes"
+
+2. **Vercel atualiza AUTOMATICAMENTE** em ~1 minuto
+
+---
+
+## 🔐 ADICIONAR FIREBASE (Opcional)
+
+Se quiser salvar dados em banco:
+
+1. **No `app.js`**, localize:
+```javascript
+const firebaseConfig = {
+    apiKey: "SUA_API_KEY_AQUI",
+    ...
+};
+```
+
+2. Substitua pelas credenciais do Firebase (veja guia README.md)
+
+3. No `index.html`, procure `</body>` e adicione:
+```html
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+```
+
+4. Faça commit
+5. Vercel atualiza automaticamente
+
+---
+
+## 🤖 ADICIONAR GPT (Recomendado)
+
+Para o resumo inteligente funcionar:
+
+1. **Crie conta OpenAI:** https://platform.openai.com/
+2. **Gere API Key:** https://platform.openai.com/api/keys
+3. **No `app.js`**, localize:
+```javascript
+Authorization: 'Bearer sk-proj-SUAS_API_KEY_AQUI'
+```
+4. Substitua pela sua chave
+5. Commit e pronto!
+
+---
+
+## 📊 MONITORAR ANALYTICS
+
+No Vercel:
+1. Vá para "Analytics"
+2. Veja quantas pessoas acessam
+3. Veja quais páginas carregam mais
+
+---
+
+## ⚡ DICAS EXTRAS
+
+### Personalizar URL:
+```
+Padrão: https://sistema-analise-negocios.vercel.app
+Customizado: https://seu-dominio-personalizado.vercel.app
+```
+
+Vá em Settings → Domains e crie seu domínio.
+
+### Variáveis de Ambiente (Seguro):
+1. No Vercel, vá em "Settings" → "Environment Variables"
+2. Adicione sua API Key do GPT:
+   - Name: `OPENAI_API_KEY`
+   - Value: `sk-proj-...`
+3. No `app.js`, use: `process.env.OPENAI_API_KEY`
+
+---
+
+## 🐛 ERROS COMUNS
+
+### ❌ "Página em branco"
+- Aguarde 1-2 minutos
+- Recarregue (F5)
+- Verifique se os arquivos foram feitos upload
+
+### ❌ "Erro 404"
+- Certificar que `index.html` foi feito upload
+- Verifique o nome do arquivo (sem espaços)
+
+### ❌ "PDF não baixa"
+- Verificar console (F12)
+- Recarregar a página
+- Tente em outro navegador
+
+---
+
+## 🔄 WORKFLOW DE ATUALIZAÇÕES
+
+```
+Você edita arquivo → GitHub atualiza → Vercel detecta → 
+Redeploy automático (~1 min) → Produção atualizada
+```
+
+Nada manual, totalmente automático!
+
+---
+
+## 💰 CUSTOS
+
+- ✅ Vercel: **GRATUITO**
+- ✅ GitHub: **GRATUITO**
+- ✅ OpenAI: **$5 grátis** (depois ~R$0,05 por análise)
+- ✅ Firebase: **GRATUITO** até 1GB
+
+**Total: ZERO!**
+
+---
+
+## 📞 PRECISA DE AJUDA?
+
+Se houver erro:
+
+1. Verifique o console (F12 → Console)
+2. Procure mensagem vermelha
+3. Screeshot do erro
+4. Contate seu suporte
+
+---
+
+## ✅ CHECKLIST FINAL
+
+- [ ] Repositório criado no GitHub
+- [ ] Arquivos feitos upload (index.html, app.js)
+- [ ] Vercel conectado ao GitHub
+- [ ] Deploy realizado com sucesso
+- [ ] URL funcionando em navegador
+- [ ] Testou preenchimento do formulário
+- [ ] Testou geração de PDF
+- [ ] Compartilhou URL com closers
+
+---
+
+**Você está 100% online! 🎉**
+
+**URL para compartilhar:** `https://sistema-analise-negocios.vercel.app`
+
+Agora seus 3 closers podem começar a usar!
+
+# 📱 GUIA RÁPIDO PARA CLOSERS
+## Como Usar o Sistema de Análise em 5 Minutos
+
+---
+
+## 📌 ANTES DE COMEÇAR
+
+- **URL:** Seu gerente vai passar o link para você acessar
+- **Tempo:** Cada análise leva ~10-15 minutos
+- **Resultado:** PDF pronto para entregar ao cliente
+
+---
+
+## ✅ PASSO A PASSO
+
+### 1️⃣ PREENCHIMENTO INICIAL (2 minutos)
+
+Preencha COM CUIDADO:
+
+```
+👤 DADOS DO CLIENTE
+├─ Nome do Cliente* → Nome completo
+├─ Nome do Especialista (Closer)* → SEU NOME
+├─ Telefone* → +5511999999999 (já vem +55)
+├─ Email* → email@cliente.com
+├─ Faturamento últimos 3 meses* → Ex: 10000
+└─ Objetivo financeiro mensal* → Ex: 15000
+```
+
+**Dica:** Se o cliente não sabe o faturamento exato, peça uma estimativa.
+
+---
+
+### 2️⃣ NICHO (1 minuto)
+
+Selecione o nicho principal do cliente:
+
+- ✅ Semijoias
+- ✅ Acessórios Feminino
+- ✅ Acessórios Masculino
+- ✅ Moda Feminina
+- ✅ Moda Masculina
+- ✅ Fitness
+- ✅ Home & Decor
+- ✅ Eletro & Eletrônicos
+- ✅ Sexy Shop
+- ✅ Cosméticos & Beleza
+- ✅ Esotérica
+- ✅ Automotiva
+- ✅ **Outros** (descrever qual)
+
+**Se marcar "Outros":** Um campo de texto aparece. Descreva o nicho.
+
+---
+
+### 3️⃣ OBJETIVOS (2 minutos)
+
+Dois campos de texto importantes:
+
+```
+🎯 Principal objetivo a ser alcançado nos próximos 6 meses
+Ex: "Aumentar faturamento de R$ 8.000 para R$ 15.000 por mês"
+ou "Expandir para novas plataformas (TikTok + Marketplace)"
+ou "Melhorar taxa de conversão do site"
+
+⚠️ Principal dificuldade a ser solucionada
+Ex: "Falta de conteúdo viral no TikTok"
+ou "Descrições de produto fracas"
+ou "Não sabe como usar Instagram Ads"
+```
+
+---
+
+### 4️⃣ ANÁLISE DO SITE (3 minutos)
+
+Para **CADA ITEM**, dê uma nota de **0 a 5**:
+
+```
+🌐 ANÁLISE DO SITE
+
+1. Design e UX (0-5)
+   → Quanto melhor a experiência do usuário, maior a nota
+   0: Site muito confuso
+   5: Site organizado e intuitivo
+
+2. Proposta de Valor (0-5)
+   → Está claro o QUE vende e POR QUE comprar?
+   0: Muito confuso o que vende
+   5: Proposta clara e atrativa
+
+3. Qualidade das Imagens (0-5)
+   → Fotos dos produtos de boa qualidade?
+   0: Fotos ruins/pixeladas
+   5: Fotos profissionais
+
+4. Descrição de Produtos (0-5)
+   → Descrições são atrativas e completas?
+   0: Descrição vaga/incompleta
+   5: Descrição detalhada e persuasiva
+
+5. Formas de Pagamento (0-5)
+   → Oferece várias opções? (cartão, Pix, boleto?)
+   0: Só uma forma
+   5: Várias opções disponíveis
+
+6. Velocidade (0-5)
+   → Site carrega rápido?
+   0: Muito lento (>5 segundos)
+   5: Muito rápido (<2 segundos)
+
+7. Segurança (0-5)
+   → Tem selos de segurança? (SSL, Ebit, etc)
+   0: Nenhum selo
+   5: Múltiplos selos visíveis
+```
+
+**Dica:** Se não tiver site, deixe em branco ou dê nota 0-1.
+
+---
+
+### 5️⃣ ANÁLISE DO INSTAGRAM (3 minutos)
+
+Para **CADA ITEM**, dê uma nota de **0 a 5**:
+
+```
+📷 ANÁLISE DO INSTAGRAM
+
+1. Identidade Visual (0-5)
+   → Cores/estilo consistentes?
+   0: Feed desorganizado
+   5: Feed muito coeso e profissional
+
+2. Frequência de Posts (0-5)
+   → Publica quantas vezes por semana?
+   0: Não publica regularmente
+   3: 3-4 posts/semana
+   5: +6 posts/semana
+
+3. Engajamento (0-5)
+   → Quantos likes/comentários por post?
+   0: 0-10 interações
+   3: 50-100 interações
+   5: +200 interações
+
+4. Qualidade do Conteúdo (0-5)
+   → Fotos, carrosséis e reels de qualidade?
+   0: Baixa qualidade
+   5: Conteúdo profissional/viral
+
+5. Bio e Call-to-Action (0-5)
+   → Bio clara com link? Convida a clicar?
+   0: Bio vaga, sem link
+   5: Bio estratégica com link funcionando
+
+6. Stories e Highlights (0-5)
+   → Usa stories? Tem highlights salvos?
+   0: Não usa
+   5: Usa estrategicamente com highlights
+
+**Dica:** Se não tiver Instagram, deixe em branco.
+```
+
+---
+
+### 6️⃣ ANÁLISE DO TIKTOK (3 minutos)
+
+Para **CADA ITEM**, dê uma nota de **0 a 5**:
+
+```
+🎵 ANÁLISE DO TIKTOK / TIKTOK SHOP
+
+1. Consistência de Conteúdo (0-5)
+   → Publica regularmente? Tem estilo?
+   0: Poucos vídeos ou desorganizado
+   5: Vídeos regulares e com estilo claro
+
+2. Taxa de Views (0-5)
+   → Qual é a média de views por vídeo?
+   0: <100 views
+   3: 1000-5000 views
+   5: >10000 views
+
+3. Tendências e Relevância (0-5)
+   → Acompanha trends? Está atualizado?
+   0: Conteúdo desatualizado
+   5: Sempre usando trends relevantes
+
+4. Qualidade Produção (0-5)
+   → Vídeos em boa qualidade?
+   0: Vídeos com áudio/vídeo ruins
+   5: Vídeos profissionais
+
+5. Integração TikTok Shop (0-5)
+   → Tem loja? Links funcionando?
+   0: Sem TikTok Shop
+   3: TikTok Shop ativo
+   5: TikTok Shop integrado e otimizado
+
+6. Engajamento (0-5)
+   → Responde comentários? Duetos/compartilhamentos?
+   0: Sem interação
+   5: Alto engajamento e comunidade
+
+**Dica:** Se não tiver TikTok, deixe em branco.
+```
+
+---
+
+### 7️⃣ ADICIONAR CAMPOS PERSONALIZADOS (OPCIONAL)
+
+Se quiser avaliar algo não listado:
+
+1. Clique em **"+ Adicionar Campo Personalizado"** (para cada plataforma)
+2. Escreva o nome do campo
+3. Dê uma nota de 0-5
+4. Pode adicionar quantos quiser
+
+**Exemplos:**
+- "Estratégia de email marketing"
+- "Integração com WhatsApp Business"
+- "Performance de anúncios pagos"
+
+---
+
+### 8️⃣ ORIENTAÇÕES DO ESPECIALISTA (3 minutos)
+
+**Este é o campo MAIS IMPORTANTE!**
+
+Aqui você escreve suas recomendações pessoais baseadas na análise.
+
+```
+💡 ORIENTAÇÕES DO ESPECIALISTA
+
+Escreva suas observações sobre o negócio:
+
+"Maria, analisando seu negócio de semijoias, vejo que:
+
+PONTOS FORTES:
+- Instagram com boa identidade visual
+- Faturamento consistente
+
+PRINCIPAIS DESAFIOS:
+- Site confuso com baixa conversão
+- Ausência total no TikTok
+- Descrições de produtos fracas
+
+RECOMENDAÇÕES PRÁTICAS:
+1. IMEDIATO: Reescrever descrições de produtos com urgência
+2. CURTO PRAZO (2-4 semanas): Entrar no TikTok com 3 vídeos/semana
+3. MÉDIO PRAZO (1-2 meses): Testar anúncios no Instagram
+
+Com essas ações, potencial de crescer para R$ 15.000/mês em 3 meses."
+```
+
+---
+
+### 9️⃣ GERAR RELATÓRIO (1 minuto)
+
+Quando tudo preenchido:
+
+1. Clique em **"📄 Gerar Relatório em PDF"**
+2. Aguarde 5-10 segundos (a IA está analisando)
+3. PDF é automaticamente baixado
+4. **Pronto!** Entregar ao cliente
+
+---
+
+## 🎁 O QUE O CLIENTE RECEBE
+
+O PDF contém:
+
+✅ Todos os dados do negócio  
+✅ Mapa de Negócio (gráfico radar)  
+✅ Análise detalhada de cada plataforma  
+✅ 4 KPIs com nível de urgência  
+✅ Diagnóstico inteligente da IA  
+✅ Orientações personalizadas  
+
+---
+
+## ⏱️ TEMPO TOTAL
+
+| Etapa | Tempo |
+|-------|-------|
+| Dados iniciais | 2 min |
+| Nicho | 1 min |
+| Objetivos | 2 min |
+| Site | 3 min |
+| Instagram | 3 min |
+| TikTok | 3 min |
+| Orientações | 3 min |
+| Gerar PDF | 1 min |
+| **TOTAL** | **~18 minutos** |
+
+---
+
+## 💡 DICAS IMPORTANTES
+
+### ✅ FAÇA:
+- Verifique os dados do cliente ANTES de preencher
+- Dê notas HONESTAS (não inflacione)
+- Escreva orientações ESPECÍFICAS e ACIONÁVEIS
+- Salve o PDF após gerar
+
+### ❌ NÃO FAÇA:
+- Preencha campos que não sabe (deixe em branco)
+- Inflacione notas só porque cliente é amigo
+- Coloque orientações genéricas ("melhore o site")
+- Feche a aba antes de baixar o PDF
+
+---
+
+## 🔍 ESCALA DE NOTAS (REFERÊNCIA)
+
+```
+0 = Não existe / Muito crítico
+1 = Muito fraco / Precisa urgente
+2 = Fraco / Muitos problemas
+3 = Regular / Funcionando mas com espaço
+4 = Bom / Profissional / Poucos ajustes
+5 = Excelente / Referência no mercado
+```
+
+---
+
+## 🚨 ERROS COMUNS
+
+### ❌ "Faltam campos obrigatórios"
+- Todos os campos com * são obrigatórios
+- Verifique nome, email, telefone, objetivo e dificuldade
+
+### ❌ "PDF não baixa"
+- Verifique se navegador permite downloads
+- Tente em outro navegador (Chrome é mais estável)
+- Não feche a aba até o PDF baixar completamente
+
+### ❌ "Não consegui preencher o campo X"
+- Faça scroll para ver se o campo está abaixo
+- Tente em outro navegador
+- Limpe o cache (Ctrl+Shift+Delete)
+
+---
+
+## 📞 PRECISA DE AJUDA?
+
+Contate seu gerente com:
+- Screenshot do erro
+- Passo em que está
+- Nome do cliente (para ajudar)
+
+---
+
+## 📊 CHECKLIST ANTES DE ENTREGAR
+
+- [ ] Cliente confirmou os dados (nome, email, telefone)?
+- [ ] Preencheu TODOS os campos obrigatórios?
+- [ ] Revisou as notas antes de gerar?
+- [ ] PDF foi gerado com sucesso?
+- [ ] Seu nome está como especialista?
+- [ ] As recomendações são claras e específicas?
+- [ ] Cliente está satisfeito com a análise?
+
+---
+
+**Você está pronto para usar o sistema! Boa sorte! 🚀**
+
+*Lembrete: Quanto mais detalhado e honesto sua análise, mais valor para o cliente e mais leads qualificados você vai fechar.*
+
+# 🤖 INTEGRAÇÃO COM GPT (OpenAI) - GUIA PRÁTICO
+
+## ⚡ POR QUE USAR GPT?
+
+GPT é melhor que Hugging Face porque:
+- ✅ Resumos mais inteligentes e contextualizados
+- ✅ Diagnósticos mais profundos
+- ✅ Recomendações práticas e personalizadas
+- ✅ Mais rápido
+- ✅ Suporta português fluentemente
+
+**Custo:** Você recebe $5 em créditos grátis = ~100.000 análises!
+
+---
+
+## 📝 PASSO 1: CRIAR CONTA OPENAI
+
+1. Acesse: **https://platform.openai.com/**
+2. Clique em "Sign up"
+3. Preencha com:
+   - Email
+   - Senha
+   - Nome completo
+4. Valide o email
+5. **Importante:** Coloque seu número de telefone (para verificação)
+6. Você receberá $5 em créditos automaticamente!
+
+---
+
+## 🔑 PASSO 2: GERAR API KEY
+
+1. Após login, vá em **https://platform.openai.com/api/keys**
+2. Clique em "Create new secret key"
+3. Dê um nome (ex: "Analise Negocios")
+4. **Copie a chave completa e GUARDE EM SEGURANÇA**
+
+Exemplo de chave:
+```
+sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+---
+
+## 💻 PASSO 3: ADICIONAR AO app.js
+
+Localize a função `generateAISummary()` e SUBSTITUA COMPLETAMENTE por:
+
+```javascript
+// Gerar resumo com IA (GPT OpenAI)
+async function generateAISummary(formData) {
+    try {
+        const prompt = `
+Você é um especialista em e-commerce e análise de negócios digitais.
+
+Gere um diagnóstico executivo PROFISSIONAL e PRÁTICO (máximo 300 palavras) para este negócio:
+
+CLIENTE: ${formData.clientName}
+NICHO: ${formData.nichos.join(', ')}
+FATURAMENTO ATUAL: R$ ${formData.revenue.toLocaleString('pt-BR')}
+META MENSAL: R$ ${formData.goal.toLocaleString('pt-BR')}
+DIFERENÇA: ${((formData.goal - formData.revenue) / formData.revenue * 100).toFixed(1)}%
+
+OBJETIVO (6 MESES): ${formData.objetivo6m}
+PRINCIPAL DIFICULDADE: ${formData.dificuldade}
+
+AVALIAÇÕES RECEBIDAS:
+- Site: ${JSON.stringify(formData.site)}
+- Instagram: ${JSON.stringify(formData.instagram)}
+- TikTok: ${JSON.stringify(formData.tiktok)}
+
+IMPORTANTE:
+1. Identifique o canal com MAIOR POTENCIAL (menor nota)
+2. Aponte os 3 principais problemas
+3. Dê 3 ações práticas e imediatas
+4. Mencione o potencial de crescimento
+5. Seja direto, objetivo, sem floreios
+
+Formate em seções claras com:
+- DIAGNÓSTICO GERAL (1 parágrafo)
+- CANAIS COM MAIOR POTENCIAL (qual é e por quê)
+- 3 PRINCIPAIS PROBLEMAS IDENTIFICADOS
+- 3 AÇÕES IMEDIATAS
+- PERSPECTIVA DE CRESCIMENTO
+        `;
+
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer sk-proj-SUAS_API_KEY_AQUI' // SUBSTITUIR
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'Você é um especialista em análise de negócios digitais e e-commerce. Seus diagnósticos são práticos, diretos e acionáveis.'
+                    },
+                    {
+                        role: 'user',
+                        content: prompt
+                    }
+                ],
+                temperature: 0.7,
+                max_tokens: 500
+            })
+        });
+
+        if (!response.ok) {
+            console.error('Erro na OpenAI:', response.statusText);
+            return generateFallbackSummary(formData);
+        }
+
+        const data = await response.json();
+        
+        if (data.choices && data.choices[0] && data.choices[0].message) {
+            return data.choices[0].message.content;
+        } else {
+            return generateFallbackSummary(formData);
+        }
+
+    } catch (error) {
+        console.error('Erro ao chamar OpenAI:', error);
+        return generateFallbackSummary(formData);
+    }
+}
+```
+
+---
+
+## 🔐 PASSO 4: ADICIONAR SUA API KEY
+
+Na função acima, SUBSTITUA:
+```javascript
+'Authorization': 'Bearer sk-proj-SUAS_API_KEY_AQUI' // SUBSTITUIR
+```
+
+Por:
+```javascript
+'Authorization': 'Bearer sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+```
+
+(Use a chave que você copiou no PASSO 2)
+
+---
+
+## ⚠️ SEGURANÇA: NÃO EXPONHA SUA CHAVE
+
+**NUNCA:**
+- ❌ Coloque a chave direto no código JavaScript (exposto no navegador)
+- ❌ Compartilhe a chave com ninguém
+- ❌ Faça commit da chave no GitHub
+
+**FAÇA:**
+- ✅ Use um servidor backend para chamar a API
+- ✅ Guarde a chave em variável de ambiente
+
+---
+
+## 🛡️ PASSO 5: SOLUÇÃO SEGURA (RECOMENDADA)
+
+Se quer máxima segurança, crie um servidor simples com Node.js:
+
+### A. Criar arquivo `server.js`:
+
+```javascript
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+app.post('/api/analyze', async (req, res) => {
+    try {
+        const { formData } = req.body;
+
+        const prompt = `
+Você é um especialista em e-commerce...
+[mesmo prompt anterior]
+        `;
+
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${OPENAI_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: 'gpt-3.5-turbo',
+                messages: [{
+                    role: 'user',
+                    content: prompt
+                }],
+                temperature: 0.7,
+                max_tokens: 500
+            })
+        });
+
+        const data = await response.json();
+        res.json({ summary: data.choices[0].message.content });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.listen(3000, () => console.log('Server rodando!'));
+```
+
+### B. Criar arquivo `.env`:
+
+```
+OPENAI_API_KEY=sk-proj-sua-chave-aqui
+```
+
+### C. Modificar app.js para chamar o servidor:
+
+```javascript
+async function generateAISummary(formData) {
+    try {
+        const response = await fetch('/api/analyze', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ formData })
+        });
+
+        const data = await response.json();
+        return data.summary;
+
+    } catch (error) {
+        console.error('Erro:', error);
+        return generateFallbackSummary(formData);
+    }
+}
+```
+
+---
+
+## 💰 MONITORAR CUSTOS
+
+Seu $5 em créditos dura:
+- **1.000.000 tokens** de leitura (praticamente grátis)
+- **150.000 tokens** de escrita
+
+**Cálculo rápido:**
+- Cada análise usa ~500 tokens
+- $5 = ~300 análises
+
+Com 3 closers fazendo 10 análises/dia:
+- 30 análises/dia
+- 300 análises = 10 dias de uso grátis
+
+Depois disso, você paga ~ R$0,05 por análise.
+
+---
+
+## 🔍 MONITORAR GASTOS
+
+1. Acesse: **https://platform.openai.com/account/billing/overview**
+2. Veja seu saldo em créditos
+3. Se usar tudo, ativar método de pagamento (opcional)
+
+---
+
+## ✅ TESTAR SE FUNCIONOU
+
+1. Abra a aplicação
+2. Preencha um formulário completo
+3. Clique em "Gerar Relatório em PDF"
+4. Se o PDF tiver um resumo inteligente = **funcionou!**
+
+---
+
+## 🚀 MODELS GPT DISPONÍVEIS
+
+Você pode usar diferentes modelos:
+
+| Modelo | Velocidade | Custo | Qualidade |
+|--------|-----------|-------|-----------|
+| gpt-3.5-turbo | ⚡⚡⚡ Rápido | 💰 Barato | ⭐⭐⭐⭐ Muito bom |
+| gpt-4 | ⚡ Médio | 💰💰💰 Caro | ⭐⭐⭐⭐⭐ Excelente |
+| gpt-4-turbo | ⚡⚡ Rápido | 💰💰 Médio | ⭐⭐⭐⭐⭐ Excelente |
+
+**Recomendação:** Use `gpt-3.5-turbo` (melhor custo-benefício)
+
+---
+
+## 🎯 EXEMPLO DE DIAGNÓSTICO GERADO
+
+Depois de implementar, você receberá algo como:
+
+```
+DIAGNÓSTICO GERAL
+Maria está no segmento de semijoias com faturamento de R$ 8.000/mês mas almeja R$ 15.000. 
+O gap de 87,5% é alcançável em 6 meses com as ações corretas.
+
+CANAIS COM MAIOR POTENCIAL
+TikTok é o canal crítico com nota 1,5/5. O potencial aqui é ENORME - a concorrência 
+no segmento de semijoias está fraca no TikTok.
+
+PRINCIPAIS PROBLEMAS
+1. Produção de vídeos amadora e lenta (1 vídeo/semana)
+2. Site com taxa de conversão baixa (falta urgência nas descrições)
+3. Instagram engajamento baixo (conteúdo repetitivo)
+
+AÇÕES IMEDIATAS
+1. Contratar um TikToker para criar 5 vídeos de semijoias/semana (investir R$ 500-1000/mês)
+2. Refazer descrições de produtos com prova social (reviews, depoimentos)
+3. Criar série no Instagram focada em "transformação" (antes/depois com clientes)
+
+PERSPECTIVA DE CRESCIMENTO
+Com essas ações, potencial de crescer 80% em 3 meses. TikTok + Instagram bem feitos 
+podem gerar 500+ leads/mês no nicho de semijoias.
+```
+
+---
+
+## 🐛 ERROS COMUNS
+
+### ❌ Erro: "401 Unauthorized"
+**Solução:** Sua API Key está incorreta ou expirou
+- Gere uma nova chave em https://platform.openai.com/api/keys
+
+### ❌ Erro: "Rate limit exceeded"
+**Solução:** Você excedeu o limite de requisições
+- Aguarde alguns minutos
+- Ou implemente "debounce" no código
+
+### ❌ Erro: "Invalid model"
+**Solução:** O modelo `gpt-3.5-turbo` não existe
+- Use `gpt-3.5-turbo-0125` ou `gpt-4` (se tiver acesso)
+
+---
+
+## 📱 ALTERNATIVA: USAR EM SERVIDOR NODEJS
+
+Se quiser rodar tudo online sem expor a chave:
+
+**Opções baratas:**
+1. **Render.com** (gratuito com limites)
+2. **Railway.app** (gratuito com $5/mês)
+3. **Replit** (gratuito)
+
+Solicite ajuda se precisar fazer isso!
+
+---
+
+**Pronto! Você agora tem GPT inteligente gerando diagnósticos para seus closers! 🚀**
+
+# 📊 DOCUMENTAÇÃO DOS KPIs E CÁLCULOS
+
+## O QUE SÃO OS KPIs?
+
+**KPI** = Key Performance Indicator (Indicador-Chave de Desempenho)
+
+São as 4 métricas principais que o sistema **calcula automaticamente** no PDF:
+
+1. **Crescimento Necessário**
+2. **Saúde Digital**
+3. **Canal com Maior Potencial**
+4. **Readiness para Escalar**
+
+Cada KPI tem um **Nível de Urgência**:
+- 🔴 **CRÍTICO** - Precisa ser solucionado nos próximos dias
+- 🟠 **ALTO** - Precisa atenção nas próximas 2 semanas
+- 🟢 **MÉDIO** - Importante mas não é prioridade imediata
+- ✅ **BAIXO** - Está bom, só manutenção
+
+---
+
+## 📈 KPI 1: CRESCIMENTO NECESSÁRIO
+
+### O que mede?
+Quanto a empresa precisa crescer em percentual para atingir a meta mensal.
+
+### Fórmula:
+```
+Crescimento % = ((Meta - Faturamento Atual) / Faturamento Atual) × 100
+```
+
+### Exemplo:
+```
+Faturamento atual: R$ 10.000
+Meta mensal: R$ 15.000
+
+Crescimento = ((15.000 - 10.000) / 10.000) × 100 = 50%
+```
+
+### Nível de Urgência:
+```
+50% ou menos     = MÉDIO
+51% a 100%       = ALTO
+Mais de 100%     = CRÍTICO
+```
+
+### O que significa:
+
+| Crescimento | Interpretação |
+|------------|---------------|
+| 0-20% | Crescimento normal, foco em otimização |
+| 21-50% | Crescimento agressivo, precisa ação |
+| 51-100% | Crescimento muito agressivo, urgente |
+| 100%+ | Dobrar faturamento = CRÍTICO |
+
+### Exemplo de Descrição:
+```
+"Precisa crescer de R$ 8.000 para R$ 12.000 (50% de crescimento)
+Isso é alcançável em 6 meses com as ações corretas."
+```
+
+---
+
+## 💻 KPI 2: SAÚDE DIGITAL
+
+### O que mede?
+Saúde geral do negócio em termos de presença digital (0-100%).
+
+### Fórmula:
+```
+Saúde Digital = (Nota Média de Todas as Avaliações / 5) × 100
+```
+
+### Exemplo:
+```
+Avaliações recebidas:
+- Site: 3.0 (média dos 7 campos)
+- Instagram: 2.5 (média dos 6 campos)
+- TikTok: 1.5 (média dos 6 campos)
+
+Média Geral = (3.0 + 2.5 + 1.5) / 3 = 2.33
+Saúde Digital = (2.33 / 5) × 100 = 46.6%
+```
+
+### Nível de Urgência:
+```
+0-2.99 (0-60%)      = ALTO (precisa tudo)
+3.00-3.99 (60-80%)  = MÉDIO (bom mas melhorável)
+4.00+ (80-100%)     = BAIXO (excelente estado)
+```
+
+### O que significa:
+
+| Nota Média | Status | Interpretação |
+|-----------|--------|---------------|
+| 0-1 | 0-20% | Novato/Negligenciado |
+| 1-2 | 20-40% | Muito fraco |
+| 2-3 | 40-60% | Fraco, muitos problemas |
+| 3-4 | 60-80% | Regular, funcionando |
+| 4-5 | 80-100% | Excelente |
+
+### Exemplo de Descrição:
+```
+"Nota média: 3.2/5 - Presença consolidada mas com espaço para crescimento.
+Com melhorias focadas, pode chegar a 4.5/5 em 3 meses."
+```
+
+---
+
+## 🎯 KPI 3: CANAL COM MAIOR POTENCIAL
+
+### O que mede?
+Qual plataforma (Site, Instagram ou TikTok) tem a **menor nota** (maior potencial).
+
+### Fórmula:
+```
+Para cada plataforma:
+Nota Média = Soma de todas as notas / Número de campos avaliados
+
+Compara as 3 médias e identifica a menor.
+```
+
+### Exemplo:
+```
+Site: (3+3+2+2+4+3+3) / 7 = 2.86
+Instagram: (4+3+3+4+3+3) / 6 = 3.33
+TikTok: (1+1+1+1+0+1) / 6 = 0.83 ← MENOR = Maior Potencial
+
+Canal com Maior Potencial: TikTok (0.83/5)
+```
+
+### Nível de Urgência:
+```
+0-1.99          = CRÍTICO (urge atuar)
+2.00-2.99       = ALTO (melhorar logo)
+3.00-3.99       = MÉDIO (otimizar)
+4.00+           = BAIXO (manutenção)
+```
+
+### Por que é importante:
+```
+O canal mais fraco é onde você consegue o MAIOR ROI (retorno sobre investimento).
+
+Exemplo: Melhorar TikTok de 0.8/5 para 3.0/5 pode gerar:
+- 300% mais views
+- 200% mais leads
+- Com investimento menor que outras plataformas
+```
+
+### Exemplo de Descrição:
+```
+"TikTok é o canal crítico com nota 0.83/5
+Este é exatamente o lugar onde você pode ter mais impacto rápido.
+A concorrência no seu nicho é fraca lá. Esse é seu ouro!"
+```
+
+---
+
+## 🚀 KPI 4: READINESS PARA ESCALAR
+
+### O que mede?
+Se o negócio está **pronto** para receber investimentos em marketing.
+
+### Fórmula:
+```
+Readiness = (Nota Média Site + Nota Média Instagram + Nota Média TikTok) / 3
+
+0.0-2.0   = NÃO PRONTO
+2.1-3.0   = PARCIALMENTE PRONTO
+3.1-4.0   = MUITO PRONTO
+4.1-5.0   = PRONTO
+```
+
+### Exemplo:
+```
+Site: 2.86
+Instagram: 3.33
+TikTok: 0.83
+
+Readiness = (2.86 + 3.33 + 0.83) / 3 = 2.34
+Status: PARCIALMENTE PRONTO
+```
+
+### Nível de Urgência:
+```
+NÃO PRONTO (0-2.0)          = CRÍTICO
+PARCIALMENTE (2.1-3.0)       = ALTO
+MUITO PRONTO (3.1-4.0)       = MÉDIO
+PRONTO (4.1+)                = BAIXO
+```
+
+### O que significa:
+
+| Status | Significado |
+|--------|-------------|
+| **NÃO PRONTO** | Não recomende investimento em ads ainda. Foco em otimização estrutural primeiro. |
+| **PARCIALMENTE PRONTO** | Pode começar com pequenos investimentos em ads. Maior impacto depois de otimizações. |
+| **MUITO PRONTO** | Recomende investimento imediato. Alta chance de ROI positivo. |
+| **PRONTO** | Negócio está otimizado. Escalar com confiança. |
+
+### Exemplo de Descrição:
+```
+"READINESS: PARCIALMENTE PRONTO
+
+Você tem bons fundamentos (Instagram forte), mas o TikTok é um ponto cego.
+
+RECOMENDAÇÃO:
+- Primeiros 30 dias: Foco total em criar presença TikTok
+- Após 30 dias: Começar a investir em ads (começar pequeno: R$200-300/dia)
+- Dia 60: Aumentar inversão conforme resultados positivos
+```
+
+---
+
+## 📌 EXEMPLO COMPLETO DE RELATÓRIO
+
+### Cliente: Maria - Semijoias
+
+**DADOS:**
+- Faturamento Atual: R$ 8.000
+- Meta Mensal: R$ 15.000
+- Avaliações: Site (2.86), Instagram (3.33), TikTok (0.83)
+
+**KPIs GERADOS:**
+
+---
+
+### 🎯 KPI 1: CRESCIMENTO NECESSÁRIO
+```
+Valor: 87,5%
+Urgência: ALTO ⚠️
+Descrição: Precisa crescer de R$ 8.000 para R$ 15.000 por mês
+Este crescimento é agressivo mas alcançável em 6 meses.
+```
+
+### 💻 KPI 2: SAÚDE DIGITAL
+```
+Valor: 57.7%
+Urgência: MÉDIO ⏳
+Descrição: Nota média 2.88/5 - Presença consolidada
+Instagram está bom, mas site e TikTok precisam urgência.
+```
+
+### 🏆 KPI 3: CANAL COM MAIOR POTENCIAL
+```
+Valor: TikTok
+Urgência: CRÍTICO 🔴
+Descrição: TikTok com nota 0.83/5 - Maior potencial de crescimento
+Investir aqui pode gerar 300% mais visibilidade. Urgente!
+```
+
+### 🚀 KPI 4: READINESS PARA ESCALAR
+```
+Valor: PARCIALMENTE PRONTO
+Urgência: MÉDIO ⏳
+Descrição: Negócio tem fundamentos mas precisa otimização
+Recomendação: 30 dias otimizando TikTok, depois começar ads.
+```
+
+---
+
+## 💡 COMO INTERPRETAR OS KPIs
+
+### Para o Closer:
+
+Os KPIs ajudam você a **priorizar recomendações**.
+
+```
+Se Crescimento = CRÍTICO
+  → Foco em anúncios pagos
+  
+Se Saúde Digital = CRÍTICO
+  → Foco em otimização estrutural
+
+Se Canal com Maior Potencial = TikTok
+  → Recomende contratar TikToker ou aprender rápido
+
+Se Readiness = NÃO PRONTO
+  → "Não recomendo ads agora, vamos otimizar primeiro"
+```
+
+### Para o Cliente:
+
+Os KPIs deixam **claro e prático** o que precisa fazer.
+
+```
+"Maria, você tem 4 áreas críticas:
+1. Crescer 87% (ALTO) - É muito, mas possível
+2. Saúde digital 58% (MÉDIO) - Melhorar presença
+3. TikTok 0.83/5 (CRÍTICO) - Começar agora mesmo
+4. Readiness (PARCIAL) - Primeiro otimiza, depois investe
+
+Próximos 30 dias: FOCO TOTAL NO TIKTOK"
+```
+
+---
+
+## 🎓 EXERCÍCIO: CALCULE SEU PRÓPRIO KPI
+
+### Dados Fictícios:
+```
+Faturamento: R$ 5.000
+Meta: R$ 8.000
+
+Site: 4, 4, 3, 3, 4, 4, 3 = ?
+Instagram: 3, 3, 3, 4, 4, 3 = ?
+TikTok: 0, 0, 1, 1, 0, 1 = ?
+```
+
+### Cálculos:
+```
+Crescimento = ((8.000 - 5.000) / 5.000) × 100 = 60% (ALTO)
+
+Site média = 3.43
+Instagram média = 3.33
+TikTok média = 0.50
+
+Saúde Digital = (3.43 + 3.33 + 0.50) / 3 / 5 × 100 = 50.2% (CRÍTICO)
+
+Canal Maior Potencial = TikTok (0.50/5) - CRÍTICO
+
+Readiness = (3.43 + 3.33 + 0.50) / 3 = 2.42 = PARCIALMENTE PRONTO
+```
+
+---
+
+## 🔄 DINÂMICA DOS KPIs
+
+Conforme o negócio melhora:
+
+```
+MÊS 1:
+Saúde Digital: 50%
+Readiness: NÃO PRONTO
+↓
+MÊS 2 (após otimizar TikTok):
+Saúde Digital: 65%
+Readiness: PARCIALMENTE PRONTO
+↓
+MÊS 3 (após investir em ads):
+Saúde Digital: 75%
+Readiness: MUITO PRONTO
+Crescimento Necessário: 20% (em vez de 87%)
+↓
+MÊS 6:
+Saúde Digital: 85%
+Readiness: PRONTO
+Meta atingida! 🎉
+```
+
+---
+
+## 📚 RESUMO VISUAL
+
+```
+┌─────────────────────────────────────────────────────┐
+│         KPI 1: Crescimento Necessário               │
+│         87,5%  |████████░░| ALTO                    │
+│  "Crescer de R$8k para R$15k"                       │
+└─────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────┐
+│         KPI 2: Saúde Digital                         │
+│         57,7%  |█████░░░░░| MÉDIO                   │
+│  "Nota média 2.88/5 - Presença consolidada"         │
+└─────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────┐
+│         KPI 3: Canal com Maior Potencial            │
+│         TikTok | ███░░░░░░░| CRÍTICO                │
+│  "Maior impacto em menos tempo"                      │
+└─────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────┐
+│         KPI 4: Readiness para Escalar               │
+│         PARCIAL|███░░░░░░░| MÉDIO                   │
+│  "Pronto para começar, mas otimizar primeiro"       │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+**Agora você entende os KPIs completamente! 📊**
+
+# 🚀 GUIA COMPLETO: SISTEMA DE ANÁLISE DE NEGÓCIOS
+
+## 📋 ÍNDICE
+1. [Estrutura do Projeto](#estrutura)
+2. [Configuração do Firebase](#firebase)
+3. [Configuração da IA (Hugging Face)](#ia)
+4. [Deploy Gratuito](#deploy)
+5. [Como Usar](#uso)
+6. [Troubleshooting](#troubleshooting)
+
+---
+
+## 🗂️ ESTRUTURA DO PROJETO {#estrutura}
+
+```
+seu-projeto/
+├── index.html          # Formulário principal
+├── app.js              # Lógica da aplicação
+└── README.md           # Este arquivo
+```
+
+**O que cada arquivo faz:**
+
+- **index.html**: Interface do usuário com formulários e estilos
+- **app.js**: Lógica de validação, cálculo de KPIs, geração de PDF e integração com IA/banco de dados
+
+---
+
+## 🔥 CONFIGURAÇÃO DO FIREBASE {#firebase}
+
+Firebase é um banco de dados GRATUITO do Google. Vamos usar para salvar os dados dos leads.
+
+### PASSO 1: Criar Conta Firebase
+
+1. Acesse: https://console.firebase.google.com/
+2. Clique em "Create Project"
+3. Digite um nome (ex: "sistema-analise-negocios")
+4. Selecione o país (Brasil)
+5. Clique em "Create Project"
+6. Aguarde a criação
+
+### PASSO 2: Ativar Firestore Database
+
+1. No menu lateral esquerdo, clique em "Firestore Database"
+2. Clique em "Create Database"
+3. Selecione "Start in test mode" (para desenvolvimento)
+4. Escolha região "southamerica-east1" (São Paulo)
+5. Clique em "Enable"
+
+### PASSO 3: Copiar Configuração
+
+1. Clique no ícone de engrenagem (Settings) → "Project Settings"
+2. Vá até a seção "Your apps"
+3. Clique em "</>" (Web)
+4. Copie o objeto `firebaseConfig` completo
+
+### PASSO 4: Adicionar ao app.js
+
+Substitua este bloco no `app.js`:
+
+```javascript
+const firebaseConfig = {
+    apiKey: "SUA_API_KEY_AQUI",
+    authDomain: "seu-projeto.firebaseapp.com",
+    projectId: "seu-projeto",
+    storageBucket: "seu-projeto.appspot.com",
+    messagingSenderId: "seu-sender-id",
+    appId: "seu-app-id"
+};
+```
+
+### PASSO 5: Descomente as linhas no app.js
+
+Localize e descomente:
+
+```javascript
+// firebase.initializeApp(firebaseConfig);
+// const db = firebase.firestore();
+```
+
+Remova os `//` no início de cada linha.
+
+### PASSO 6: Adicionar script do Firebase no index.html
+
+Coloque isso ANTES da tag `</body>`:
+
+```html
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+```
+
+---
+
+## 🤖 CONFIGURAÇÃO DA IA (Hugging Face) {#ia}
+
+O Hugging Face oferece uma API gratuita para usar modelos de IA. Vamos usá-la para gerar o resumo diagnóstico.
+
+### PASSO 1: Criar Conta Hugging Face
+
+1. Acesse: https://huggingface.co/
+2. Clique em "Sign Up"
+3. Preencha com seus dados
+4. Confirme o email
+
+### PASSO 2: Gerar Token de API
+
+1. Acesse: https://huggingface.co/settings/tokens
+2. Clique em "New token"
+3. Selecione "Read" como tipo
+4. Dê um nome (ex: "analise-negocios")
+5. Copie o token gerado
+
+### PASSO 3: Adicionar ao app.js
+
+Localize esta linha no `app.js`:
+
+```javascript
+Authorization: 'Bearer hf_kJzXxXxxXxXxXxXxXxXxXxXxXxXxXxXx',
+```
+
+Substitua `hf_kJzXxXxxXxXxXxXxXxXxXxXxXxXxXxXx` pelo seu token copiado.
+
+### PASSO 4: Alternativas de IA
+
+Se Hugging Face não funcionar, existem alternativas:
+
+**Opção 1: Usar GPT (OpenAI)**
+- Acesse: https://platform.openai.com/
+- Cadastre-se
+- Recebe $5 em créditos grátis
+- Gere uma API Key
+- Substitua a função `generateAISummary()` no app.js
+
+**Opção 2: Usar Claude (Anthropic)**
+- Acesse: https://console.anthropic.com/
+- Cadastre-se
+- Recebe $5 em créditos grátis
+- Use com sua própria API
+
+**Opção 3: Usar fallback (SEM IA externa)**
+- Se nenhuma IA funcionar, o app usa `generateFallbackSummary()`
+- Gera resumo genérico mas funcional
+
+---
+
+## 🌍 DEPLOY GRATUITO {#deploy}
+
+### OPÇÃO 1: Vercel (RECOMENDADO - Mais Fácil)
+
+**Passo 1: Criar conta no Vercel**
+1. Acesse: https://vercel.com/
+2. Clique em "Sign Up"
+3. Use sua conta GitHub/Google
+
+**Passo 2: Fazer upload do projeto**
+1. Clique em "New Project"
+2. Selecione "Import Git Repository"
+3. Se não tiver repositório, crie um no GitHub:
+   - Acesse: https://github.com/new
+   - Nome: "sistema-analise-negocios"
+   - Faça upload dos arquivos (index.html + app.js)
+
+**Passo 3: Deploy**
+1. No Vercel, selecione seu repositório
+2. Clique em "Import"
+3. Clique em "Deploy"
+4. Aguarde... Pronto! Sua app estará em `https://seu-projeto.vercel.app`
+
+### OPÇÃO 2: Netlify
+
+**Passo 1: Criar conta Netlify**
+1. Acesse: https://app.netlify.com/
+2. Clique em "Sign up"
+
+**Passo 2: Fazer upload**
+1. Clique em "Add new site"
+2. Selecione "Deploy manually"
+3. Arraste a pasta do projeto
+
+**Passo 3:** Pronto! Sua app estará online
+
+### OPÇÃO 3: GitHub Pages (Totalmente Grátis)
+
+**Passo 1: Criar repositório no GitHub**
+1. Acesse: https://github.com/new
+2. Nome: "sistema-analise-negocios"
+3. Clique em "Create repository"
+
+**Passo 2: Fazer upload**
+```bash
+# Se tiver Git instalado:
+git clone https://github.com/seu-usuario/sistema-analise-negocios.git
+cd sistema-analise-negocios
+
+# Copie os arquivos (index.html, app.js) para esta pasta
+
+git add .
+git commit -m "Primeira versão"
+git push origin main
+```
+
+**Passo 3: Ativar GitHub Pages**
+1. Vá para Settings do repositório
+2. Vá em "Pages"
+3. Em "Source", selecione "main"
+4. Salve
+
+**Passo 4:** Sua app estará em `https://seu-usuario.github.io/sistema-analise-negocios`
+
+---
+
+## 📖 COMO USAR {#uso}
+
+### Para os Closers (Vendedores):
+
+1. **Abrir a aplicação** na URL onde foi feito deploy
+2. **Preencher dados do cliente:**
+   - Nome completo
+   - Telefone (já vem +55)
+   - Email
+   - Faturamento dos últimos 3 meses
+   - Objetivo financeiro mensal
+
+3. **Selecionar nicho:**
+   - Escolher um ou mais nichos
+   - Se for "Outros", descrever qual
+
+4. **Preencher objetivos:**
+   - Objetivo para 6 meses (textarea)
+   - Dificuldade principal (textarea)
+
+5. **Analisar canais:**
+   - **Para SITE:** 8 campos pré-preenchidos (design, proposta, imagens, etc)
+   - **Para INSTAGRAM:** 7 campos (visual, frequência, engajamento, etc)
+   - **Para TIKTOK:** 6 campos (consistência, views, trends, etc)
+   - Dar nota de 0-5 para cada campo
+   - Opcionalmente adicionar campos personalizados
+
+6. **Preencher orientações:**
+   - Campo livre para escrever observações pessoais
+
+7. **Gerar relatório:**
+   - Clicar em "Gerar Relatório em PDF"
+   - Aguardar processamento (5-10 segundos)
+   - PDF é automaticamente baixado
+
+### Para o Gerente:
+
+1. **Acessar dados salvos:**
+   - Os dados ficam salvos no navegador (localStorage)
+   - Com Firebase configurado, ficam permanentes
+
+2. **Exportar leads:**
+   - Usar função `exportLeadsToCSV()` no console
+   - Dados saem em CSV para importar em Excel/planilha
+
+3. **Ver análises anteriores:**
+   - Com Firebase, você vê todos os relatórios já gerados
+   - Pode filtar por especialista, nicho, data, etc
+
+---
+
+## 🐛 TROUBLESHOOTING {#troubleshooting}
+
+### Problema: "PDF não está sendo gerado"
+
+**Solução:**
+- Verifique se todos os campos obrigatórios foram preenchidos
+- Veja o console (F12 → Console) para erros
+- Se houver erro de "html2pdf not found", a biblioteca não carregou
+
+### Problema: "IA não está gerando resumo"
+
+**Solução:**
+- Verifique se o token do Hugging Face está correto
+- Se usar fallback, o resumo genérico ainda será gerado
+- Tente aguardar mais tempo (até 30 segundos)
+
+### Problema: "Dados não estão sendo salvos"
+
+**Solução 1: Sem Firebase (OK)**
+- Os dados são salvos em localStorage (no navegador)
+- Dados persistem entre sessões
+
+**Solução 2: Com Firebase**
+- Verificar se Firebase foi corretamente configurado
+- Verificar se creditais estão corretas
+- Testar se Firestore está criado (não está vazio)
+
+### Problema: "Erro ao fazer deploy no Vercel/Netlify"
+
+**Solução:**
+- Certificar que index.html está na raiz da pasta
+- Certificar que app.js está na mesma pasta que index.html
+- Verificar se não há caracteres especiais nos nomes dos arquivos
+
+### Problema: "Formulário não salva dados de campos personalizados"
+
+**Solução:**
+- Os campos personalizados são salvos, mas precisam ser preenchidos
+- Verifique se selecionou a nota (0-5) para cada campo personalizado
+
+---
+
+## 📱 MOBILE & RESPONSIVO
+
+A aplicação é totalmente responsiva e funciona em:
+- ✅ Desktop (Chrome, Firefox, Safari, Edge)
+- ✅ Tablet (iPad, Android tablets)
+- ✅ Mobile (iPhone, Android phones)
+
+Os PDFs gerados ficam otimizados para impressão e visualização.
+
+---
+
+## 🔐 SEGURANÇA E PRIVACIDADE
+
+### Dados Sensíveis:
+- Telefone e email são dados do cliente
+- No Firebase, isso está protegido (modo test)
+- Para produção, ativar regras de segurança no Firestore
+
+### Exemplo de Regra Segura:
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /businesses/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+```
+
+---
+
+## 📊 BANCOS DE DADOS SUPORTADOS
+
+Além de Firebase, você pode integrar:
+
+1. **Supabase** (PostgreSQL gratuito)
+2. **MongoDB Atlas** (NoSQL gratuito)
+3. **AWS RDS** (com free tier)
+4. **Serverless com Fauna** (GraphQL)
+
+Solicite configuração se precisar de outra opção.
+
+---
+
+## 🎯 PRÓXIMAS MELHORIAS POSSÍVEIS
+
+- [ ] Dashboard com gráficos de relatórios
+- [ ] Sistema de usuários e permissões
+- [ ] Templates de email personalizados
+- [ ] Integração com WhatsApp/Telegram para notificações
+- [ ] App mobile com React Native
+- [ ] Histórico de evolução dos leads
+- [ ] Comparativo antes/depois
+
+---
+
+## 📞 SUPORTE
+
+Se tiver dúvidas:
+1. Verifique o console (F12)
+2. Leia este guia novamente
+3. Procure alternativas na seção de IA/Deploy
+
+---
+
+## ✅ CHECKLIST DE CONFIGURAÇÃO
+
+- [ ] Firebase criado e Firestore ativado
+- [ ] Credenciais Firebase copiadas no app.js
+- [ ] Script do Firebase adicionado no index.html
+- [ ] Hugging Face token adicionado no app.js
+- [ ] Projeto feito deploy em Vercel/Netlify/GitHub Pages
+- [ ] Testado em desktop
+- [ ] Testado em mobile
+- [ ] PDF gerado com sucesso
+- [ ] Dados salvos no banco
+
+---
+
+**Versão:** 1.0  
+**Última atualização:** Junho 2026  
+**Desenvolvido por:** Sistema de Análise de Negócios
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Avaliação de Negócios</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select,
+        textarea {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .nicho-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-item label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .rating-section {
+            margin-top: 20px;
+        }
+
+        .rating-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .rating-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .rating-scale input[type="radio"] {
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+        }
+
+        .rating-value {
+            min-width: 50px;
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .add-field-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .add-field-btn:hover {
+            background: #218838;
+        }
+
+        .custom-field {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .custom-field input {
+            flex: 1;
+        }
+
+        .custom-field .rating-scale {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                min-width: unset;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Análise de Negócios</h1>
+            <p>Sistema de Avaliação Empresarial com Relatório em PDF</p>
+        </div>
+
+        <div id="message"></div>
+
+        <form id="businessForm">
+            <!-- SEÇÃO 1: DADOS DO CLIENTE -->
+            <div class="form-section">
+                <h2 class="section-title">👤 Dados do Cliente</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="clientName">Nome do Cliente *</label>
+                        <input type="text" id="clientName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="especialista">Nome do Especialista (Closer) *</label>
+                        <input type="text" id="especialista" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Telefone * (formato: +55XXXXXXXXXXX)</label>
+                        <input type="tel" id="phone" placeholder="+55" value="+55" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="revenue">Faturamento Médio (últimos 3 meses) *</label>
+                        <input type="number" id="revenue" placeholder="Ex: 10000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goal">Objetivo Financeiro Mensal *</label>
+                        <input type="number" id="goal" placeholder="Ex: 15000" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 2: NICHO DE NEGÓCIO -->
+            <div class="form-section">
+                <h2 class="section-title">🏢 Nicho de Negócio</h2>
+                <div class="nicho-section">
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Semijoias" id="nicho-semijoias">
+                        <label for="nicho-semijoias">Semijoias</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Acessórios Feminino" id="nicho-acessoriosFem">
+                        <label for="nicho-acessoriosFem">Acessórios Feminino</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Acessórios Masculino" id="nicho-acessoriosMas">
+                        <label for="nicho-acessoriosMas">Acessórios Masculino</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Moda Feminina" id="nicho-modaFem">
+                        <label for="nicho-modaFem">Moda Feminina</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Moda Masculina" id="nicho-modaMas">
+                        <label for="nicho-modaMas">Moda Masculina</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Fitness" id="nicho-fitness">
+                        <label for="nicho-fitness">Fitness</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Home & Decor" id="nicho-home">
+                        <label for="nicho-home">Home & Decor</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Eletro & Eletrônicos" id="nicho-eletro">
+                        <label for="nicho-eletro">Eletro & Eletrônicos</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Sexy Shop" id="nicho-sexy">
+                        <label for="nicho-sexy">Sexy Shop</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Cosméticos & Beleza" id="nicho-cosmeticos">
+                        <label for="nicho-cosmeticos">Cosméticos & Beleza</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Esotérica" id="nicho-esoterica">
+                        <label for="nicho-esoterica">Esotérica</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Automotiva" id="nicho-automotiva">
+                        <label for="nicho-automotiva">Automotiva</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Outros" id="nicho-outros">
+                        <label for="nicho-outros">Outros</label>
+                    </div>
+                </div>
+
+                <div id="outroNichoContainer" class="hidden" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label for="outroNicho">Especifique o nicho *</label>
+                        <input type="text" id="outroNicho" placeholder="Qual é o nicho do negócio?">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 3: OBJETIVOS -->
+            <div class="form-section">
+                <h2 class="section-title">🎯 Objetivos e Desafios</h2>
+                <div class="form-grid">
+                    <div style="grid-column: 1 / -1;" class="form-group">
+                        <label for="objetivo6m">Principal Objetivo a ser alcançado nos próximos 6 meses *</label>
+                        <textarea id="objetivo6m" required></textarea>
+                    </div>
+
+                    <div style="grid-column: 1 / -1;" class="form-group">
+                        <label for="dificuldade">Principal Dificuldade a ser solucionada *</label>
+                        <textarea id="dificuldade" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 4: ANÁLISE DE CANAIS -->
+            <div class="form-section">
+                <h2 class="section-title">📱 Análise de Canais</h2>
+
+                <!-- Página/Site -->
+                <div class="rating-section">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">🌐 Página/Site Analisada</h3>
+                    
+                    <div class="rating-item">
+                        <label class="rating-label">Design e UX (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Design e experiência do usuário</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_design" value="0"> 0
+                            <input type="radio" name="site_design" value="1"> 1
+                            <input type="radio" name="site_design" value="2"> 2
+                            <input type="radio" name="site_design" value="3"> 3
+                            <input type="radio" name="site_design" value="4"> 4
+                            <input type="radio" name="site_design" value="5"> 5
+                            <div class="rating-value" id="rating-site_design">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Proposta de Valor (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Clareza da proposta de valor</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_proposta" value="0"> 0
+                            <input type="radio" name="site_proposta" value="1"> 1
+                            <input type="radio" name="site_proposta" value="2"> 2
+                            <input type="radio" name="site_proposta" value="3"> 3
+                            <input type="radio" name="site_proposta" value="4"> 4
+                            <input type="radio" name="site_proposta" value="5"> 5
+                            <div class="rating-value" id="rating-site_proposta">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Qualidade das Imagens (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Qualidade das fotos/vídeos dos produtos</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_imagens" value="0"> 0
+                            <input type="radio" name="site_imagens" value="1"> 1
+                            <input type="radio" name="site_imagens" value="2"> 2
+                            <input type="radio" name="site_imagens" value="3"> 3
+                            <input type="radio" name="site_imagens" value="4"> 4
+                            <input type="radio" name="site_imagens" value="5"> 5
+                            <div class="rating-value" id="rating-site_imagens">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Descrição de Produtos (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Descrição completa e atrativa</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_descricao" value="0"> 0
+                            <input type="radio" name="site_descricao" value="1"> 1
+                            <input type="radio" name="site_descricao" value="2"> 2
+                            <input type="radio" name="site_descricao" value="3"> 3
+                            <input type="radio" name="site_descricao" value="4"> 4
+                            <input type="radio" name="site_descricao" value="5"> 5
+                            <div class="rating-value" id="rating-site_descricao">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Formas de Pagamento (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Variedade de opções de pagamento</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_pagamento" value="0"> 0
+                            <input type="radio" name="site_pagamento" value="1"> 1
+                            <input type="radio" name="site_pagamento" value="2"> 2
+                            <input type="radio" name="site_pagamento" value="3"> 3
+                            <input type="radio" name="site_pagamento" value="4"> 4
+                            <input type="radio" name="site_pagamento" value="5"> 5
+                            <div class="rating-value" id="rating-site_pagamento">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Velocidade (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Velocidade de carregamento</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_velocidade" value="0"> 0
+                            <input type="radio" name="site_velocidade" value="1"> 1
+                            <input type="radio" name="site_velocidade" value="2"> 2
+                            <input type="radio" name="site_velocidade" value="3"> 3
+                            <input type="radio" name="site_velocidade" value="4"> 4
+                            <input type="radio" name="site_velocidade" value="5"> 5
+                            <div class="rating-value" id="rating-site_velocidade">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Segurança (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Confiabilidade e segurança (selos, certificados)</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_seguranca" value="0"> 0
+                            <input type="radio" name="site_seguranca" value="1"> 1
+                            <input type="radio" name="site_seguranca" value="2"> 2
+                            <input type="radio" name="site_seguranca" value="3"> 3
+                            <input type="radio" name="site_seguranca" value="4"> 4
+                            <input type="radio" name="site_seguranca" value="5"> 5
+                            <div class="rating-value" id="rating-site_seguranca">-</div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="add-field-btn" onclick="addCustomField('site')">+ Adicionar Campo Personalizado</button>
+                    <div id="customFields-site"></div>
+                </div>
+
+                <!-- Instagram -->
+                <div class="rating-section" style="margin-top: 30px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📷 Perfil Instagram Analisado</h3>
+                    
+                    <div class="rating-item">
+                        <label class="rating-label">Identidade Visual (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Consistência visual e identidade de marca</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_visual" value="0"> 0
+                            <input type="radio" name="insta_visual" value="1"> 1
+                            <input type="radio" name="insta_visual" value="2"> 2
+                            <input type="radio" name="insta_visual" value="3"> 3
+                            <input type="radio" name="insta_visual" value="4"> 4
+                            <input type="radio" name="insta_visual" value="5"> 5
+                            <div class="rating-value" id="rating-insta_visual">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Frequência de Posts (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Frequência e consistência de publicações</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_frequencia" value="0"> 0
+                            <input type="radio" name="insta_frequencia" value="1"> 1
+                            <input type="radio" name="insta_frequencia" value="2"> 2
+                            <input type="radio" name="insta_frequencia" value="3"> 3
+                            <input type="radio" name="insta_frequencia" value="4"> 4
+                            <input type="radio" name="insta_frequencia" value="5"> 5
+                            <div class="rating-value" id="rating-insta_frequencia">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Engajamento (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Taxa de engajamento (likes, comentários)</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_engajamento" value="0"> 0
+                            <input type="radio" name="insta_engajamento" value="1"> 1
+                            <input type="radio" name="insta_engajamento" value="2"> 2
+                            <input type="radio" name="insta_engajamento" value="3"> 3
+                            <input type="radio" name="insta_engajamento" value="4"> 4
+                            <input type="radio" name="insta_engajamento" value="5"> 5
+                            <div class="rating-value" id="rating-insta_engajamento">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Qualidade do Conteúdo (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Qualidade de fotos, carrosséis e reels</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_conteudo" value="0"> 0
+                            <input type="radio" name="insta_conteudo" value="1"> 1
+                            <input type="radio" name="insta_conteudo" value="2"> 2
+                            <input type="radio" name="insta_conteudo" value="3"> 3
+                            <input type="radio" name="insta_conteudo" value="4"> 4
+                            <input type="radio" name="insta_conteudo" value="5"> 5
+                            <div class="rating-value" id="rating-insta_conteudo">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Bio e Call-to-Action (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Bio otimizada com CTA claro</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_bio" value="0"> 0
+                            <input type="radio" name="insta_bio" value="1"> 1
+                            <input type="radio" name="insta_bio" value="2"> 2
+                            <input type="radio" name="insta_bio" value="3"> 3
+                            <input type="radio" name="insta_bio" value="4"> 4
+                            <input type="radio" name="insta_bio" value="5"> 5
+                            <div class="rating-value" id="rating-insta_bio">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Stories e Highlights (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Estratégia de stories e highlights</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_stories" value="0"> 0
+                            <input type="radio" name="insta_stories" value="1"> 1
+                            <input type="radio" name="insta_stories" value="2"> 2
+                            <input type="radio" name="insta_stories" value="3"> 3
+                            <input type="radio" name="insta_stories" value="4"> 4
+                            <input type="radio" name="insta_stories" value="5"> 5
+                            <div class="rating-value" id="rating-insta_stories">-</div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="add-field-btn" onclick="addCustomField('insta')">+ Adicionar Campo Personalizado</button>
+                    <div id="customFields-insta"></div>
+                </div>
+
+                <!-- TikTok -->
+                <div class="rating-section" style="margin-top: 30px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">🎵 Perfil TikTok / TikTok Shop</h3>
+                    
+                    <div class="rating-item">
+                        <label class="rating-label">Consistência de Conteúdo (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Consistência e potencial viral</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_consistencia" value="0"> 0
+                            <input type="radio" name="tiktok_consistencia" value="1"> 1
+                            <input type="radio" name="tiktok_consistencia" value="2"> 2
+                            <input type="radio" name="tiktok_consistencia" value="3"> 3
+                            <input type="radio" name="tiktok_consistencia" value="4"> 4
+                            <input type="radio" name="tiktok_consistencia" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_consistencia">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Taxa de Views (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Desempenho de views por vídeo</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_views" value="0"> 0
+                            <input type="radio" name="tiktok_views" value="1"> 1
+                            <input type="radio" name="tiktok_views" value="2"> 2
+                            <input type="radio" name="tiktok_views" value="3"> 3
+                            <input type="radio" name="tiktok_views" value="4"> 4
+                            <input type="radio" name="tiktok_views" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_views">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Tendências e Relevância (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Acompanhamento de trends</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_trends" value="0"> 0
+                            <input type="radio" name="tiktok_trends" value="1"> 1
+                            <input type="radio" name="tiktok_trends" value="2"> 2
+                            <input type="radio" name="tiktok_trends" value="3"> 3
+                            <input type="radio" name="tiktok_trends" value="4"> 4
+                            <input type="radio" name="tiktok_trends" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_trends">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Qualidade Produção (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Qualidade de produção dos vídeos</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_qualidade" value="0"> 0
+                            <input type="radio" name="tiktok_qualidade" value="1"> 1
+                            <input type="radio" name="tiktok_qualidade" value="2"> 2
+                            <input type="radio" name="tiktok_qualidade" value="3"> 3
+                            <input type="radio" name="tiktok_qualidade" value="4"> 4
+                            <input type="radio" name="tiktok_qualidade" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_qualidade">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Integração TikTok Shop (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Qualidade da integração com loja</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_shop" value="0"> 0
+                            <input type="radio" name="tiktok_shop" value="1"> 1
+                            <input type="radio" name="tiktok_shop" value="2"> 2
+                            <input type="radio" name="tiktok_shop" value="3"> 3
+                            <input type="radio" name="tiktok_shop" value="4"> 4
+                            <input type="radio" name="tiktok_shop" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_shop">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Engajamento (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Comentários, duetos, compartilhamentos</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_engajamento" value="0"> 0
+                            <input type="radio" name="tiktok_engajamento" value="1"> 1
+                            <input type="radio" name="tiktok_engajamento" value="2"> 2
+                            <input type="radio" name="tiktok_engajamento" value="3"> 3
+                            <input type="radio" name="tiktok_engajamento" value="4"> 4
+                            <input type="radio" name="tiktok_engajamento" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_engajamento">-</div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="add-field-btn" onclick="addCustomField('tiktok')">+ Adicionar Campo Personalizado</button>
+                    <div id="customFields-tiktok"></div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 5: ORIENTAÇÕES -->
+            <div class="form-section">
+                <h2 class="section-title">💡 Orientações do Especialista</h2>
+                <div class="form-group">
+                    <label for="orientacoes">Observações e Recomendações Personalizadas *</label>
+                    <textarea id="orientacoes" required placeholder="Compartilhe suas observações pessoais sobre o negócio analisado..."></textarea>
+                </div>
+            </div>
+
+            <!-- BOTÕES DE AÇÃO -->
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">📄 Gerar Relatório em PDF</button>
+                <button type="reset" class="btn btn-secondary">Limpar Formulário</button>
+            </div>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Gerando relatório... Por favor, aguarde!</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+
+// Configuração do Firebase (Gratuito - Spark Plan)
+// Você precisa criar uma conta em https://console.firebase.google.com/
+const firebaseConfig = {
+    apiKey: "SUA_API_KEY_AQUI",
+    authDomain: "seu-projeto.firebaseapp.com",
+    projectId: "seu-projeto",
+    storageBucket: "seu-projeto.appspot.com",
+    messagingSenderId: "seu-sender-id",
+    appId: "seu-app-id"
+};
+
+// Inicialize Firebase
+// Descomente quando configurar Firebase
+// firebase.initializeApp(firebaseConfig);
+// const db = firebase.firestore();
+
+// Variável para armazenar dados localmente (antes de conectar ao Firebase)
+let allBusinessData = JSON.parse(localStorage.getItem('businessData')) || [];
+
+// Função para mostrar mensagens
+function showMessage(text, type = 'success') {
+    const messageDiv = document.getElementById('message');
+    messageDiv.className = `message ${type}`;
+    messageDiv.textContent = text;
+    messageDiv.style.display = 'block';
+    
+    if (type === 'success') {
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+        }, 5000);
+    }
+}
+
+// Adicionar campo personalizado
+function addCustomField(platform) {
+    const container = document.getElementById(`customFields-${platform}`);
+    const fieldId = `custom-${platform}-${Date.now()}`;
+    
+    const html = `
+        <div class="custom-field">
+            <input type="text" placeholder="Nome do campo" class="field-name" value="">
+            <div class="rating-scale" style="flex: 1; margin-bottom: 0;">
+                <input type="radio" name="${fieldId}" value="0"> 0
+                <input type="radio" name="${fieldId}" value="1"> 1
+                <input type="radio" name="${fieldId}" value="2"> 2
+                <input type="radio" name="${fieldId}" value="3"> 3
+                <input type="radio" name="${fieldId}" value="4"> 4
+                <input type="radio" name="${fieldId}" value="5"> 5
+                <div class="rating-value">-</div>
+            </div>
+            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Remover</button>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+    
+    // Adicionar listener para atualizar rating
+    const radioButtons = container.lastElementChild.querySelectorAll(`input[name="${fieldId}"]`);
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const ratingValue = e.target.parentElement.querySelector('.rating-value');
+            ratingValue.textContent = e.target.value;
+        });
+    });
+}
+
+// Atualizar valor de rating visualmente
+document.addEventListener('change', (e) => {
+    if (e.target.type === 'radio' && e.target.name.startsWith('site_') || 
+        e.target.name.startsWith('insta_') || 
+        e.target.name.startsWith('tiktok_')) {
+        
+        const fieldName = e.target.name;
+        const ratingValue = document.getElementById(`rating-${fieldName}`);
+        if (ratingValue) {
+            ratingValue.textContent = e.target.value;
+        }
+    }
+});
+
+// Mostrar/Ocultar campo de "Outro Nicho"
+document.getElementById('nicho-outros').addEventListener('change', (e) => {
+    document.getElementById('outroNichoContainer').classList.toggle('hidden', !e.target.checked);
+    if (e.target.checked) {
+        document.getElementById('outroNicho').focus();
+    }
+});
+
+// Processar envio do formulário
+document.getElementById('businessForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    try {
+        showMessage('Coletando dados...', 'success');
+        
+        // Coletar dados
+        const formData = collectFormData();
+        
+        // Validar dados obrigatórios
+        if (!validateForm(formData)) {
+            showMessage('Por favor, preencha todos os campos obrigatórios!', 'error');
+            return;
+        }
+        
+        // Mostrar loading
+        document.getElementById('loading').style.display = 'block';
+        
+        // Gerar resumo com IA (Gratuito com Hugging Face)
+        showMessage('Gerando análise com IA...');
+        formData.aiSummary = await generateAISummary(formData);
+        
+        // Calcular KPIs
+        formData.kpis = calculateKPIs(formData);
+        
+        // Salvar dados
+        formData.id = Date.now();
+        formData.date = new Date().toLocaleDateString('pt-BR');
+        allBusinessData.push(formData);
+        localStorage.setItem('businessData', JSON.stringify(allBusinessData));
+        
+        // Gerar PDF
+        await generatePDF(formData);
+        
+        // Salvar no Firebase se disponível
+        // await saveToDB(formData);
+        
+        document.getElementById('loading').style.display = 'none';
+        showMessage('✅ Relatório gerado com sucesso!', 'success');
+        
+        // Limpar formulário
+        document.getElementById('businessForm').reset();
+        document.getElementById('message').style.display = 'none';
+        
+    } catch (error) {
+        console.error('Erro:', error);
+        document.getElementById('loading').style.display = 'none';
+        showMessage(`Erro ao gerar relatório: ${error.message}`, 'error');
+    }
+});
+
+// Coletar dados do formulário
+function collectFormData() {
+    const nichos = Array.from(document.querySelectorAll('input[name="nicho"]:checked'))
+        .map(el => el.value);
+    
+    const outroNicho = nichos.includes('Outros') ? document.getElementById('outroNicho').value : '';
+    
+    const data = {
+        // Dados do Cliente
+        clientName: document.getElementById('clientName').value,
+        especialista: document.getElementById('especialista').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        revenue: parseFloat(document.getElementById('revenue').value),
+        goal: parseFloat(document.getElementById('goal').value),
+        
+        // Nicho
+        nichos: nichos,
+        outroNicho: outroNicho,
+        
+        // Objetivos
+        objetivo6m: document.getElementById('objetivo6m').value,
+        dificuldade: document.getElementById('dificuldade').value,
+        
+        // Análises
+        site: collectChannelData('site'),
+        instagram: collectChannelData('insta'),
+        tiktok: collectChannelData('tiktok'),
+        
+        // Orientações
+        orientacoes: document.getElementById('orientacoes').value
+    };
+    
+    return data;
+}
+
+// Coletar dados de um canal específico
+function collectChannelData(platform) {
+    const ratings = {};
+    
+    // Coletar ratings padrão
+    const radios = document.querySelectorAll(`input[name^="${platform}_"]`);
+    radios.forEach(radio => {
+        if (radio.checked) {
+            ratings[radio.name.replace(`${platform}_`, '')] = parseInt(radio.value);
+        }
+    });
+    
+    // Coletar campos personalizados
+    const customFields = document.getElementById(`customFields-${platform}`);
+    const customData = {};
+    
+    if (customFields) {
+        customFields.querySelectorAll('.custom-field').forEach(field => {
+            const fieldName = field.querySelector('.field-name')?.value || 
+                            field.parentElement.textContent.match(/Nome do campo[^:]*:\s*([^\n]*)/)?.[1];
+            const selectedRating = field.querySelector('input[type="radio"]:checked');
+            
+            if (fieldName && selectedRating) {
+                customData[fieldName] = parseInt(selectedRating.value);
+            }
+        });
+    }
+    
+    return { ...ratings, ...customData };
+}
+
+// Validar formulário
+function validateForm(data) {
+    return data.clientName && 
+           data.especialista && 
+           data.phone && 
+           data.email && 
+           data.revenue && 
+           data.goal && 
+           data.nichos.length > 0 &&
+           data.objetivo6m &&
+           data.dificuldade &&
+           data.orientacoes;
+}
+
+// Gerar resumo com IA (Hugging Face - 100% Gratuito)
+async function generateAISummary(formData) {
+    try {
+        const prompt = `
+Gere um breve diagnóstico executivo (máximo 200 palavras) para este negócio:
+
+Cliente: ${formData.clientName}
+Nicho: ${formData.nichos.join(', ')}
+Faturamento atual: R$ ${formData.revenue.toLocaleString('pt-BR')}
+Meta mensal: R$ ${formData.goal.toLocaleString('pt-BR')}
+
+Objetivo (6 meses): ${formData.objetivo6m}
+Dificuldade principal: ${formData.dificuldade}
+
+Avaliações:
+- Site: ${JSON.stringify(formData.site)}
+- Instagram: ${JSON.stringify(formData.instagram)}
+- TikTok: ${JSON.stringify(formData.tiktok)}
+
+Forneça uma análise concisa e objetiva com recomendações práticas.
+        `;
+
+        // Usando Hugging Face Inference API (GRATUITO)
+        const response = await fetch('https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer hf_kJzXxXxxXxXxXxXxXxXxXxXxXxXxXxXx', // SUBSTITUIR por seu token gratuito
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                inputs: prompt,
+                parameters: {
+                    max_new_tokens: 200,
+                    temperature: 0.7,
+                }
+            })
+        });
+
+        if (!response.ok) {
+            // Se falhar, retornar resumo genérico
+            return `
+Diagnóstico do Negócio de ${formData.clientName}:
+
+O negócio no segmento de ${formData.nichos.join(', ')} apresenta desafios relacionados a: ${formData.dificuldade}
+
+Recomendações principais:
+1. Melhorar os canais com avaliação mais baixa
+2. Focar na diversificação de tráfego
+3. Implementar estratégias de retenção de clientes
+4. Otimizar descrições de produtos e proposta de valor
+
+Potencial de crescimento: ELEVADO com as ações corretas.
+            `;
+        }
+
+        const result = await response.json();
+        return result[0]?.generated_text || generateFallbackSummary(formData);
+        
+    } catch (error) {
+        console.error('Erro na IA:', error);
+        return generateFallbackSummary(formData);
+    }
+}
+
+// Resumo fallback quando IA falha
+function generateFallbackSummary(formData) {
+    const avgRating = calculateAverageRating(formData);
+    const status = avgRating >= 4 ? 'EXCELENTE' : avgRating >= 3 ? 'BOM' : avgRating >= 2 ? 'REGULAR' : 'CRÍTICO';
+    
+    return `
+DIAGNÓSTICO EXECUTIVO
+
+Negócio: ${formData.clientName}
+Nicho: ${formData.nichos.join(', ')}
+
+STATUS GERAL: ${status} (Nota média: ${avgRating.toFixed(1)}/5)
+
+Desafio Principal: ${formData.dificuldade}
+Objetivo: ${formData.objetivo6m}
+
+RECOMENDAÇÕES:
+${formData.site && Object.values(formData.site).some(v => v < 2) ? '• Urgente: Melhorar presença no site\n' : ''}
+${formData.instagram && Object.values(formData.instagram).some(v => v < 2) ? '• Urgente: Fortalecer estratégia no Instagram\n' : ''}
+${formData.tiktok && Object.values(formData.tiktok).some(v => v < 2) ? '• Urgente: Otimizar presença no TikTok\n' : ''}
+
+Potencial de crescimento: ELEVADO
+
+Próximos passos conforme orientações do especialista.
+    `.trim();
+}
+
+// Calcular nota média
+function calculateAverageRating(data) {
+    const allRatings = [
+        ...Object.values(data.site || {}),
+        ...Object.values(data.instagram || {}),
+        ...Object.values(data.tiktok || {})
+    ].filter(v => typeof v === 'number');
+    
+    if (allRatings.length === 0) return 0;
+    return allRatings.reduce((a, b) => a + b) / allRatings.length;
+}
+
+// Calcular KPIs
+function calculateKPIs(data) {
+    const kpis = [];
+    const avgRating = calculateAverageRating(data);
+    const gapPercentual = ((data.goal - data.revenue) / data.revenue) * 100;
+    
+    // KPI 1: Crescimento necessário
+    kpis.push({
+        title: 'CRESCIMENTO NECESSÁRIO',
+        value: `${gapPercentual.toFixed(1)}%`,
+        urgency: gapPercentual > 100 ? 'CRÍTICO' : gapPercentual > 50 ? 'ALTO' : 'MÉDIO',
+        description: `Precisa crescer de R$ ${data.revenue.toLocaleString('pt-BR')} para R$ ${data.goal.toLocaleString('pt-BR')}`
+    });
+    
+    // KPI 2: Saúde Digital
+    kpis.push({
+        title: 'SAÚDE DIGITAL',
+        value: `${(avgRating * 20).toFixed(0)}%`,
+        urgency: avgRating >= 4 ? 'BAIXO' : avgRating >= 3 ? 'MÉDIO' : 'ALTO',
+        description: `Nota média: ${avgRating.toFixed(1)}/5 - ${avgRating >= 4 ? 'Excelente presença online' : avgRating >= 3 ? 'Presença consolidada' : 'Necessário melhorias urgentes'}`
+    });
+    
+    // KPI 3: Canal mais fraco
+    const channels = {
+        'Site': calculateChannelAverage(data.site),
+        'Instagram': calculateChannelAverage(data.instagram),
+        'TikTok': calculateChannelAverage(data.tiktok)
+    };
+    
+    const weakestChannel = Object.entries(channels).sort((a, b) => a[1] - b[1])[0];
+    kpis.push({
+        title: 'CANAL COM MAIOR POTENCIAL',
+        value: weakestChannel[0],
+        urgency: weakestChannel[1] < 2 ? 'CRÍTICO' : weakestChannel[1] < 3 ? 'ALTO' : 'MÉDIO',
+        description: `${weakestChannel[0]} com nota ${weakestChannel[1].toFixed(1)}/5 - Melhorar este canal pode gerar impacto imediato`
+    });
+    
+    // KPI 4: Readiness
+    const readiness = data.site && data.instagram && data.tiktok ? 
+        (calculateChannelAverage(data.site) + calculateChannelAverage(data.instagram) + calculateChannelAverage(data.tiktok)) / 3 : 0;
+    
+    kpis.push({
+        title: 'READINESS PARA ESCALAR',
+        value: readiness >= 4 ? 'PRONTO' : readiness >= 3 ? 'PARCIAL' : 'NÃO PRONTO',
+        urgency: readiness < 3 ? 'CRÍTICO' : readiness < 4 ? 'MÉDIO' : 'BAIXO',
+        description: `Negócio ${readiness >= 4 ? 'está pronto para investimentos em marketing' : readiness >= 3 ? 'precisa de ajustes antes de escalar' : 'precisa de otimizações estruturais'}`
+    });
+    
+    return kpis;
+}
+
+// Calcular média de um canal
+function calculateChannelAverage(channelData) {
+    if (!channelData || Object.keys(channelData).length === 0) return 0;
+    const values = Object.values(channelData).filter(v => typeof v === 'number');
+    if (values.length === 0) return 0;
+    return values.reduce((a, b) => a + b) / values.length;
+}
+
+// Gerar PDF
+async function generatePDF(data) {
+    const element = document.createElement('div');
+    element.style.padding = '20px';
+    element.style.fontFamily = 'Arial, sans-serif';
+    
+    // Cabeçalho
+    element.innerHTML = `
+        <div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #667eea; padding-bottom: 20px;">
+            <h1 style="color: #667eea; margin: 0;">📊 RELATÓRIO DE ANÁLISE DE NEGÓCIO</h1>
+            <p style="color: #666; margin: 10px 0 0 0;">Diagnóstico Completo de Presença Digital</p>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="color: #333; margin-top: 0;">👤 INFORMAÇÕES DO CLIENTE</h2>
+            <table style="width: 100%; font-size: 11px;">
+                <tr>
+                    <td style="padding: 8px;"><strong>Cliente:</strong> ${data.clientName}</td>
+                    <td style="padding: 8px;"><strong>Especialista:</strong> ${data.especialista}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;"><strong>Email:</strong> ${data.email}</td>
+                    <td style="padding: 8px;"><strong>Telefone:</strong> ${data.phone}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;"><strong>Faturamento Atual:</strong> R$ ${data.revenue.toLocaleString('pt-BR')}</td>
+                    <td style="padding: 8px;"><strong>Meta Mensal:</strong> R$ ${data.goal.toLocaleString('pt-BR')}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 8px;"><strong>Nicho:</strong> ${data.nichos.join(', ')} ${data.outroNicho ? '(' + data.outroNicho + ')' : ''}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding: 8px;"><strong>Data:</strong> ${data.date}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="color: #333; margin-top: 0;">🎯 OBJETIVOS E DESAFIOS</h2>
+            <div style="font-size: 11px;">
+                <p><strong>Objetivo (6 meses):</strong></p>
+                <p style="margin: 0; padding: 10px; background: white; border-radius: 5px;">${data.objetivo6m}</p>
+                
+                <p style="margin-top: 15px;"><strong>Dificuldade Principal:</strong></p>
+                <p style="margin: 0; padding: 10px; background: white; border-radius: 5px;">${data.dificuldade}</p>
+            </div>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px; page-break-inside: avoid;">
+            <h2 style="color: #333; margin-top: 0;">🗺️ MAPA DE NEGÓCIO</h2>
+            <canvas id="radarChart" style="max-height: 300px;"></canvas>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="color: #333; margin-top: 0;">📋 ANÁLISE DETALHADA</h2>
+            
+            <h3 style="color: #667eea; margin-top: 15px;">🌐 Análise do Site</h3>
+            ${generateRatingsHTML(data.site)}
+            
+            <h3 style="color: #667eea; margin-top: 15px;">📷 Análise do Instagram</h3>
+            ${generateRatingsHTML(data.instagram)}
+            
+            <h3 style="color: #667eea; margin-top: 15px;">🎵 Análise do TikTok</h3>
+            ${generateRatingsHTML(data.tiktok)}
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="color: #333; margin-top: 0;">⚠️ KPIs E NÍVEL DE URGÊNCIA</h2>
+            ${data.kpis.map(kpi => `
+                <div style="margin-bottom: 15px; padding: 15px; background: white; border-left: 4px solid ${kpi.urgency === 'CRÍTICO' ? '#dc3545' : kpi.urgency === 'ALTO' ? '#fd7e14' : '#28a745'}; border-radius: 5px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <strong style="font-size: 12px; color: #333;">${kpi.title}</strong>
+                        <span style="background: ${kpi.urgency === 'CRÍTICO' ? '#dc3545' : kpi.urgency === 'ALTO' ? '#fd7e14' : '#28a745'}; color: white; padding: 4px 12px; border-radius: 3px; font-size: 10px; font-weight: bold;">${kpi.urgency}</span>
+                    </div>
+                    <p style="margin: 5px 0; font-size: 14px; font-weight: bold; color: #667eea;">${kpi.value}</p>
+                    <p style="margin: 0; font-size: 10px; color: #666;">${kpi.description}</p>
+                </div>
+            `).join('')}
+        </div>
+
+        <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="color: #1976d2; margin-top: 0;">🤖 DIAGNÓSTICO PELA IA</h2>
+            <div style="font-size: 10px; line-height: 1.6; color: #333; white-space: pre-wrap;">${data.aiSummary}</div>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+            <h2 style="color: #333; margin-top: 0;">💡 ORIENTAÇÕES DO ESPECIALISTA</h2>
+            <div style="font-size: 11px; line-height: 1.6; white-space: pre-wrap; padding: 15px; background: white; border-radius: 5px; border-left: 4px solid #667eea;">${data.orientacoes}</div>
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #ddd; text-align: center; font-size: 9px; color: #999;">
+            <p style="margin: 0;">Relatório gerado em: ${new Date().toLocaleString('pt-BR')}</p>
+            <p style="margin: 5px 0 0 0;">Sistema de Análise de Negócios</p>
+        </div>
+    `;
+    
+    document.body.appendChild(element);
+    
+    // Aguardar um pouco para o gráfico ser renderizado
+    setTimeout(() => {
+        // Criar gráfico radar
+        createRadarChart(data, () => {
+            // Gerar PDF
+            html2pdf().set({
+                margin: 10,
+                filename: `Analise_${data.clientName.replace(/\s+/g, '_')}_${new Date().getTime()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+            }).save().then(() => {
+                document.body.removeChild(element);
+            });
+        });
+    }, 100);
+}
+
+// Gerar HTML das avaliações
+function generateRatingsHTML(ratings) {
+    if (!ratings || Object.keys(ratings).length === 0) {
+        return '<p style="font-size: 10px; color: #999;">Nenhuma avaliação realizada</p>';
+    }
+    
+    return Object.entries(ratings).map(([key, value]) => {
+        const barWidth = (value / 5) * 100;
+        return `
+            <div style="margin: 10px 0; font-size: 10px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
+                    <span>${key}</span>
+                    <span style="font-weight: bold; color: #667eea;">${value}/5</span>
+                </div>
+                <div style="background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div style="background: linear-gradient(to right, #667eea, #764ba2); height: 100%; width: ${barWidth}%; border-radius: 4px;"></div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Criar gráfico radar
+function createRadarChart(data, callback) {
+    const labels = [];
+    const dataPoints = [];
+    
+    // Site
+    if (data.site) {
+        Object.entries(data.site).forEach(([key, value]) => {
+            labels.push(`Site: ${key}`);
+            dataPoints.push(value);
+        });
+    }
+    
+    // Instagram
+    if (data.instagram) {
+        Object.entries(data.instagram).forEach(([key, value]) => {
+            labels.push(`IG: ${key}`);
+            dataPoints.push(value);
+        });
+    }
+    
+    // TikTok
+    if (data.tiktok) {
+        Object.entries(data.tiktok).forEach(([key, value]) => {
+            labels.push(`TK: ${key}`);
+            dataPoints.push(value);
+        });
+    }
+    
+    const canvas = document.getElementById('radarChart');
+    if (!canvas) {
+        callback();
+        return;
+    }
+    
+    const ctx = canvas.getContext('2d');
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Avaliação do Negócio',
+                data: dataPoints,
+                borderColor: '#667eea',
+                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                pointBackgroundColor: '#667eea',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 5,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        font: { size: 10 }
+                    }
+                }
+            }
+        },
+        plugins: [{
+            afterDatasetsDraw: function() {
+                callback();
+            }
+        }]
+    });
+}
+
+// Salvar no Firebase (opcional - descomente quando configurar)
+async function saveToDB(data) {
+    try {
+        // await db.collection('businesses').add({
+        //     ...data,
+        //     timestamp: new Date()
+        // });
+        console.log('Dados salvos com sucesso!');
+    } catch (error) {
+        console.error('Erro ao salvar no banco:', error);
+    }
+}
+
+// Exportar leads para CSV
+function exportLeadsToCSV() {
+    if (allBusinessData.length === 0) {
+        alert('Nenhum registro para exportar!');
+        return;
+    }
+    
+    const headers = ['Data', 'Cliente', 'Especialista', 'Email', 'Telefone', 'Faturamento', 'Meta', 'Nicho'];
+    const rows = allBusinessData.map(item => [
+        item.date,
+        item.clientName,
+        item.especialista,
+        item.email,
+        item.phone,
+        `R$ ${item.revenue.toLocaleString('pt-BR')}`,
+        `R$ ${item.goal.toLocaleString('pt-BR')}`,
+        item.nichos.join('; ')
+    ]);
+    
+    let csv = headers.join(',') + '\n';
+    rows.forEach(row => {
+        csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `Leads_${new Date().getTime()}.csv`);
+    link.click();
+}
+
+// Mostrar leads salvos
+function showSavedLeads() {
+    if (allBusinessData.length === 0) {
+        alert('Nenhum registro salvo!');
+        return;
+    }
+    
+    let html = '<h3>Leads Salvos</h3><table border="1" cellpadding="10"><tr><th>Data</th><th>Cliente</th><th>Especialista</th><th>Nicho</th><th>Meta</th></tr>';
+    
+    allBusinessData.forEach(item => {
+        html += `<tr>
+            <td>${item.date}</td>
+            <td>${item.clientName}</td>
+            <td>${item.especialista}</td>
+            <td>${item.nichos.join(', ')}</td>
+            <td>R$ ${item.goal.toLocaleString('pt-BR')}</td>
+        </tr>`;
+    });
+    
+    html += '</table>';
+    
+    const modal = window.open('', 'Leads', 'width=800,height=600');
+    modal.document.write(html);
+    modal.document.close();
+}
+
+console.log('App carregado! Pronto para usar.');
