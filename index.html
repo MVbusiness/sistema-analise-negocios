@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Avaliação de Negócios</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select,
+        textarea {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .nicho-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-item label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .rating-section {
+            margin-top: 20px;
+        }
+
+        .rating-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .rating-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .rating-scale input[type="radio"] {
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+        }
+
+        .rating-value {
+            min-width: 50px;
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .add-field-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .add-field-btn:hover {
+            background: #218838;
+        }
+
+        .custom-field {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .custom-field input {
+            flex: 1;
+        }
+
+        .custom-field .rating-scale {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                min-width: unset;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Análise de Negócios</h1>
+            <p>Sistema de Avaliação Empresarial com Relatório em PDF</p>
+        </div>
+
+        <div id="message"></div>
+
+        <form id="businessForm">
+            <!-- SEÇÃO 1: DADOS DO CLIENTE -->
+            <div class="form-section">
+                <h2 class="section-title">👤 Dados do Cliente</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="clientName">Nome do Cliente *</label>
+                        <input type="text" id="clientName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="especialista">Nome do Especialista (Closer) *</label>
+                        <input type="text" id="especialista" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Telefone * (formato: +55XXXXXXXXXXX)</label>
+                        <input type="tel" id="phone" placeholder="+55" value="+55" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="revenue">Faturamento Médio (últimos 3 meses) *</label>
+                        <input type="number" id="revenue" placeholder="Ex: 10000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goal">Objetivo Financeiro Mensal *</label>
+                        <input type="number" id="goal" placeholder="Ex: 15000" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 2: NICHO DE NEGÓCIO -->
+            <div class="form-section">
+                <h2 class="section-title">🏢 Nicho de Negócio</h2>
+                <div class="nicho-section">
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Semijoias" id="nicho-semijoias">
+                        <label for="nicho-semijoias">Semijoias</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Acessórios Feminino" id="nicho-acessoriosFem">
+                        <label for="nicho-acessoriosFem">Acessórios Feminino</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Acessórios Masculino" id="nicho-acessoriosMas">
+                        <label for="nicho-acessoriosMas">Acessórios Masculino</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Moda Feminina" id="nicho-modaFem">
+                        <label for="nicho-modaFem">Moda Feminina</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Moda Masculina" id="nicho-modaMas">
+                        <label for="nicho-modaMas">Moda Masculina</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Fitness" id="nicho-fitness">
+                        <label for="nicho-fitness">Fitness</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Home & Decor" id="nicho-home">
+                        <label for="nicho-home">Home & Decor</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Eletro & Eletrônicos" id="nicho-eletro">
+                        <label for="nicho-eletro">Eletro & Eletrônicos</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Sexy Shop" id="nicho-sexy">
+                        <label for="nicho-sexy">Sexy Shop</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Cosméticos & Beleza" id="nicho-cosmeticos">
+                        <label for="nicho-cosmeticos">Cosméticos & Beleza</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Esotérica" id="nicho-esoterica">
+                        <label for="nicho-esoterica">Esotérica</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Automotiva" id="nicho-automotiva">
+                        <label for="nicho-automotiva">Automotiva</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" name="nicho" value="Outros" id="nicho-outros">
+                        <label for="nicho-outros">Outros</label>
+                    </div>
+                </div>
+
+                <div id="outroNichoContainer" class="hidden" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label for="outroNicho">Especifique o nicho *</label>
+                        <input type="text" id="outroNicho" placeholder="Qual é o nicho do negócio?">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 3: OBJETIVOS -->
+            <div class="form-section">
+                <h2 class="section-title">🎯 Objetivos e Desafios</h2>
+                <div class="form-grid">
+                    <div style="grid-column: 1 / -1;" class="form-group">
+                        <label for="objetivo6m">Principal Objetivo a ser alcançado nos próximos 6 meses *</label>
+                        <textarea id="objetivo6m" required></textarea>
+                    </div>
+
+                    <div style="grid-column: 1 / -1;" class="form-group">
+                        <label for="dificuldade">Principal Dificuldade a ser solucionada *</label>
+                        <textarea id="dificuldade" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 4: ANÁLISE DE CANAIS -->
+            <div class="form-section">
+                <h2 class="section-title">📱 Análise de Canais</h2>
+
+                <!-- Página/Site -->
+                <div class="rating-section">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">🌐 Página/Site Analisada</h3>
+                    
+                    <div class="rating-item">
+                        <label class="rating-label">Design e UX (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Design e experiência do usuário</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_design" value="0"> 0
+                            <input type="radio" name="site_design" value="1"> 1
+                            <input type="radio" name="site_design" value="2"> 2
+                            <input type="radio" name="site_design" value="3"> 3
+                            <input type="radio" name="site_design" value="4"> 4
+                            <input type="radio" name="site_design" value="5"> 5
+                            <div class="rating-value" id="rating-site_design">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Proposta de Valor (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Clareza da proposta de valor</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_proposta" value="0"> 0
+                            <input type="radio" name="site_proposta" value="1"> 1
+                            <input type="radio" name="site_proposta" value="2"> 2
+                            <input type="radio" name="site_proposta" value="3"> 3
+                            <input type="radio" name="site_proposta" value="4"> 4
+                            <input type="radio" name="site_proposta" value="5"> 5
+                            <div class="rating-value" id="rating-site_proposta">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Qualidade das Imagens (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Qualidade das fotos/vídeos dos produtos</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_imagens" value="0"> 0
+                            <input type="radio" name="site_imagens" value="1"> 1
+                            <input type="radio" name="site_imagens" value="2"> 2
+                            <input type="radio" name="site_imagens" value="3"> 3
+                            <input type="radio" name="site_imagens" value="4"> 4
+                            <input type="radio" name="site_imagens" value="5"> 5
+                            <div class="rating-value" id="rating-site_imagens">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Descrição de Produtos (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Descrição completa e atrativa</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_descricao" value="0"> 0
+                            <input type="radio" name="site_descricao" value="1"> 1
+                            <input type="radio" name="site_descricao" value="2"> 2
+                            <input type="radio" name="site_descricao" value="3"> 3
+                            <input type="radio" name="site_descricao" value="4"> 4
+                            <input type="radio" name="site_descricao" value="5"> 5
+                            <div class="rating-value" id="rating-site_descricao">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Formas de Pagamento (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Variedade de opções de pagamento</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_pagamento" value="0"> 0
+                            <input type="radio" name="site_pagamento" value="1"> 1
+                            <input type="radio" name="site_pagamento" value="2"> 2
+                            <input type="radio" name="site_pagamento" value="3"> 3
+                            <input type="radio" name="site_pagamento" value="4"> 4
+                            <input type="radio" name="site_pagamento" value="5"> 5
+                            <div class="rating-value" id="rating-site_pagamento">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Velocidade (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Velocidade de carregamento</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_velocidade" value="0"> 0
+                            <input type="radio" name="site_velocidade" value="1"> 1
+                            <input type="radio" name="site_velocidade" value="2"> 2
+                            <input type="radio" name="site_velocidade" value="3"> 3
+                            <input type="radio" name="site_velocidade" value="4"> 4
+                            <input type="radio" name="site_velocidade" value="5"> 5
+                            <div class="rating-value" id="rating-site_velocidade">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Segurança (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Confiabilidade e segurança (selos, certificados)</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="site_seguranca" value="0"> 0
+                            <input type="radio" name="site_seguranca" value="1"> 1
+                            <input type="radio" name="site_seguranca" value="2"> 2
+                            <input type="radio" name="site_seguranca" value="3"> 3
+                            <input type="radio" name="site_seguranca" value="4"> 4
+                            <input type="radio" name="site_seguranca" value="5"> 5
+                            <div class="rating-value" id="rating-site_seguranca">-</div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="add-field-btn" onclick="addCustomField('site')">+ Adicionar Campo Personalizado</button>
+                    <div id="customFields-site"></div>
+                </div>
+
+                <!-- Instagram -->
+                <div class="rating-section" style="margin-top: 30px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📷 Perfil Instagram Analisado</h3>
+                    
+                    <div class="rating-item">
+                        <label class="rating-label">Identidade Visual (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Consistência visual e identidade de marca</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_visual" value="0"> 0
+                            <input type="radio" name="insta_visual" value="1"> 1
+                            <input type="radio" name="insta_visual" value="2"> 2
+                            <input type="radio" name="insta_visual" value="3"> 3
+                            <input type="radio" name="insta_visual" value="4"> 4
+                            <input type="radio" name="insta_visual" value="5"> 5
+                            <div class="rating-value" id="rating-insta_visual">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Frequência de Posts (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Frequência e consistência de publicações</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_frequencia" value="0"> 0
+                            <input type="radio" name="insta_frequencia" value="1"> 1
+                            <input type="radio" name="insta_frequencia" value="2"> 2
+                            <input type="radio" name="insta_frequencia" value="3"> 3
+                            <input type="radio" name="insta_frequencia" value="4"> 4
+                            <input type="radio" name="insta_frequencia" value="5"> 5
+                            <div class="rating-value" id="rating-insta_frequencia">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Engajamento (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Taxa de engajamento (likes, comentários)</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_engajamento" value="0"> 0
+                            <input type="radio" name="insta_engajamento" value="1"> 1
+                            <input type="radio" name="insta_engajamento" value="2"> 2
+                            <input type="radio" name="insta_engajamento" value="3"> 3
+                            <input type="radio" name="insta_engajamento" value="4"> 4
+                            <input type="radio" name="insta_engajamento" value="5"> 5
+                            <div class="rating-value" id="rating-insta_engajamento">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Qualidade do Conteúdo (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Qualidade de fotos, carrosséis e reels</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_conteudo" value="0"> 0
+                            <input type="radio" name="insta_conteudo" value="1"> 1
+                            <input type="radio" name="insta_conteudo" value="2"> 2
+                            <input type="radio" name="insta_conteudo" value="3"> 3
+                            <input type="radio" name="insta_conteudo" value="4"> 4
+                            <input type="radio" name="insta_conteudo" value="5"> 5
+                            <div class="rating-value" id="rating-insta_conteudo">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Bio e Call-to-Action (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Bio otimizada com CTA claro</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_bio" value="0"> 0
+                            <input type="radio" name="insta_bio" value="1"> 1
+                            <input type="radio" name="insta_bio" value="2"> 2
+                            <input type="radio" name="insta_bio" value="3"> 3
+                            <input type="radio" name="insta_bio" value="4"> 4
+                            <input type="radio" name="insta_bio" value="5"> 5
+                            <div class="rating-value" id="rating-insta_bio">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Stories e Highlights (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Estratégia de stories e highlights</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="insta_stories" value="0"> 0
+                            <input type="radio" name="insta_stories" value="1"> 1
+                            <input type="radio" name="insta_stories" value="2"> 2
+                            <input type="radio" name="insta_stories" value="3"> 3
+                            <input type="radio" name="insta_stories" value="4"> 4
+                            <input type="radio" name="insta_stories" value="5"> 5
+                            <div class="rating-value" id="rating-insta_stories">-</div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="add-field-btn" onclick="addCustomField('insta')">+ Adicionar Campo Personalizado</button>
+                    <div id="customFields-insta"></div>
+                </div>
+
+                <!-- TikTok -->
+                <div class="rating-section" style="margin-top: 30px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">🎵 Perfil TikTok / TikTok Shop</h3>
+                    
+                    <div class="rating-item">
+                        <label class="rating-label">Consistência de Conteúdo (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Consistência e potencial viral</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_consistencia" value="0"> 0
+                            <input type="radio" name="tiktok_consistencia" value="1"> 1
+                            <input type="radio" name="tiktok_consistencia" value="2"> 2
+                            <input type="radio" name="tiktok_consistencia" value="3"> 3
+                            <input type="radio" name="tiktok_consistencia" value="4"> 4
+                            <input type="radio" name="tiktok_consistencia" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_consistencia">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Taxa de Views (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Desempenho de views por vídeo</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_views" value="0"> 0
+                            <input type="radio" name="tiktok_views" value="1"> 1
+                            <input type="radio" name="tiktok_views" value="2"> 2
+                            <input type="radio" name="tiktok_views" value="3"> 3
+                            <input type="radio" name="tiktok_views" value="4"> 4
+                            <input type="radio" name="tiktok_views" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_views">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Tendências e Relevância (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Acompanhamento de trends</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_trends" value="0"> 0
+                            <input type="radio" name="tiktok_trends" value="1"> 1
+                            <input type="radio" name="tiktok_trends" value="2"> 2
+                            <input type="radio" name="tiktok_trends" value="3"> 3
+                            <input type="radio" name="tiktok_trends" value="4"> 4
+                            <input type="radio" name="tiktok_trends" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_trends">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Qualidade Produção (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Qualidade de produção dos vídeos</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_qualidade" value="0"> 0
+                            <input type="radio" name="tiktok_qualidade" value="1"> 1
+                            <input type="radio" name="tiktok_qualidade" value="2"> 2
+                            <input type="radio" name="tiktok_qualidade" value="3"> 3
+                            <input type="radio" name="tiktok_qualidade" value="4"> 4
+                            <input type="radio" name="tiktok_qualidade" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_qualidade">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Integração TikTok Shop (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Qualidade da integração com loja</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_shop" value="0"> 0
+                            <input type="radio" name="tiktok_shop" value="1"> 1
+                            <input type="radio" name="tiktok_shop" value="2"> 2
+                            <input type="radio" name="tiktok_shop" value="3"> 3
+                            <input type="radio" name="tiktok_shop" value="4"> 4
+                            <input type="radio" name="tiktok_shop" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_shop">-</div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <label class="rating-label">Engajamento (0-5)</label>
+                        <div class="rating-scale">
+                            <span>Comentários, duetos, compartilhamentos</span>
+                            <div style="flex: 1;"></div>
+                            <input type="radio" name="tiktok_engajamento" value="0"> 0
+                            <input type="radio" name="tiktok_engajamento" value="1"> 1
+                            <input type="radio" name="tiktok_engajamento" value="2"> 2
+                            <input type="radio" name="tiktok_engajamento" value="3"> 3
+                            <input type="radio" name="tiktok_engajamento" value="4"> 4
+                            <input type="radio" name="tiktok_engajamento" value="5"> 5
+                            <div class="rating-value" id="rating-tiktok_engajamento">-</div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="add-field-btn" onclick="addCustomField('tiktok')">+ Adicionar Campo Personalizado</button>
+                    <div id="customFields-tiktok"></div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 5: ORIENTAÇÕES -->
+            <div class="form-section">
+                <h2 class="section-title">💡 Orientações do Especialista</h2>
+                <div class="form-group">
+                    <label for="orientacoes">Observações e Recomendações Personalizadas *</label>
+                    <textarea id="orientacoes" required placeholder="Compartilhe suas observações pessoais sobre o negócio analisado..."></textarea>
+                </div>
+            </div>
+
+            <!-- BOTÕES DE AÇÃO -->
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">📄 Gerar Relatório em PDF</button>
+                <button type="reset" class="btn btn-secondary">Limpar Formulário</button>
+            </div>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Gerando relatório... Por favor, aguarde!</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
