@@ -209,6 +209,44 @@ tr:hover td { background:var(--surface2); }
 .chart-area { background:var(--surface2); border-radius:12px; padding:20px; margin-bottom:20px; }
 .chart-title { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:16px; font-size:1rem; }
 
+
+/* FILTER BAR */
+.filter-bar {
+  display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end;
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:14px; padding:20px 22px; margin-bottom:20px;
+}
+.filter-group { display:flex; flex-direction:column; gap:6px; }
+.filter-label { font-size:.75rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+.filter-date {
+  background:var(--surface); border:1px solid var(--border); border-radius:9px;
+  color:var(--text); padding:9px 14px; font-size:.9rem; font-family:"DM Sans",sans-serif;
+  cursor:pointer; transition:.2s;
+}
+.filter-date:focus { outline:none; border-color:var(--accent); }
+.filter-date::-webkit-calendar-picker-indicator { filter:invert(.6); cursor:pointer; }
+.metrics-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:14px; margin-bottom:20px;
+}
+.metric-card {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:14px; padding:18px 20px;
+  display:flex; align-items:center; gap:16px; transition:.2s;
+}
+.metric-card:hover { border-color:var(--accent); transform:translateY(-1px); }
+.metric-icon {
+  width:46px; height:46px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0;
+}
+.metric-body { flex:1; }
+.metric-value { font-family:"Syne",sans-serif; font-size:1.5rem; font-weight:800; line-height:1; margin-bottom:4px; }
+.metric-label { font-size:.78rem; color:var(--muted); }
+.filter-result-bar {
+  background:rgba(124,92,252,.1); border:1px solid rgba(124,92,252,.25);
+  border-radius:10px; padding:10px 16px;
+  font-size:.88rem; color:var(--accent); font-weight:500;
+}
 /* RESPONSIVE */
 @media(max-width:768px) {
   .app-header { flex-direction:column; align-items:flex-start; }
@@ -446,13 +484,79 @@ tr:hover td { background:var(--surface2); }
         <span class="section-icon">👥</span>
         <div>
           <div class="section-title">Base de Leads</div>
-          <div class="section-sub">Todos os relatórios gerados — clique para baixar o PDF novamente</div>
+          <div class="section-sub">Todos os relatórios gerados — filtre por período e exporte</div>
         </div>
       </div>
-      <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
-        <button class="btn btn-success" onclick="exportCSV()">📥 Exportar CSV</button>
-        <button class="btn btn-outline" onclick="loadLeads()">🔄 Atualizar</button>
+
+      <!-- FILTROS -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label class="filter-label">De</label>
+          <input type="date" id="filterFrom" class="filter-date" onchange="applyFilter()">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Até</label>
+          <input type="date" id="filterTo" class="filter-date" onchange="applyFilter()">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Especialista</label>
+          <select id="filterEspecialista" class="filter-date" onchange="applyFilter()" style="min-width:160px;">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-end;">
+          <button class="btn btn-outline" onclick="setQuickFilter('today')" style="padding:10px 16px;font-size:.82rem;">Hoje</button>
+          <button class="btn btn-outline" onclick="setQuickFilter('week')" style="padding:10px 16px;font-size:.82rem;">7 dias</button>
+          <button class="btn btn-outline" onclick="setQuickFilter('month')" style="padding:10px 16px;font-size:.82rem;">30 dias</button>
+          <button class="btn btn-outline" onclick="clearFilter()" style="padding:10px 16px;font-size:.82rem;">Limpar</button>
+        </div>
       </div>
+
+      <!-- CARDS DE MÉTRICAS -->
+      <div class="metrics-grid" id="metricsGrid">
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(124,92,252,.15);color:#7c5cfc;">📋</div>
+          <div class="metric-body">
+            <div class="metric-value" id="metricTotal">0</div>
+            <div class="metric-label">Formulários no período</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(46,213,115,.15);color:#2ed573;">📈</div>
+          <div class="metric-body">
+            <div class="metric-value" id="metricAvgScore">—</div>
+            <div class="metric-label">Score médio geral</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(0,201,255,.15);color:#00c9ff;">💰</div>
+          <div class="metric-body">
+            <div class="metric-value" id="metricAvgRevenue">—</div>
+            <div class="metric-label">Faturamento médio</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon" style="background:rgba(255,107,157,.15);color:#ff6b9d;">🎯</div>
+          <div class="metric-body">
+            <div class="metric-value" id="metricAvgGoal">—</div>
+            <div class="metric-label">Meta média</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTADO DO FILTRO -->
+      <div id="filterResult" style="display:none;margin-bottom:16px;">
+        <div class="filter-result-bar">
+          <span id="filterResultText"></span>
+        </div>
+      </div>
+
+      <!-- AÇÕES -->
+      <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+        <button class="btn btn-success" onclick="exportCSV()">Exportar CSV do período</button>
+        <button class="btn btn-outline" onclick="loadLeads()">Atualizar</button>
+      </div>
+
       <div class="table-wrap">
         <table id="leadsTable">
           <thead>
