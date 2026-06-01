@@ -3,7 +3,7 @@
 // ============================================================
 const CHANNELS = {
   site: {
-    label: 'Site / Loja Virtual', icon: '🌐', color: '#00c9ff',
+    label: 'Site / Loja Virtual', icon: '🌐', color: '#C9A84C',
     potencia: 'Potência do Site',
     fields: [
       'Design e UX (experiência do usuário)',
@@ -27,7 +27,7 @@ const CHANNELS = {
     ]
   },
   insta: {
-    label: 'Instagram', icon: '📷', color: '#ff6b9d',
+    label: 'Instagram', icon: '📷', color: '#B8860B',
     potencia: 'Potência do Instagram',
     fields: [
       'Identidade visual consistente',
@@ -45,7 +45,7 @@ const CHANNELS = {
     ]
   },
   tiktok: {
-    label: 'TikTok / TikTok Shop', icon: '🎵', color: '#a8ff78',
+    label: 'TikTok / TikTok Shop', icon: '🎵', color: '#8B7355',
     potencia: 'Potência do TikTok',
     fields: [
       'Consistência e frequência de vídeos',
@@ -62,7 +62,7 @@ const CHANNELS = {
     ]
   },
   whatsapp: {
-    label: 'WhatsApp', icon: '💬', color: '#25d366',
+    label: 'WhatsApp', icon: '💬', color: '#6B8E6B',
     potencia: 'Potência do WhatsApp',
     fields: [
       'Captação e criação de grupos de clientes',
@@ -81,6 +81,7 @@ const CHANNELS = {
 const state = {
   ratings: { site:{}, insta:{}, tiktok:{}, whatsapp:{} },
   disabled: { site:false, insta:false, tiktok:false, whatsapp:false },
+  logoDataURL: null,
 };
 
 // Init
@@ -91,7 +92,31 @@ document.addEventListener('DOMContentLoaded', () => {
     ?.addEventListener('change', function() {
       document.getElementById('outroNichoBox').style.display = this.checked ? 'block' : 'none';
     });
+  setupLogoUpload();
 });
+
+// ============================================================
+// LOGO UPLOAD
+// ============================================================
+function setupLogoUpload() {
+  const logoInput = document.getElementById('logoUpload');
+  if (!logoInput) return;
+  logoInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      state.logoDataURL = ev.target.result;
+      const preview = document.getElementById('logoPreview');
+      if (preview) {
+        preview.src = ev.target.result;
+        preview.style.display = 'block';
+        document.getElementById('logoPlaceholder').style.display = 'none';
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
 
 // ============================================================
 // CONSTRUIR RATINGS
@@ -193,6 +218,9 @@ function collectData() {
     objetivo6m: document.getElementById('objetivo6m').value.trim(),
     dificuldade: document.getElementById('dificuldade').value.trim(),
     orientacoes: document.getElementById('orientacoes').value.trim(),
+    logoDataURL: state.logoDataURL,
+    nomeEmpresa: document.getElementById('nomeEmpresa')?.value?.trim() || '',
+    corPrimaria: document.getElementById('corPrimaria')?.value || '#C9A84C',
     channels: {}
   };
   Object.keys(CHANNELS).forEach(ch => {
@@ -242,8 +270,7 @@ function calcKPIs(data) {
   Object.keys(CHANNELS).forEach(ch => {
     const d = data.channels[ch];
     if (!d.disabled && Object.keys(d.ratings).length) {
-      const a = calcAvg(d.ratings);
-      avgs[ch] = a;
+      const a = calcAvg(d.ratings); avgs[ch] = a;
       if (a!==null) scores.push(a);
     } else avgs[ch] = null;
   });
@@ -251,12 +278,11 @@ function calcKPIs(data) {
   const saude = (globalAvg/5)*100;
   let weakCh=null, weakVal=Infinity;
   Object.entries(avgs).forEach(([ch,a])=>{ if(a!==null && a<weakVal){weakVal=a;weakCh=ch;} });
-  const readiness = globalAvg;
   return [
-    { title:'CRESCIMENTO NECESSARIO', value:`${gap.toFixed(1)}%`, urgency: gap>100?'critico':gap>50?'alto':'medio', desc:`De R$ ${data.revenue.toLocaleString('pt-BR')} para R$ ${data.goal.toLocaleString('pt-BR')} por mes` },
-    { title:'SAUDE DIGITAL', value:`${saude.toFixed(0)}%`, urgency: saude<40?'critico':saude<60?'alto':saude<80?'medio':'baixo', desc:`Nota media geral: ${globalAvg.toFixed(1)}/5 em todos os canais avaliados` },
-    { title:'CANAL COM MAIOR POTENCIAL', value: weakCh ? CHANNELS[weakCh].label : 'N/A', urgency: weakVal<2?'critico':weakVal<3?'alto':'medio', desc: weakCh ? `${CHANNELS[weakCh].label} com nota ${weakVal.toFixed(1)}/5 — maior oportunidade` : 'Todos os canais desativados' },
-    { title:'READINESS PARA ESCALAR', value: readiness<2?'NAO PRONTO':readiness<3?'PARCIAL':readiness<4?'PRONTO':'EXCELENTE', urgency: readiness<2?'critico':readiness<3?'alto':readiness<4?'medio':'baixo', desc: readiness<2?'Necessita reestruturacao antes de escalar':readiness<3?'Pequenos ajustes antes de escalar':'Estruturado — escalar com confianca' },
+    { title:'CRESCIMENTO NECESSÁRIO', value:`${gap.toFixed(1)}%`, urgency: gap>100?'critico':gap>50?'alto':'medio', desc:`De R$ ${data.revenue.toLocaleString('pt-BR')} para R$ ${data.goal.toLocaleString('pt-BR')} por mês` },
+    { title:'SAÚDE DIGITAL', value:`${saude.toFixed(0)}%`, urgency: saude<40?'critico':saude<60?'alto':saude<80?'medio':'baixo', desc:`Nota média: ${globalAvg.toFixed(1)}/5 em todos os canais avaliados` },
+    { title:'CANAL COM MAIOR POTENCIAL', value: weakCh ? CHANNELS[weakCh].label : 'N/A', urgency: weakVal<2?'critico':weakVal<3?'alto':'medio', desc: weakCh ? `${CHANNELS[weakCh].label} · nota ${weakVal.toFixed(1)}/5 — maior oportunidade de crescimento` : 'Todos os canais desativados' },
+    { title:'READINESS PARA ESCALAR', value: globalAvg<2?'NÃO PRONTO':globalAvg<3?'PARCIAL':globalAvg<4?'PRONTO':'EXCELENTE', urgency: globalAvg<2?'critico':globalAvg<3?'alto':globalAvg<4?'medio':'baixo', desc: globalAvg<2?'Necessita reestruturação antes de escalar':globalAvg<3?'Pequenos ajustes antes de escalar':'Estruturado — pronto para escalar com confiança' },
   ];
 }
 
@@ -269,13 +295,13 @@ function gerarDiagnostico(data) {
     if (d.disabled || !Object.keys(d.ratings).length) return null;
     const avg = calcAvg(d.ratings);
     if (avg===null) return null;
-    const s = avg>=4?'excelente':avg>=3?'bom':avg>=2?'regular':'critico';
+    const s = avg>=4?'excelente':avg>=3?'bom':avg>=2?'regular':'crítico';
     return `${CHANNELS[ch].label}: ${avg.toFixed(1)}/5 (${s})`;
-  }).filter(Boolean).join(' | ');
+  }).filter(Boolean).join('\n');
   const gap = data.goal>0?((data.goal-data.revenue)/data.revenue*100).toFixed(0):0;
-  return `DIAGNOSTICO EXECUTIVO — ${data.clientName}
+  return `DIAGNÓSTICO EXECUTIVO
 
-Negocio no nicho de ${data.nichos.join(', ')} com faturamento atual de R$ ${data.revenue.toLocaleString('pt-BR')}/mes e meta de R$ ${data.goal.toLocaleString('pt-BR')}/mes (gap de ${gap}%).
+Negócio no nicho de ${data.nichos.join(', ')} com faturamento atual de R$ ${data.revenue.toLocaleString('pt-BR')}/mês e meta de R$ ${data.goal.toLocaleString('pt-BR')}/mês (gap de ${gap}%).
 
 CANAIS AVALIADOS
 ${avgsText||'Nenhum canal avaliado'}
@@ -286,11 +312,11 @@ ${data.dificuldade}
 OBJETIVO (6 MESES)
 ${data.objetivo6m}
 
-ANALISE DOS KPIs
-${data.kpis.map(k=>`• ${k.title}: ${k.value} — ${k.urgency.toUpperCase()}`).join('\n')}
+ANÁLISE DOS KPIs
+${data.kpis.map(k=>`• ${k.title}: ${k.value}`).join('\n')}
 
-RECOMENDACAO
-Foque nos canais com menor pontuacao para gerar o maior impacto no menor tempo. Com as otimizacoes corretas, o gap de ${gap}% e alcancavel em 6 meses.`;
+RECOMENDAÇÃO
+Foque nos canais com menor pontuação para gerar o maior impacto no menor tempo. Com as otimizações corretas, o crescimento de ${gap}% é alcançável em 6 meses.`;
 }
 
 // ============================================================
@@ -304,53 +330,138 @@ function salvarLead(data) {
 }
 function getLeads() { return JSON.parse(localStorage.getItem('mvbusiness_leads')||'[]'); }
 
+let filteredLeadsCache = [];
+
 function loadLeads() {
   const leads = getLeads();
   filteredLeadsCache = leads;
-
-  // Popular select de especialistas
   const sel = document.getElementById('filterEspecialista');
   if (sel) {
-    const especialistas = [...new Set(leads.map(l=>l.especialista).filter(Boolean))].sort();
-    const currentVal = sel.value;
-    sel.innerHTML = '<option value="">Todos</option>' + especialistas.map(e=>`<option value="${e}">${e}</option>`).join('');
-    if (currentVal) sel.value = currentVal;
+    const esp = [...new Set(leads.map(l=>l.especialista).filter(Boolean))].sort();
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">Todos</option>' + esp.map(e=>`<option value="${e}">${e}</option>`).join('');
+    if (cur) sel.value = cur;
   }
-
-  // Aplicar filtro atual (ou mostrar todos)
   applyFilter();
 }
 
 function redownloadPDF(id) {
   const lead = getLeads().find(l=>l.id===id);
-  if (!lead) { alert('Lead nao encontrado!'); return; }
+  if (!lead) { alert('Lead não encontrado!'); return; }
   lead.kpis = lead.kpis||calcKPIs(lead);
   lead.aiSummary = lead.aiSummary||gerarDiagnostico(lead);
   document.getElementById('loadingOverlay').classList.add('show');
   gerarPDF(lead).then(()=>document.getElementById('loadingOverlay').classList.remove('show'));
 }
 
-function exportCSV() {
-  const leads = getLeads();
-  if (!leads.length) { alert('Nenhum lead para exportar!'); return; }
-  const headers = ['Data','Cliente','Especialista','Email','Telefone','Nicho','Faturamento','Meta','Score Site','Score Instagram','Score TikTok','Score WhatsApp'];
-  const rows = leads.map(l => {
-    const scores = Object.keys(CHANNELS).map(ch => {
-      const d = l.channels?.[ch];
-      if(!d||d.disabled||!Object.keys(d.ratings||{}).length) return '—';
-      const a=calcAvg(d.ratings); return a!==null?a.toFixed(1):'—';
-    });
-    return [l.date,l.clientName,l.especialista,l.email,l.phone,l.nichos?.join('; '),l.revenue,l.goal,...scores];
+// FILTRO
+function parseDate(s) {
+  if(!s) return null;
+  const p = s.split('/');
+  if(p.length===3) return new Date(parseInt(p[2]),parseInt(p[1])-1,parseInt(p[0]));
+  return new Date(s);
+}
+function toInputDate(d) { return d.toISOString().split('T')[0]; }
+
+function setQuickFilter(type) {
+  const today = new Date();
+  const from = new Date();
+  if(type==='today') from.setHours(0,0,0,0);
+  else if(type==='week') from.setDate(today.getDate()-7);
+  else if(type==='month') from.setDate(today.getDate()-30);
+  document.getElementById('filterFrom').value = toInputDate(from);
+  document.getElementById('filterTo').value = toInputDate(today);
+  applyFilter();
+}
+function clearFilter() {
+  document.getElementById('filterFrom').value='';
+  document.getElementById('filterTo').value='';
+  document.getElementById('filterEspecialista').value='';
+  applyFilter();
+}
+function applyFilter() {
+  const fromVal = document.getElementById('filterFrom').value;
+  const toVal = document.getElementById('filterTo').value;
+  const esp = document.getElementById('filterEspecialista').value;
+  const fromDate = fromVal ? new Date(fromVal+'T00:00:00') : null;
+  const toDate = toVal ? new Date(toVal+'T23:59:59') : null;
+  const all = getLeads();
+  const filtered = all.filter(l => {
+    const d = parseDate(l.date);
+    if (!d) return true;
+    if (fromDate && d < fromDate) return false;
+    if (toDate && d > toDate) return false;
+    if (esp && l.especialista !== esp) return false;
+    return true;
   });
-  const csv = [headers,...rows].map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));
-  a.download = `MVBusiness_Leads_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.csv`;
-  a.click();
+  filteredLeadsCache = filtered;
+  renderLeadsTable(filtered);
+  renderMetrics(filtered, fromVal, toVal);
 }
 
+function renderMetrics(leads, fromVal, toVal) {
+  document.getElementById('metricTotal').textContent = leads.length;
+  const scores = leads.map(l=>{
+    const cs = Object.keys(CHANNELS).map(ch=>{const d=l.channels?.[ch];if(!d||d.disabled||!Object.keys(d.ratings||{}).length)return null;return calcAvg(d.ratings);}).filter(v=>v!==null);
+    return cs.length?cs.reduce((a,b)=>a+b,0)/cs.length:null;
+  }).filter(v=>v!==null);
+  document.getElementById('metricAvgScore').textContent = scores.length?(scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1)+'/5':'—';
+  const revenues = leads.filter(l=>l.revenue>0).map(l=>l.revenue);
+  document.getElementById('metricAvgRevenue').textContent = revenues.length?'R$ '+Math.round(revenues.reduce((a,b)=>a+b,0)/revenues.length).toLocaleString('pt-BR'):'—';
+  const goals = leads.filter(l=>l.goal>0).map(l=>l.goal);
+  document.getElementById('metricAvgGoal').textContent = goals.length?'R$ '+Math.round(goals.reduce((a,b)=>a+b,0)/goals.length).toLocaleString('pt-BR'):'—';
+  const bar = document.getElementById('filterResult');
+  const txt = document.getElementById('filterResultText');
+  if (fromVal||toVal) {
+    bar.style.display='block';
+    const de = fromVal?new Date(fromVal+'T00:00:00').toLocaleDateString('pt-BR'):'início';
+    const ate = toVal?new Date(toVal+'T23:59:59').toLocaleDateString('pt-BR'):'hoje';
+    txt.textContent=`${leads.length} formulário${leads.length!==1?'s':''} preenchido${leads.length!==1?'s':''} de ${de} até ${ate}`;
+  } else { bar.style.display='none'; }
+}
+
+function renderLeadsTable(leads) {
+  const tbody = document.getElementById('leadsBody');
+  if (!leads.length) {
+    tbody.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:40px;">Nenhum lead no período selecionado</td></tr>';
+    return;
+  }
+  tbody.innerHTML = leads.slice().reverse().map(l => {
+    const sc = Object.keys(CHANNELS).map(ch=>{const d=l.channels?.[ch];if(!d||d.disabled||!Object.keys(d.ratings||{}).length)return null;return calcAvg(d.ratings);}).filter(v=>v!==null);
+    const gs = sc.length?(sc.reduce((a,b)=>a+b,0)/sc.length).toFixed(1):'—';
+    const clr = gs==='—'?'var(--muted)':parseFloat(gs)>=4?'#2ed573':parseFloat(gs)>=3?'#f1c40f':parseFloat(gs)>=2?'#ffa502':'#ff4757';
+    return `<tr>
+      <td style="white-space:nowrap;">${l.date}</td>
+      <td><strong>${l.clientName}</strong></td>
+      <td style="color:var(--muted);">${l.especialista}</td>
+      <td>${l.phone}</td>
+      <td style="font-size:.85rem;color:var(--muted);">${l.email}</td>
+      <td><span class="badge badge-info">${l.nichos?.[0]||'—'}</span></td>
+      <td>R$ ${(l.revenue||0).toLocaleString('pt-BR')}</td>
+      <td>R$ ${(l.goal||0).toLocaleString('pt-BR')}</td>
+      <td><strong style="color:${clr};">${gs!=='—'?gs+'/5':'—'}</strong></td>
+      <td><button class="btn btn-outline" style="padding:6px 14px;font-size:.8rem;" onclick="redownloadPDF(${l.id})">PDF</button></td>
+    </tr>`;
+  }).join('');
+}
+
+window.exportCSV = function() {
+  const leads = filteredLeadsCache.length>0?filteredLeadsCache:getLeads();
+  if(!leads.length){alert('Nenhum lead para exportar!');return;}
+  const headers=['Data','Cliente','Especialista','Email','Telefone','Nicho','Faturamento','Meta','Score Site','Score Instagram','Score TikTok','Score WhatsApp'];
+  const rows=leads.map(l=>{
+    const sc=Object.keys(CHANNELS).map(ch=>{const d=l.channels?.[ch];if(!d||d.disabled||!Object.keys(d.ratings||{}).length)return '—';const a=calcAvg(d.ratings);return a!==null?a.toFixed(1):'—';});
+    return[l.date,l.clientName,l.especialista,l.email,l.phone,l.nichos?.join('; '),l.revenue,l.goal,...sc];
+  });
+  const csv=[headers,...rows].map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download=`MVBusiness_Leads_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.csv`;
+  a.click();
+};
+
 // ============================================================
-// GERAR RELATORIO
+// GERAR RELATÓRIO
 // ============================================================
 async function gerarRelatorio() {
   const data = collectData();
@@ -363,7 +474,7 @@ async function gerarRelatorio() {
     salvarLead(data);
     await gerarPDF(data);
     document.getElementById('loadingOverlay').classList.remove('show');
-    showMsg('Relatorio gerado e PDF baixado com sucesso!','success');
+    showMsg('Relatório gerado e PDF baixado com sucesso!','success');
     window.scrollTo(0,0);
   } catch(e) {
     document.getElementById('loadingOverlay').classList.remove('show');
@@ -373,320 +484,585 @@ async function gerarRelatorio() {
 }
 
 // ============================================================
-// PDF — renderiza HTML off-screen e captura com html2canvas
+// GERAR GRÁFICO RADAR EM CANVAS (retorna Promise<dataURL>)
 // ============================================================
-async function gerarPDF(data) {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+async function renderRadarToImage(data) {
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 600; canvas.height = 600;
+    canvas.style.cssText = 'position:fixed;left:-9999px;top:-9999px;';
+    document.body.appendChild(canvas);
 
-  // Cria container invisível para renderizar cada página
-  const container = document.createElement('div');
-  container.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#0d0d0f;font-family:DM Sans,sans-serif;';
-  document.body.appendChild(container);
+    const activeChannels = Object.keys(CHANNELS).filter(ch => {
+      const d = data.channels[ch];
+      return !d.disabled && Object.keys(d.ratings).length > 0;
+    });
 
-  const addPageFromHTML = async (html, isFirst=false) => {
-    container.innerHTML = html;
-    await new Promise(r=>setTimeout(r,300));
-    const canvas = await html2canvas(container, {scale:2, backgroundColor:'#0d0d0f', logging:false, useCORS:true});
-    if (!isFirst) doc.addPage();
-    const imgData = canvas.toDataURL('image/jpeg',0.92);
-    doc.addImage(imgData,'JPEG',0,0,210,297);
-  };
+    if (activeChannels.length < 2) {
+      document.body.removeChild(canvas);
+      resolve(null);
+      return;
+    }
 
-  // ---- CAPA ----
-  await addPageFromHTML(pageCapa(data), true);
+    const labels = activeChannels.map(ch => CHANNELS[ch].label);
+    const values = activeChannels.map(ch => {
+      const avg = calcAvg(data.channels[ch].ratings);
+      return avg !== null ? parseFloat(avg.toFixed(2)) : 0;
+    });
+    const pointColors = ['#C9A84C','#B8860B','#8B7355','#6B8E6B'];
 
-  // ---- DADOS + KPIs ----
-  await addPageFromHTML(pageDadosKPIs(data));
-
-  // ---- MAPA DE NEGOCIO (radar) ----
-  const radarHTML = await pageRadar(data);
-  await addPageFromHTML(radarHTML);
-
-  // ---- CANAIS (barras) ----
-  for (const ch of Object.keys(CHANNELS)) {
-    const d = data.channels[ch];
-    if (d.disabled || !Object.keys(d.ratings).length) continue;
-    const html = await pageCanal(ch, d, data);
-    await addPageFromHTML(html);
-  }
-
-  // ---- DIAGNOSTICO + ORIENTACOES ----
-  await addPageFromHTML(pageDiagnostico(data));
-
-  document.body.removeChild(container);
-  doc.save(`Analise_${data.clientName.replace(/\s+/g,'_')}_${data.id}.pdf`);
-}
-
-// ============================================================
-// TEMPLATES HTML DAS PÁGINAS
-// ============================================================
-
-const baseStyle = `
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body,div{font-family:'DM Sans',Arial,sans-serif;color:#f0f0f5;background:#0d0d0f;}
-    .page{width:794px;min-height:1123px;background:#0d0d0f;overflow:hidden;position:relative;}
-  </style>`;
-
-function pageCapa(data) {
-  const nichoText = data.nichos.join(', ') + (data.outroNicho ? ` (${data.outroNicho})` : '');
-  return `${baseStyle}<div class="page" style="background:linear-gradient(160deg,#0d0d0f 0%,#1a1040 50%,#0d0d0f 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;">
-    <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#00c9ff,#7c5cfc,#ff6b9d,#a8ff78,#25d366);"></div>
-    <div style="text-align:center;padding:60px;">
-      <div style="font-size:11px;letter-spacing:.25em;color:#7c5cfc;text-transform:uppercase;margin-bottom:24px;">MVBusiness · Sistema de Analise</div>
-      <div style="font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:10px;">RELATORIO DE</div>
-      <div style="font-family:'Syne',sans-serif;font-size:52px;font-weight:800;background:linear-gradient(90deg,#00c9ff,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin-bottom:40px;">ANALISE DIGITAL</div>
-      <div style="width:80px;height:2px;background:linear-gradient(90deg,#7c5cfc,#00c9ff);margin:0 auto 40px;"></div>
-      <div style="font-size:28px;font-weight:700;color:#fff;margin-bottom:8px;">${data.clientName.toUpperCase()}</div>
-      <div style="font-size:14px;color:#7c5cfc;margin-bottom:40px;">${nichoText}</div>
-      <div style="display:flex;gap:40px;justify-content:center;margin-bottom:60px;">
-        <div style="text-align:center;"><div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Especialista</div><div style="font-size:15px;color:#ccc;">${data.especialista}</div></div>
-        <div style="width:1px;background:#333;"></div>
-        <div style="text-align:center;"><div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Data</div><div style="font-size:15px;color:#ccc;">${data.date}</div></div>
-        <div style="width:1px;background:#333;"></div>
-        <div style="text-align:center;"><div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Faturamento</div><div style="font-size:15px;color:#ccc;">R$ ${data.revenue.toLocaleString('pt-BR')}</div></div>
-      </div>
-      <div style="border:1px solid #222;border-radius:16px;padding:24px 40px;display:inline-block;">
-        <div style="font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Meta Mensal</div>
-        <div style="font-size:32px;font-weight:800;color:#7c5cfc;">R$ ${data.goal.toLocaleString('pt-BR')}</div>
-      </div>
-    </div>
-    <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#25d366,#a8ff78,#7c5cfc,#ff6b9d,#00c9ff);"></div>
-  </div>`;
-}
-
-function pageDadosKPIs(data) {
-  const urgBg = {critico:'rgba(255,71,87,.12)',alto:'rgba(255,165,2,.12)',medio:'rgba(241,196,15,.12)',baixo:'rgba(46,213,115,.12)'};
-  const urgClr = {critico:'#ff4757',alto:'#ffa502',medio:'#f1c40f',baixo:'#2ed573'};
-  return `${baseStyle}<div class="page" style="padding:60px 50px;">
-    <div style="font-size:9px;letter-spacing:.2em;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px;">MVBusiness · Relatorio de Analise</div>
-    <div style="height:1px;background:linear-gradient(90deg,#7c5cfc,transparent);margin-bottom:36px;"></div>
-
-    <div style="font-family:'Syne',sans-serif;font-size:11px;letter-spacing:.15em;color:#555;text-transform:uppercase;margin-bottom:16px;">Dados do Cliente</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px;">
-      ${[['CLIENTE',data.clientName],['ESPECIALISTA',data.especialista],['TELEFONE',data.phone],['EMAIL',data.email],['FATURAMENTO ATUAL','R$ '+data.revenue.toLocaleString('pt-BR')+'/mes'],['META MENSAL','R$ '+data.goal.toLocaleString('pt-BR')+'/mes'],['NICHO',data.nichos.join(', ')+(data.outroNicho?' ('+data.outroNicho+')':'')]].map(([k,v])=>`
-        <div style="background:#16161a;border:1px solid #1e1e24;border-radius:10px;padding:14px 18px;">
-          <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;">${k}</div>
-          <div style="font-size:13px;color:#e0e0f0;">${v}</div>
-        </div>`).join('')}
-    </div>
-
-    <div style="font-family:'Syne',sans-serif;font-size:11px;letter-spacing:.15em;color:#555;text-transform:uppercase;margin-bottom:16px;">Objetivos e Desafios</div>
-    <div style="background:#16161a;border:1px solid #1e1e24;border-radius:10px;padding:18px;margin-bottom:10px;">
-      <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Objetivo 6 Meses</div>
-      <div style="font-size:12px;color:#c0c0d8;line-height:1.6;">${data.objetivo6m}</div>
-    </div>
-    <div style="background:#16161a;border:1px solid #1e1e24;border-radius:10px;padding:18px;margin-bottom:36px;">
-      <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Principal Dificuldade</div>
-      <div style="font-size:12px;color:#c0c0d8;line-height:1.6;">${data.dificuldade}</div>
-    </div>
-
-    <div style="font-family:'Syne',sans-serif;font-size:11px;letter-spacing:.15em;color:#555;text-transform:uppercase;margin-bottom:16px;">KPIs e Nivel de Urgencia</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-      ${data.kpis.map(k=>`
-        <div style="background:${urgBg[k.urgency]};border:1px solid ${urgClr[k.urgency]}33;border-left:3px solid ${urgClr[k.urgency]};border-radius:10px;padding:18px;">
-          <div style="font-size:9px;color:${urgClr[k.urgency]};text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:6px;">${k.urgency.toUpperCase()}</div>
-          <div style="font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">${k.title}</div>
-          <div style="font-size:22px;font-weight:800;color:${urgClr[k.urgency]};margin-bottom:6px;">${k.value}</div>
-          <div style="font-size:10px;color:#666;line-height:1.5;">${k.desc}</div>
-        </div>`).join('')}
-    </div>
-    <div style="position:absolute;bottom:20px;right:50px;font-size:9px;color:#333;">${data.date} · ${data.clientName}</div>
-  </div>`;
-}
-
-async function pageRadar(data) {
-  // Criar canvas para o radar
-  const canvas = document.createElement('canvas');
-  canvas.width = 500; canvas.height = 500;
-  canvas.style.position = 'absolute';
-  canvas.style.left = '-9999px';
-  document.body.appendChild(canvas);
-
-  const activeChannels = Object.keys(CHANNELS).filter(ch => {
-    const d = data.channels[ch];
-    return !d.disabled && Object.keys(d.ratings).length > 0;
-  });
-
-  const labels = activeChannels.map(ch => CHANNELS[ch].label);
-  const values = activeChannels.map(ch => {
-    const avg = calcAvg(data.channels[ch].ratings);
-    return avg !== null ? parseFloat(avg.toFixed(2)) : 0;
-  });
-  const colors = activeChannels.map(ch => CHANNELS[ch].color);
-
-  let radarDataURL = '';
-  if (labels.length >= 2) {
     const chart = new Chart(canvas.getContext('2d'), {
       type: 'radar',
       data: {
         labels,
         datasets: [{
           data: values,
-          borderColor: '#7c5cfc',
-          backgroundColor: 'rgba(124,92,252,0.15)',
-          borderWidth: 2.5,
-          pointBackgroundColor: colors,
-          pointBorderColor: '#fff',
+          borderColor: '#C9A84C',
+          backgroundColor: 'rgba(201,168,76,0.12)',
+          borderWidth: 2,
+          pointBackgroundColor: activeChannels.map((_,i) => pointColors[i]||'#C9A84C'),
+          pointBorderColor: '#1a1204',
           pointBorderWidth: 2,
           pointRadius: 8,
         }]
       },
       options: {
-        animation: false,
-        scales: { r: { min:0, max:5, ticks:{stepSize:1,color:'#555',backdropColor:'transparent',font:{size:14}}, grid:{color:'#222'}, angleLines:{color:'#333'}, pointLabels:{color:'#aaa',font:{size:16,weight:'600'}} } },
+        animation: { duration: 0 }, // SEM animação — captura imediata
+        responsive: false,
+        scales: {
+          r: {
+            min: 0, max: 5,
+            ticks: { stepSize:1, color:'#8B7355', backdropColor:'transparent', font:{size:13} },
+            grid: { color:'rgba(139,115,85,0.3)' },
+            angleLines: { color:'rgba(139,115,85,0.4)' },
+            pointLabels: { color:'#2C1810', font:{size:15, weight:'600'} }
+          }
+        },
+        plugins: { legend:{ display:false } }
+      }
+    });
+
+    // Aguardar 1 frame para render completo, depois capturar
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const url = canvas.toDataURL('image/png');
+        chart.destroy();
+        document.body.removeChild(canvas);
+        resolve(url);
+      });
+    });
+  });
+}
+
+// ============================================================
+// GERAR GRÁFICO DE BARRAS (retorna Promise<dataURL>)
+// ============================================================
+async function renderBarToImage(ch, chData) {
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 800; canvas.height = 380;
+    canvas.style.cssText = 'position:fixed;left:-9999px;top:-9999px;';
+    document.body.appendChild(canvas);
+
+    const cfg = CHANNELS[ch];
+    const labels = Object.keys(chData.ratings);
+    const values = Object.values(chData.ratings);
+
+    const chart = new Chart(canvas.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: labels.map(l => l.length > 35 ? l.substring(0,33)+'…' : l),
+        datasets: [{
+          data: values,
+          backgroundColor: cfg.color + 'bb',
+          borderColor: cfg.color,
+          borderWidth: 1.5,
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        animation: { duration: 0 },
+        responsive: false,
+        indexAxis: 'y',
+        scales: {
+          x: { min:0, max:5, ticks:{stepSize:1,color:'#8B7355',font:{size:12}}, grid:{color:'rgba(139,115,85,0.15)'}, backgroundColor:'transparent' },
+          y: { ticks:{color:'#2C1810',font:{size:11,weight:'500'}}, grid:{color:'rgba(139,115,85,0.08)'} }
+        },
         plugins: { legend:{display:false} }
       }
     });
-    await new Promise(r=>setTimeout(r,500));
-    radarDataURL = canvas.toDataURL('image/png');
-    chart.destroy();
-  }
-  document.body.removeChild(canvas);
 
-  const legendItems = activeChannels.map(ch =>
-    `<div style="display:flex;align-items:center;gap:8px;"><div style="width:12px;height:12px;border-radius:50%;background:${CHANNELS[ch].color};"></div><span style="font-size:12px;color:#aaa;">${CHANNELS[ch].label}: <strong style="color:#fff;">${values[activeChannels.indexOf(ch)].toFixed(1)}/5</strong></span></div>`
-  ).join('');
-
-  return `${baseStyle}<div class="page" style="padding:60px 50px;">
-    <div style="font-size:9px;letter-spacing:.2em;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px;">MVBusiness · Relatorio de Analise</div>
-    <div style="height:1px;background:linear-gradient(90deg,#7c5cfc,transparent);margin-bottom:36px;"></div>
-    <div style="text-align:center;margin-bottom:40px;">
-      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;margin-bottom:8px;">MAPA DE NEGOCIO</div>
-      <div style="font-size:12px;color:#555;">Visao geral da presenca digital por canal — pontuacao de 0 a 5</div>
-    </div>
-    ${radarDataURL
-      ? `<div style="text-align:center;"><img src="${radarDataURL}" style="width:460px;height:460px;object-fit:contain;" /></div>`
-      : `<div style="text-align:center;padding:80px;color:#555;">Minimo de 2 canais necessario para o grafico radar</div>`}
-    <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:30px;">${legendItems}</div>
-    <div style="position:absolute;bottom:20px;right:50px;font-size:9px;color:#333;">${data.date} · ${data.clientName}</div>
-  </div>`;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const url = canvas.toDataURL('image/png');
+        chart.destroy();
+        document.body.removeChild(canvas);
+        resolve(url);
+      });
+    });
+  });
 }
 
-async function pageCanal(ch, chData, data) {
-  const cfg = CHANNELS[ch];
-  const canvas = document.createElement('canvas');
-  canvas.width = 700; canvas.height = 340;
-  canvas.style.position = 'absolute';
-  canvas.style.left = '-9999px';
-  document.body.appendChild(canvas);
+// ============================================================
+// PDF — PALETA LUXO BRANCO + DOURADO
+// ============================================================
+const GOLD = '#C9A84C';
+const GOLD_DARK = '#8B6914';
+const CREAM = '#FDFAF4';
+const CREAM2 = '#F5F0E8';
+const DARK = '#1a0f02';
+const BROWN = '#2C1810';
+const MUTED = '#8B7355';
+const urgColors = {
+  critico: '#C0392B',
+  alto:    '#D4820A',
+  medio:   '#B8860B',
+  baixo:   '#4A7C59',
+};
 
-  const labels = Object.keys(chData.ratings);
-  const values = Object.values(chData.ratings);
-  const avg = calcAvg(chData.ratings);
+async function gerarPDF(data) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const W = 210;
 
-  const chart = new Chart(canvas.getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: labels.map(l => l.length > 35 ? l.substring(0,33) + '…' : l),
-      datasets: [{
-        data: values,
-        backgroundColor: cfg.color + '99',
-        borderColor: cfg.color,
-        borderWidth: 1.5,
-        borderRadius: 5,
-        borderSkipped: false,
-      }]
-    },
-    options: {
-      animation: false,
-      indexAxis: 'y',
-      scales: {
-        x: { min:0, max:5, ticks:{stepSize:1,color:'#666',font:{size:13}}, grid:{color:'#222'} },
-        y: { ticks:{color:'#bbb',font:{size:12}}, grid:{color:'#1a1a1a'} }
-      },
-      plugins: { legend:{display:false} }
+  // Pré-renderizar os gráficos ANTES de montar o PDF
+  const radarURL = await renderRadarToImage(data);
+
+  const barURLs = {};
+  for (const ch of Object.keys(CHANNELS)) {
+    const d = data.channels[ch];
+    if (!d.disabled && Object.keys(d.ratings).length > 0) {
+      barURLs[ch] = await renderBarToImage(ch, d);
     }
-  });
-  await new Promise(r=>setTimeout(r,400));
-  const chartURL = canvas.toDataURL('image/png');
-  chart.destroy();
-  document.body.removeChild(canvas);
+  }
 
-  const statusInfo = (v) => {
-    if(v===0) return ['NAO AVALIADO','#555'];
-    if(v<=1) return ['CRITICO','#ff4757'];
-    if(v<=2) return ['FRACO','#ffa502'];
-    if(v<=3) return ['REGULAR','#f1c40f'];
-    if(v<=4) return ['BOM','#2ed573'];
-    return ['OTIMO','#00c9ff'];
+  // ---- CAPA ----
+  drawCapa(doc, data, W);
+
+  // ---- DADOS + KPIs ----
+  doc.addPage();
+  drawDadosKPIs(doc, data, W);
+
+  // ---- MAPA DE NEGÓCIO ----
+  doc.addPage();
+  drawRadar(doc, data, W, radarURL);
+
+  // ---- CANAIS ----
+  for (const ch of Object.keys(CHANNELS)) {
+    const d = data.channels[ch];
+    if (d.disabled || !Object.keys(d.ratings).length) continue;
+    doc.addPage();
+    await drawCanal(doc, ch, d, data, W, barURLs[ch]);
+  }
+
+  // ---- DIAGNÓSTICO + ORIENTAÇÕES ----
+  doc.addPage();
+  drawDiagnostico(doc, data, W);
+
+  // Numeração
+  const total = doc.getNumberOfPages();
+  for (let i=2; i<=total; i++) {
+    doc.setPage(i);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(7);
+    doc.setTextColor(MUTED);
+    doc.text(`${data.clientName}  ·  ${data.date}`, 14, 291);
+    doc.text(`${i} / ${total}`, W-14, 291, {align:'right'});
+  }
+
+  doc.save(`Analise_${data.clientName.replace(/\s+/g,'_')}_${data.id}.pdf`);
+}
+
+// ---- CAPA ----
+function drawCapa(doc, data, W) {
+  // Fundo escuro elegante
+  doc.setFillColor(16, 10, 2);
+  doc.rect(0, 0, W, 297, 'F');
+
+  // Faixa dourada topo
+  doc.setFillColor(201, 168, 76);
+  doc.rect(0, 0, W, 2, 'F');
+
+  // Bloco decorativo esquerdo
+  doc.setFillColor(30, 20, 5);
+  doc.rect(0, 0, 8, 297, 'F');
+  doc.setFillColor(201, 168, 76);
+  doc.rect(8, 0, 1.5, 297, 'F');
+
+  // Logo da empresa (se tiver)
+  if (data.logoDataURL) {
+    try {
+      doc.addImage(data.logoDataURL, 22, 30, 50, 25, '', 'FAST');
+    } catch(e) { console.warn('Erro ao inserir logo:', e); }
+  }
+
+  // Texto decorativo topo
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(7);
+  doc.setTextColor(MUTED);
+  doc.setCharSpace(3);
+  doc.text('MVBUSINESS  ·  DIAGNÓSTICO DIGITAL', W/2+5, 22, {align:'center'});
+  doc.setCharSpace(0);
+
+  // Linha separadora dourada
+  doc.setDrawColor(201, 168, 76);
+  doc.setLineWidth(0.3);
+  doc.line(22, 26, W-14, 26);
+
+  // TÍTULO PRINCIPAL
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(38);
+  doc.setTextColor(240, 230, 210);
+  doc.text('RELATÓRIO DE', W/2+5, 90, {align:'center'});
+
+  doc.setFontSize(38);
+  doc.setTextColor(GOLD);
+  doc.text('ANÁLISE DIGITAL', W/2+5, 108, {align:'center'});
+
+  // Divisor ornamental
+  doc.setDrawColor(GOLD);
+  doc.setLineWidth(0.5);
+  doc.line(W/2-20, 116, W/2+30, 116);
+  doc.setFillColor(201, 168, 76);
+  doc.circle(W/2+5, 116, 1.2, 'F');
+
+  // Nome do cliente
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(22);
+  doc.setTextColor(240, 230, 210);
+  doc.text(data.clientName.toUpperCase(), W/2+5, 136, {align:'center'});
+
+  // Nicho
+  const nichoText = data.nichos.join('  ·  ') + (data.outroNicho ? `  (${data.outroNicho})` : '');
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(10);
+  doc.setTextColor(MUTED);
+  doc.text(nichoText, W/2+5, 146, {align:'center'});
+
+  // Bloco de info
+  const infoY = 168;
+  doc.setFillColor(28, 18, 4);
+  doc.setDrawColor(50, 35, 10);
+  doc.setLineWidth(0.3);
+  doc.roundedRect(22, infoY, W-36, 32, 4, 4, 'FD');
+
+  // Divisórias verticais
+  doc.setDrawColor(50, 35, 10);
+  doc.line(22+(W-36)/3, infoY+4, 22+(W-36)/3, infoY+28);
+  doc.line(22+(W-36)*2/3, infoY+4, 22+(W-36)*2/3, infoY+28);
+
+  const infoCols = [
+    {label:'ESPECIALISTA', value: data.especialista},
+    {label:'DATA', value: data.date},
+    {label:'FATURAMENTO ATUAL', value: 'R$ '+data.revenue.toLocaleString('pt-BR')},
+  ];
+  infoCols.forEach((col, i) => {
+    const cx = 22 + (W-36)/3*i + (W-36)/6;
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(MUTED);
+    doc.text(col.label, cx, infoY+11, {align:'center'});
+    doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(240,230,210);
+    doc.text(col.value, cx, infoY+22, {align:'center'});
+  });
+
+  // Meta destaque
+  doc.setFillColor(35, 24, 6);
+  doc.setDrawColor(100, 76, 25);
+  doc.setLineWidth(0.5);
+  doc.roundedRect(22, infoY+40, W-36, 24, 4, 4, 'FD');
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(MUTED);
+  doc.text('META MENSAL', W/2+5, infoY+50, {align:'center'});
+  doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.setTextColor(GOLD);
+  doc.text('R$ '+data.goal.toLocaleString('pt-BR'), W/2+5, infoY+60, {align:'center'});
+
+  // Rodapé capa
+  doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(50,38,15);
+  doc.text('MVBusiness  ·  Sistema de Análise de Negócios Digitais', W/2+5, 285, {align:'center'});
+
+  // Faixa dourada base
+  doc.setFillColor(201, 168, 76);
+  doc.rect(0, 295, W, 2, 'F');
+}
+
+// ---- DADOS + KPIs ----
+function drawDadosKPIs(doc, data, W) {
+  const M = 14;
+  let y = 18;
+
+  const sectionTitle = (title) => {
+    doc.setFillColor(245, 240, 232);
+    doc.rect(M, y, W-M*2, 8, 'F');
+    doc.setFillColor(201, 168, 76);
+    doc.rect(M, y, 2, 8, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(8);
+    doc.setTextColor(BROWN);
+    doc.setCharSpace(1.5);
+    doc.text(title, M+6, y+5.5);
+    doc.setCharSpace(0);
+    y += 13;
   };
 
-  const tableRows = labels.map((label, i) => {
-    const [status, color] = statusInfo(values[i]);
-    const pct = (values[i]/5)*100;
-    return `<tr style="border-bottom:1px solid #1a1a1a;">
-      <td style="padding:9px 12px;font-size:11px;color:#c0c0d8;">${label}</td>
-      <td style="padding:9px 12px;text-align:center;"><div style="display:flex;align-items:center;gap:8px;"><div style="flex:1;height:6px;background:#1e1e24;border-radius:3px;overflow:hidden;"><div style="height:100%;width:${pct}%;background:${cfg.color};border-radius:3px;"></div></div><span style="font-size:11px;font-weight:700;color:${cfg.color};min-width:28px;">${values[i]}/5</span></div></td>
-      <td style="padding:9px 12px;text-align:center;font-size:10px;font-weight:700;color:${color};">${status}</td>
-    </tr>`;
-  }).join('');
+  const field = (label, value, half=false, colIdx=0) => {
+    const fw = half ? (W-M*2-6)/2 : W-M*2;
+    const fx = M + (half ? colIdx*(fw+6) : 0);
+    doc.setFillColor(250, 247, 240);
+    doc.setDrawColor(230, 220, 200);
+    doc.setLineWidth(0.2);
+    doc.roundedRect(fx, y, fw, 16, 2, 2, 'FD');
+    doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(MUTED);
+    doc.text(label, fx+6, y+6);
+    doc.setFont('helvetica','bold'); doc.setFontSize(9.5); doc.setTextColor(BROWN);
+    doc.text(String(value), fx+6, y+13);
+    if (!half) y += 19;
+  };
 
-  const pctAvg = avg !== null ? (avg/5)*100 : 0;
+  sectionTitle('DADOS DO CLIENTE');
+  // Linha 1: cliente + especialista
+  field('CLIENTE', data.clientName, true, 0);
+  field('ESPECIALISTA', data.especialista, true, 1);
+  y += 19;
+  field('TELEFONE', data.phone, true, 0);
+  field('EMAIL', data.email, true, 1);
+  y += 19;
+  field('FATURAMENTO ATUAL', 'R$ '+data.revenue.toLocaleString('pt-BR'), true, 0);
+  field('META MENSAL', 'R$ '+data.goal.toLocaleString('pt-BR'), true, 1);
+  y += 19;
+  field('NICHO', data.nichos.join(', ')+(data.outroNicho?' ('+data.outroNicho+')':''));
 
-  return `${baseStyle}<div class="page" style="padding:50px;">
-    <div style="font-size:9px;letter-spacing:.2em;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px;">MVBusiness · Relatorio de Analise</div>
-    <div style="height:1px;background:linear-gradient(90deg,#7c5cfc,transparent);margin-bottom:28px;"></div>
+  y += 4;
+  sectionTitle('OBJETIVOS E DESAFIOS');
+  // Objetivo
+  doc.setFillColor(250,247,240); doc.setDrawColor(230,220,200); doc.setLineWidth(0.2);
+  doc.roundedRect(M, y, W-M*2, 22, 2, 2, 'FD');
+  doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(MUTED);
+  doc.text('OBJETIVO 6 MESES', M+6, y+6);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(BROWN);
+  const objLines = doc.splitTextToSize(data.objetivo6m, W-M*2-12);
+  doc.text(objLines.slice(0,2), M+6, y+13);
+  y += 26;
 
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-      <div>
-        <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:${cfg.color};">${cfg.potencia}</div>
-        <div style="font-size:11px;color:#555;margin-top:4px;">${cfg.label}</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-size:10px;color:#555;margin-bottom:4px;">MEDIA GERAL</div>
-        <div style="font-size:28px;font-weight:800;color:${cfg.color};">${avg!==null?avg.toFixed(1):'—'}<span style="font-size:14px;color:#555;">/5</span></div>
-      </div>
-    </div>
+  doc.setFillColor(250,247,240); doc.setDrawColor(230,220,200);
+  doc.roundedRect(M, y, W-M*2, 22, 2, 2, 'FD');
+  doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(MUTED);
+  doc.text('PRINCIPAL DIFICULDADE', M+6, y+6);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(BROWN);
+  const difLines = doc.splitTextToSize(data.dificuldade, W-M*2-12);
+  doc.text(difLines.slice(0,2), M+6, y+13);
+  y += 30;
 
-    <div style="height:8px;background:#1e1e24;border-radius:4px;overflow:hidden;margin-bottom:24px;">
-      <div style="height:100%;width:${pctAvg}%;background:linear-gradient(90deg,${cfg.color}88,${cfg.color});border-radius:4px;"></div>
-    </div>
+  sectionTitle('KPIs E NÍVEL DE URGÊNCIA');
+  const kw = (W-M*2-6)/2;
+  data.kpis.forEach((kpi, i) => {
+    const kx = M + (i%2)*(kw+6);
+    const ky = y + Math.floor(i/2)*38;
+    const uc = urgColors[kpi.urgency]||GOLD;
+    doc.setFillColor(250,247,240); doc.setDrawColor(...hexToRgb(uc)); doc.setLineWidth(0.5);
+    doc.roundedRect(kx, ky, kw, 33, 3, 3, 'FD');
+    doc.setFillColor(...hexToRgb(uc));
+    doc.roundedRect(kx, ky, 2.5, 33, 2, 2, 'F');
 
-    <img src="${chartURL}" style="width:100%;height:220px;object-fit:contain;border-radius:8px;background:#0f0f12;padding:10px;margin-bottom:20px;" />
+    doc.setFont('helvetica','bold'); doc.setFontSize(6.5);
+    doc.setTextColor(...hexToRgb(uc));
+    doc.text(kpi.urgency.toUpperCase(), kx+6, ky+7);
 
-    <table style="width:100%;border-collapse:collapse;background:#16161a;border-radius:10px;overflow:hidden;">
-      <thead><tr style="background:#1e1e24;">
-        <th style="padding:10px 12px;text-align:left;font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;">Item Avaliado</th>
-        <th style="padding:10px 12px;text-align:center;font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;">Nota</th>
-        <th style="padding:10px 12px;text-align:center;font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;">Status</th>
-      </tr></thead>
-      <tbody>${tableRows}</tbody>
-    </table>
-    <div style="position:absolute;bottom:20px;right:50px;font-size:9px;color:#333;">${data.date} · ${data.clientName}</div>
-  </div>`;
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(MUTED);
+    doc.text(kpi.title, kx+6, ky+13);
+
+    doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(...hexToRgb(uc));
+    doc.text(kpi.value, kx+6, ky+23);
+
+    doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(MUTED);
+    const dLines = doc.splitTextToSize(kpi.desc, kw-10);
+    doc.text(dLines[0]||'', kx+6, ky+30);
+  });
 }
 
-function pageDiagnostico(data) {
-  const lines = data.aiSummary.split('\n').map(l => l.trim() ? `<p style="margin-bottom:8px;font-size:12px;color:${l===l.toUpperCase()&&l.length>4?'#7c5cfc':'#c0c0d8'};font-weight:${l===l.toUpperCase()&&l.length>4?'700':'400'};line-height:1.6;">${l}</p>` : '<br>').join('');
-  return `${baseStyle}<div class="page" style="padding:60px 50px;">
-    <div style="font-size:9px;letter-spacing:.2em;color:#7c5cfc;text-transform:uppercase;margin-bottom:6px;">MVBusiness · Relatorio de Analise</div>
-    <div style="height:1px;background:linear-gradient(90deg,#7c5cfc,transparent);margin-bottom:36px;"></div>
+// ---- RADAR ----
+function drawRadar(doc, data, W, radarURL) {
+  const M = 14;
+  let y = 18;
 
-    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;margin-bottom:6px;">Diagnostico Executivo</div>
-    <div style="font-size:11px;color:#555;margin-bottom:24px;">Analise gerada automaticamente com base nos dados coletados</div>
-    <div style="background:#16161a;border:1px solid #1e1e24;border-radius:12px;padding:28px;margin-bottom:32px;">
-      ${lines}
-    </div>
+  // Título
+  doc.setFillColor(245,240,232); doc.rect(M, y, W-M*2, 8, 'F');
+  doc.setFillColor(GOLD); doc.rect(M, y, 2, 8, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(BROWN);
+  doc.setCharSpace(1.5); doc.text('MAPA DE NEGÓCIO', M+6, y+5.5); doc.setCharSpace(0);
+  y += 13;
 
-    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;margin-bottom:6px;">Orientacoes do Especialista</div>
-    <div style="font-size:11px;color:#555;margin-bottom:24px;">${data.especialista} · ${data.date}</div>
-    <div style="background:linear-gradient(135deg,rgba(124,92,252,.08),rgba(0,201,255,.05));border:1px solid rgba(124,92,252,.2);border-radius:12px;padding:28px;">
-      ${data.orientacoes.split('\n').map(l=>`<p style="font-size:12px;color:#c0c0d8;line-height:1.7;margin-bottom:6px;">${l||'&nbsp;'}</p>`).join('')}
-    </div>
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(MUTED);
+  doc.text('Visão geral da presença digital por canal  ·  pontuação de 0 a 5', M, y);
+  y += 10;
 
-    <div style="margin-top:40px;padding-top:20px;border-top:1px solid #1e1e24;display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-size:10px;color:#333;">MVBusiness · Sistema de Analise de Negocios Digitais</div>
-      <div style="font-size:10px;color:#333;">${data.date}</div>
-    </div>
-  </div>`;
+  if (radarURL) {
+    // Quadro decorativo
+    doc.setFillColor(250,247,240); doc.setDrawColor(220,210,190); doc.setLineWidth(0.3);
+    doc.roundedRect(M, y, W-M*2, 170, 4, 4, 'FD');
+    doc.addImage(radarURL, 'PNG', M+10, y+8, W-M*2-20, 155);
+    y += 178;
+  } else {
+    doc.setTextColor(MUTED); doc.text('Mínimo de 2 canais para gerar o gráfico radar', M, y+20);
+    y += 40;
+  }
+
+  // Legenda
+  const activeChannels = Object.keys(CHANNELS).filter(ch => !data.channels[ch].disabled && Object.keys(data.channels[ch].ratings).length);
+  const legColors = ['#C9A84C','#B8860B','#8B7355','#6B8E6B'];
+  let lx = M;
+  activeChannels.forEach((ch, i) => {
+    const avg = calcAvg(data.channels[ch].ratings);
+    const [r,g,b] = hexToRgb(legColors[i]||GOLD);
+    doc.setFillColor(r,g,b); doc.circle(lx+3, y+3, 2.5, 'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(BROWN);
+    doc.text(`${CHANNELS[ch].label}: `, lx+8, y+5);
+    doc.setFont('helvetica','bold'); doc.setTextColor(...hexToRgb(legColors[i]||GOLD));
+    doc.text(`${avg!==null?avg.toFixed(1):'—'}/5`, lx+8+doc.getTextWidth(`${CHANNELS[ch].label}: `), y+5);
+    lx += 50;
+  });
+}
+
+// ---- CANAL ----
+async function drawCanal(doc, ch, chData, data, W, barURL) {
+  const M = 14;
+  let y = 18;
+  const cfg = CHANNELS[ch];
+  const avg = calcAvg(chData.ratings);
+  const [r,g,b] = hexToRgb(cfg.color);
+
+  // Header colorido
+  doc.setFillColor(r,g,b);
+  doc.setGState(doc.GState({opacity:0.1}));
+  doc.rect(0,0,W,18,'F');
+  doc.setGState(doc.GState({opacity:1}));
+
+  doc.setFillColor(r,g,b); doc.rect(0,0,3,18,'F');
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(r,g,b);
+  doc.text(cfg.potencia, M+2, 12);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(MUTED);
+  doc.text('MÉDIA GERAL', W-M, 8, {align:'right'});
+  doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(r,g,b);
+  doc.text((avg!==null?avg.toFixed(1):'—')+'/5', W-M, 15, {align:'right'});
+
+  y = 22;
+
+  // Barra de progresso média
+  const pct = avg!==null?(avg/5)*100:0;
+  doc.setFillColor(230,220,205); doc.roundedRect(M, y, W-M*2, 4, 2, 2, 'F');
+  doc.setFillColor(r,g,b); doc.roundedRect(M, y, (W-M*2)*(pct/100), 4, 2, 2, 'F');
+  y += 10;
+
+  // Gráfico barras
+  if (barURL) {
+    doc.setFillColor(250,247,240); doc.setDrawColor(220,210,190); doc.setLineWidth(0.2);
+    doc.roundedRect(M, y, W-M*2, 85, 3, 3, 'FD');
+    doc.addImage(barURL, 'PNG', M+2, y+2, W-M*2-4, 81);
+    y += 90;
+  }
+
+  // Tabela
+  doc.setFillColor(245,240,232); doc.rect(M, y, W-M*2, 7, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(6.5); doc.setTextColor(BROWN);
+  doc.setCharSpace(1); doc.text('ITEM AVALIADO', M+4, y+5); doc.setCharSpace(0);
+  doc.text('NOTA', W-M-30, y+5);
+  doc.text('STATUS', W-M-12, y+5);
+  y += 9;
+
+  const statusInfo = (v) => {
+    if(v===0) return ['N/AVAL.', MUTED];
+    if(v<=1) return ['CRÍTICO', urgColors.critico];
+    if(v<=2) return ['FRACO', urgColors.alto];
+    if(v<=3) return ['REGULAR', urgColors.medio];
+    if(v<=4) return ['BOM', '#4A7C59'];
+    return ['ÓTIMO', '#2D6A4F'];
+  };
+
+  Object.entries(chData.ratings).forEach(([label, val], i) => {
+    if (y > 276) { doc.addPage(); y = 18; }
+    if (i%2===0) { doc.setFillColor(250,247,240); doc.rect(M, y, W-M*2, 7, 'F'); }
+    const [status, color] = statusInfo(val);
+    const pctBar = (val/5)*100;
+
+    doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(BROWN);
+    doc.text(label.length>55?label.substring(0,53)+'…':label, M+4, y+5);
+
+    // mini barra inline
+    doc.setFillColor(220,210,195); doc.roundedRect(W-M-50, y+2, 18, 3, 1, 1, 'F');
+    doc.setFillColor(r,g,b); doc.roundedRect(W-M-50, y+2, 18*(pctBar/100), 3, 1, 1, 'F');
+
+    doc.setFont('helvetica','bold'); doc.setFontSize(7.5); doc.setTextColor(r,g,b);
+    doc.text(`${val}/5`, W-M-28, y+5);
+
+    doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(...hexToRgb(color));
+    doc.text(status, W-M-12, y+5);
+    y += 8;
+  });
+}
+
+// ---- DIAGNÓSTICO + ORIENTAÇÕES ----
+function drawDiagnostico(doc, data, W) {
+  const M = 14;
+  let y = 18;
+
+  const sectionTitle = (title) => {
+    doc.setFillColor(245,240,232); doc.rect(M, y, W-M*2, 8, 'F');
+    doc.setFillColor(GOLD); doc.rect(M, y, 2, 8, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(BROWN);
+    doc.setCharSpace(1.5); doc.text(title, M+6, y+5.5); doc.setCharSpace(0);
+    y += 13;
+  };
+
+  sectionTitle('DIAGNÓSTICO EXECUTIVO');
+
+  const lines = data.aiSummary.split('\n');
+  lines.forEach(line => {
+    if (y > 220) return;
+    const isTitle = line === line.toUpperCase() && line.trim().length > 3;
+    doc.setFont('helvetica', isTitle?'bold':'normal');
+    doc.setFontSize(isTitle ? 8 : 8.5);
+    doc.setTextColor(isTitle ? GOLD_DARK : BROWN);
+    if (isTitle && line.trim()) { y+=2; }
+    if (line.trim()) {
+      const wrapped = doc.splitTextToSize(line, W-M*2-4);
+      wrapped.forEach(l => { if(y<225){doc.text(l, M+4, y); y+=5.5;} });
+    } else { y+=3; }
+  });
+
+  y += 6;
+  if (y > 200) { doc.addPage(); y = 18; }
+
+  sectionTitle('ORIENTAÇÕES DO ESPECIALISTA');
+  doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(MUTED);
+  doc.text(`${data.especialista}  ·  ${data.date}`, M+4, y);
+  y += 8;
+
+  doc.setFillColor(250,247,240); doc.setDrawColor(220,210,190); doc.setLineWidth(0.3);
+  doc.setFillColor(r=>r, g=>g, b=>b); // reset
+  // Caixa de orientações
+  const oriLines = doc.splitTextToSize(data.orientacoes, W-M*2-12);
+  const boxH = Math.min(oriLines.length * 5.5 + 12, 80);
+  doc.setFillColor(250,247,240); doc.setDrawColor(201,168,76); doc.setLineWidth(0.3);
+  doc.roundedRect(M, y, W-M*2, boxH, 3, 3, 'FD');
+  doc.setFillColor(201,168,76); doc.roundedRect(M, y, 2.5, boxH, 2, 2, 'F');
+  doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(BROWN);
+  oriLines.slice(0, 14).forEach((l, i) => {
+    doc.text(l, M+7, y+8+i*5.5);
+  });
+
+  // Rodapé dourado
+  doc.setFillColor(201,168,76); doc.rect(0, 293, W, 4, 'F');
+  doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(MUTED);
+  doc.text('MVBusiness · Sistema de Análise de Negócios Digitais', W/2, 290, {align:'center'});
 }
 
 // ============================================================
 // UTILS
 // ============================================================
+function hexToRgb(hex) {
+  hex = hex.replace('#','');
+  if (hex.length === 3) hex = hex.split('').map(c=>c+c).join('');
+  return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
+}
+
 function showMsg(text, type='success') {
   const el = document.getElementById('msg');
   el.textContent = text;
@@ -711,169 +1087,10 @@ function limparForm() {
     document.getElementById(`customFields-${ch}`).innerHTML='';
     buildChannel(ch);
   });
+  state.logoDataURL = null;
+  const preview = document.getElementById('logoPreview');
+  if (preview) { preview.style.display='none'; }
+  const ph = document.getElementById('logoPlaceholder');
+  if (ph) ph.style.display='block';
   window.scrollTo(0,0);
 }
-
-// ============================================================
-// FILTRO E MÉTRICAS DE LEADS
-// ============================================================
-
-// Estado do filtro atual (usado no exportCSV)
-let filteredLeadsCache = [];
-
-function parseDate(dateStr) {
-  // Suporta DD/MM/YYYY (formato pt-BR)
-  if (!dateStr) return null;
-  const parts = dateStr.split('/');
-  if (parts.length === 3) {
-    return new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
-  }
-  return new Date(dateStr);
-}
-
-function toInputDate(date) {
-  // Converte Date para YYYY-MM-DD (formato do input date)
-  return date.toISOString().split('T')[0];
-}
-
-function setQuickFilter(type) {
-  const today = new Date();
-  const from = new Date();
-  if (type === 'today') {
-    from.setHours(0,0,0,0);
-  } else if (type === 'week') {
-    from.setDate(today.getDate() - 7);
-  } else if (type === 'month') {
-    from.setDate(today.getDate() - 30);
-  }
-  document.getElementById('filterFrom').value = toInputDate(from);
-  document.getElementById('filterTo').value = toInputDate(today);
-  applyFilter();
-}
-
-function clearFilter() {
-  document.getElementById('filterFrom').value = '';
-  document.getElementById('filterTo').value = '';
-  document.getElementById('filterEspecialista').value = '';
-  applyFilter();
-}
-
-function applyFilter() {
-  const fromVal = document.getElementById('filterFrom').value;
-  const toVal = document.getElementById('filterTo').value;
-  const especialista = document.getElementById('filterEspecialista').value;
-
-  const fromDate = fromVal ? new Date(fromVal + 'T00:00:00') : null;
-  const toDate = toVal ? new Date(toVal + 'T23:59:59') : null;
-
-  const allLeads = getLeads();
-
-  const filtered = allLeads.filter(lead => {
-    const leadDate = parseDate(lead.date);
-    if (!leadDate) return true;
-    if (fromDate && leadDate < fromDate) return false;
-    if (toDate && leadDate > toDate) return false;
-    if (especialista && lead.especialista !== especialista) return false;
-    return true;
-  });
-
-  filteredLeadsCache = filtered;
-  renderLeadsTable(filtered);
-  renderMetrics(filtered, fromVal, toVal);
-}
-
-function renderMetrics(leads, fromVal, toVal) {
-  const total = leads.length;
-  document.getElementById('metricTotal').textContent = total;
-
-  // Score médio
-  const scores = leads.map(l => {
-    const chScores = Object.keys(CHANNELS).map(ch => {
-      const d = l.channels?.[ch];
-      if (!d || d.disabled || !Object.keys(d.ratings||{}).length) return null;
-      return calcAvg(d.ratings);
-    }).filter(v => v !== null);
-    return chScores.length ? chScores.reduce((a,b)=>a+b,0)/chScores.length : null;
-  }).filter(v => v !== null);
-
-  const avgScore = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
-  document.getElementById('metricAvgScore').textContent = scores.length ? avgScore + '/5' : '—';
-
-  // Faturamento médio
-  const revenues = leads.filter(l=>l.revenue>0).map(l=>l.revenue);
-  const avgRevenue = revenues.length ? revenues.reduce((a,b)=>a+b,0)/revenues.length : null;
-  document.getElementById('metricAvgRevenue').textContent = avgRevenue
-    ? 'R$ ' + Math.round(avgRevenue).toLocaleString('pt-BR')
-    : '—';
-
-  // Meta média
-  const goals = leads.filter(l=>l.goal>0).map(l=>l.goal);
-  const avgGoal = goals.length ? goals.reduce((a,b)=>a+b,0)/goals.length : null;
-  document.getElementById('metricAvgGoal').textContent = avgGoal
-    ? 'R$ ' + Math.round(avgGoal).toLocaleString('pt-BR')
-    : '—';
-
-  // Resultado do filtro
-  const resultBar = document.getElementById('filterResult');
-  const resultText = document.getElementById('filterResultText');
-  if (fromVal || toVal) {
-    resultBar.style.display = 'block';
-    const de = fromVal ? new Date(fromVal+'T00:00:00').toLocaleDateString('pt-BR') : '—';
-    const ate = toVal ? new Date(toVal+'T23:59:59').toLocaleDateString('pt-BR') : 'hoje';
-    resultText.textContent = `${total} formulário${total!==1?'s':''} preenchido${total!==1?'s':''} de ${de} ate ${ate}`;
-  } else {
-    resultBar.style.display = 'none';
-  }
-}
-
-function renderLeadsTable(leads) {
-  const tbody = document.getElementById('leadsBody');
-  if (!leads.length) {
-    tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:40px;">Nenhum lead no período selecionado</td></tr>';
-    return;
-  }
-  tbody.innerHTML = leads.slice().reverse().map(l => {
-    const scores = Object.keys(CHANNELS).map(ch => {
-      const d = l.channels?.[ch];
-      if (!d || d.disabled || !Object.keys(d.ratings||{}).length) return null;
-      return calcAvg(d.ratings);
-    }).filter(v=>v!==null);
-    const gs = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
-    const scoreColor = gs === '—' ? 'var(--muted)' : parseFloat(gs) >= 4 ? '#2ed573' : parseFloat(gs) >= 3 ? '#f1c40f' : parseFloat(gs) >= 2 ? '#ffa502' : '#ff4757';
-    return `<tr>
-      <td style="white-space:nowrap;">${l.date}</td>
-      <td><strong>${l.clientName}</strong></td>
-      <td style="color:var(--muted);">${l.especialista}</td>
-      <td style="white-space:nowrap;">${l.phone}</td>
-      <td style="color:var(--muted);font-size:.85rem;">${l.email}</td>
-      <td><span class="badge badge-info">${l.nichos?.[0]||'—'}</span></td>
-      <td style="white-space:nowrap;">R$ ${(l.revenue||0).toLocaleString('pt-BR')}</td>
-      <td style="white-space:nowrap;">R$ ${(l.goal||0).toLocaleString('pt-BR')}</td>
-      <td><strong style="color:${scoreColor};">${gs !== '—' ? gs+'/5' : '—'}</strong></td>
-      <td><button class="btn btn-outline" style="padding:6px 14px;font-size:.8rem;" onclick="redownloadPDF(${l.id})">PDF</button></td>
-    </tr>`;
-  }).join('');
-}
-
-// Sobrescrever exportCSV para usar o filtro atual
-const _origExportCSV = exportCSV;
-// redefine exportCSV para exportar apenas filtrados
-window.exportCSV = function() {
-  const leads = filteredLeadsCache.length > 0 ? filteredLeadsCache : getLeads();
-  if (!leads.length) { alert('Nenhum lead para exportar no período!'); return; }
-  const headers = ['Data','Cliente','Especialista','Email','Telefone','Nicho','Faturamento','Meta','Score Site','Score Instagram','Score TikTok','Score WhatsApp'];
-  const rows = leads.map(l => {
-    const scores = Object.keys(CHANNELS).map(ch => {
-      const d = l.channels?.[ch];
-      if(!d||d.disabled||!Object.keys(d.ratings||{}).length) return '—';
-      const a=calcAvg(d.ratings); return a!==null?a.toFixed(1):'—';
-    });
-    return [l.date,l.clientName,l.especialista,l.email,l.phone,l.nichos?.join('; '),l.revenue,l.goal,...scores];
-  });
-  const csv = [headers,...rows].map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));
-  a.download = `MVBusiness_Leads_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.csv`;
-  a.click();
-};
-
