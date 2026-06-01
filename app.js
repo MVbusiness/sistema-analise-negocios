@@ -1,4 +1,4 @@
-app.js// Configuração do Firebase (Gratuito - Spark Plan)
+// Configuração do Firebase (Gratuito - Spark Plan)
 // Você precisa criar uma conta em https://console.firebase.google.com/
 const firebaseConfig = {
     apiKey: "SUA_API_KEY_AQUI",
