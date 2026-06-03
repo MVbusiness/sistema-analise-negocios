@@ -372,23 +372,28 @@ Máximo 900 palavras no total. Seja específico, use os dados reais do formulár
     );
 
     if (!response.ok) {
-      const err = await response.json();
-      console.error('Gemini erro:', err);
+      let errText = '';
+      try { errText = JSON.stringify(await response.json()); } catch(e) { errText = response.statusText; }
+      console.error('Gemini HTTP ' + response.status + ':', errText);
       return gerarDiagnosticoFallback(data);
     }
 
     const result = await response.json();
     const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-    if (text) {
-      console.log('Diagnostico gerado pela IA com sucesso!');
+    if (text && text.length > 100) {
+      console.log('Gemini OK! Diagnostico gerado:', text.substring(0,80));
       return text;
     } else {
       return gerarDiagnosticoFallback(data);
     }
 
   } catch (error) {
-    console.error('Erro ao chamar Gemini:', error);
+    console.error('Erro ao chamar Gemini:', error.message || error);
+    // Se for erro de API key inválida, logar claramente
+    if (error.message && error.message.includes('API')) {
+      console.error('Verifique a API Key do Gemini');
+    }
     return gerarDiagnosticoFallback(data);
   }
 }
@@ -396,62 +401,88 @@ Máximo 900 palavras no total. Seja específico, use os dados reais do formulár
 // Fallback caso a IA falhe (sem internet, chave invalida, etc.)
 function gerarDiagnosticoFallback(data) {
   const gap = data.goal > 0 ? ((data.goal - data.revenue) / data.revenue * 100).toFixed(1) : 0;
-  const canaisAtivos = Object.keys(CHANNELS).filter(ch => {
-    const d = data.channels[ch];
-    return !d.disabled && Object.keys(d.ratings).length > 0;
-  });
 
-  // Identificar pontos fortes e gargalos
-  let pontosFracos = [], pontosFortes = [];
-  canaisAtivos.forEach(ch => {
+  let pontosFortes = [];
+  let gargalos = [];
+
+  Object.keys(CHANNELS).forEach(ch => {
     const d = data.channels[ch];
+    if (d.disabled || !Object.keys(d.ratings).length) return;
     Object.entries(d.ratings).forEach(([item, nota]) => {
-      if (nota <= 2) pontosFracos.push({ canal: CHANNELS[ch].label, item, nota });
-      if (nota >= 4) pontosFortes.push({ canal: CHANNELS[ch].label, item, nota });
+      if (nota >= 4) pontosFortes.push('- ' + CHANNELS[ch].label + ': ' + item + ' (nota ' + nota + '/5)');
+      if (nota <= 2) gargalos.push('- ' + CHANNELS[ch].label + ': ' + item + ' (nota ' + nota + '/5)');
     });
   });
-  pontosFracos.sort((a,b) => a.nota - b.nota);
-  pontosFortes.sort((a,b) => b.nota - a.nota);
 
-  const topGargalos = pontosFracos.slice(0,3).map(p => `- ${p.canal}: ${p.item} (nota ${p.nota}/5)`).join('\n') || '- Avalie os canais para identificar gargalos';
-  const topFortes = pontosFortes.slice(0,3).map(p => `- ${p.canal}: ${p.item} (nota ${p.nota}/5)`).join('\n') || '- Complete a avaliação dos canais';
+  pontosFortes = pontosFortes.slice(0, 3);
+  gargalos = gargalos.slice(0, 3);
 
-  return `PANORAMA DO NEGÓCIO
-O negócio de \${data.clientName} no nicho de \${data.nichos.join(', ')} apresenta faturamento de R$ \${data.revenue.toLocaleString('pt-BR')}/mês com meta de R$ \${data.goal.toLocaleString('pt-BR')}/mês — um crescimento de \${gap}% necessário. Há potencial claro de expansão, e os dados coletados mostram caminhos concretos para chegar lá.
+  const nome = data.clientName;
+  const nicho = data.nichos.join(', ');
+  const fat = 'R$ ' + data.revenue.toLocaleString('pt-BR');
+  const meta = 'R$ ' + data.goal.toLocaleString('pt-BR');
 
-O QUE ESTÁ FUNCIONANDO
-\${topFortes}
+  return 'PANORAMA DO NEGÓCIO\n' +
+    'Olá ' + nome + '! Analisamos com cuidado o seu negócio no nicho de ' + nicho + ' e identificamos pontos importantes. ' +
+    'Com faturamento atual de ' + fat + '/mês e meta de ' + meta + '/mês, você precisa crescer ' + gap + '%. ' +
+    'Os dados mostram que há potencial real — e os ajustes certos podem acelerar muito esse caminho.\n\n' +
 
-ONDE ESTÃO OS GARGALOS
-\${topGargalos}
+    'O QUE ESTÁ FUNCIONANDO\n' +
+    (pontosFortes.length ? pontosFortes.join('\n') : '- Complete a avaliação dos canais para identificar pontos fortes') + '\n\n' +
 
-DIRETRIZES PRÁTICAS POR CANAL
-Site / Loja Virtual: Revise descrições de produtos, velocidade de carregamento e taxa de conversão. Cada ponto abaixo de 3 é uma venda perdida por dia.
-Instagram: Defina linha editorial, aumente frequência e foque em conteúdo que gera desejo e CTA direto.
-TikTok e TikTok Shop: Crie consistência de publicações e ative a loja para capturar intenção de compra.
-WhatsApp: Estruture grupos de clientes, crie ofertas exclusivas e use automações para aumentar recorrência.
+    'ONDE ESTÃO OS GARGALOS\n' +
+    (gargalos.length ? gargalos.join('\n') : '- Complete a avaliação dos canais para identificar gargalos') + '\n\n' +
 
-CHECKLIST DE TAREFAS — PRÓXIMOS 30 DIAS
-URGENTE (essa semana):
-- Mapear os 3 produtos mais vendidos e otimizar suas páginas
-- Criar calendário editorial para Instagram e TikTok
-- Ativar ou revisar catálogo no WhatsApp Business
+    'DIRETRIZES PRÁTICAS POR CANAL\n' +
+    'Site / Loja Virtual:\n' +
+    '- Revise as descrições dos produtos — sejam claras, com benefícios e chamada para ação\n' +
+    '- Verifique a velocidade de carregamento (use Google PageSpeed)\n' +
+    '- Certifique-se de que o checkout é simples e aceita Pix, cartão e boleto\n' +
+    '- Adicione selos de segurança e depoimentos de clientes visíveis\n\n' +
+    'Instagram:\n' +
+    '- Defina e siga uma linha editorial consistente (ex: 3 posts de conteúdo para 1 de venda)\n' +
+    '- Use Reels mostrando os produtos em uso — esse formato tem maior alcance orgânico\n' +
+    '- Otimize a bio com o que você vende + CTA com link para a loja\n' +
+    '- Responda todos os comentários e DMs — engajamento gera mais alcance\n\n' +
+    'TikTok e TikTok Shop:\n' +
+    '- Publique pelo menos 5 vídeos por semana mostrando produtos, bastidores e dicas do nicho\n' +
+    '- Cadastre todos os produtos na TikTok Shop com fotos e descrições completas\n' +
+    '- Use as tendências de áudio e hashtags do seu nicho para ganhar alcance orgânico\n' +
+    '- Considere parcerias com afiliados para ampliar o alcance sem custo fixo\n\n' +
+    'WhatsApp:\n' +
+    '- Crie um grupo VIP de clientes e envie ofertas exclusivas semanais\n' +
+    '- Use o catálogo do WhatsApp Business com fotos, preços e link de compra\n' +
+    '- Programe disparos estratégicos em datas especiais e lançamentos\n' +
+    '- Configure mensagens automáticas de boas-vindas e carrinho abandonado\n\n' +
 
-IMPORTANTE (até 15 dias):
-- Gravar 5 vídeos para TikTok mostrando os produtos
-- Criar grupo VIP de clientes no WhatsApp
-- Revisar política de frete e frete grátis
+    'CHECKLIST DE TAREFAS — PRÓXIMOS 30 DIAS\n' +
+    'URGENTE (essa semana):\n' +
+    '- Mapear os 3 produtos mais vendidos e otimizar suas páginas\n' +
+    '- Criar calendário editorial para Instagram e TikTok\n' +
+    '- Ativar ou revisar catálogo no WhatsApp Business\n' +
+    '- Revisar bio do Instagram com CTA claro\n\n' +
+    'IMPORTANTE (até 15 dias):\n' +
+    '- Gravar 5 vídeos para TikTok mostrando produtos do nicho ' + nicho + '\n' +
+    '- Criar grupo VIP de clientes no WhatsApp\n' +
+    '- Verificar velocidade do site e corrigir se necessário\n' +
+    '- Adicionar depoimentos de clientes na página principal da loja\n\n' +
+    'PLANEJAMENTO (até o fim do mês):\n' +
+    '- Estruturar estratégia de retenção com cupons para recompra\n' +
+    '- Planejar ações promocionais do próximo mês\n' +
+    '- Analisar métricas e ajustar o que não está convertendo\n\n' +
 
-PLANEJAMENTO (até o fim do mês):
-- Estruturar estratégia de retenção de clientes
-- Planejar ações promocionais do próximo mês
-- Analisar métricas e ajustar o que não está performando
+    'ROTA PARA A META\n' +
+    'Para atingir ' + meta + '/mês a partir de ' + fat + '/mês, a sequência mais inteligente é: ' +
+    '(1) corrigir os gargalos críticos identificados — cada um resolvido já aumenta a conversão; ' +
+    '(2) fortalecer os canais com melhor desempenho atual para gerar mais resultado com menos esforço; ' +
+    '(3) ativar os canais ainda inexplorados como fonte de novo tráfego e vendas. ' +
+    'Com disciplina e consistência nos próximos 90 dias, o crescimento de ' + gap + '% é totalmente alcançável.\n\n' +
 
-ROTA PARA A META
-Para atingir R$ \${data.goal.toLocaleString('pt-BR')}/mês, a sequência ideal é: primeiro estabilizar o que já funciona, depois ativar os canais com menor nota e por último escalar com tráfego pago quando a conversão estiver sólida.
-
-MENSAGEM PARA O EMPREENDEDOR
-\${data.clientName}, os dados mostram que você já tem estrutura — o que falta é ajuste e direção. Os nossos programas foram criados para empreendedores exatamente como você — que têm potencial, mas precisam de método, estratégia e direção para encurtar o caminho até o resultado. Você não precisa descobrir tudo sozinho. O próximo passo pode mudar tudo.`;
+    'MENSAGEM PARA O EMPREENDEDOR\n' +
+    nome + ', cada dado levantado aqui é uma oportunidade de crescimento esperando para ser aproveitada. ' +
+    'Você já está um passo à frente de quem ainda não parou para olhar com cuidado para o próprio negócio — e isso importa muito. ' +
+    'Os nossos programas foram criados para empreendedores exatamente como você — que têm potencial, mas precisam de método, estratégia e direção para encurtar o caminho até o resultado. ' +
+    'Você não precisa descobrir tudo sozinho. O próximo passo pode mudar tudo.';
 }
 
 // ============================================================
