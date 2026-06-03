@@ -3,74 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Análise de Negócios</title>
+<title>Programa de Diagnóstico de Negócio</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Syne:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0c0b09;
-  --surface: #141210;
-  --surface2: #1a1814;
-  --border: #2a2620;
-  --text: #f5f0e8;
-  --muted: #8a8070;
-  --gold: #C9A84C;
-  --gold-light: #E8D08A;
-  --gold-dim: #6B5520;
-  --site-color: #C9A84C;
-  --insta-color: #D4829A;
-  --tiktok-color: #8BAF8B;
-  --whatsapp-color: #6B9E6B;
-  --accent: #C9A84C;
-  --danger: #C0392B;
-  --warning: #D4820A;
-  --success: #4A7C59;
+  --bg:         #0A0818;
+  --surface:    #120F22;
+  --surface2:   #1A1630;
+  --border:     #2A2445;
+  --text:       #F5F0EE;
+  --muted:      #8A7A90;
+  --gold:       #C9A870;
+  --gold-light: #E8CFA0;
+  --gold-dim:   #6B5530;
+  --rose:       #C41866;
+  --rose-dark:  #8B1048;
+  --rose-light: #E8508A;
+  --accent:     #C9A870;
+  --danger:     #C0392B;
+  --warning:    #D4820A;
+  --success:    #4A7C59;
+  --site-color:      #C9A870;
+  --insta-color:     #C41866;
+  --tiktok-color:    #8B6AB8;
+  --whatsapp-color:  #4A9E6A;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
 /* HEADER */
 .app-header {
-  background: #0c0b09;
-  border-bottom: 1px solid #2a2620;
+  background: #080616;
+  border-bottom: 1px solid #1e1a35;
   padding: 0 40px;
-  display: flex; align-items: stretch; gap: 0;
+  display: flex; align-items: center; gap: 0;
   position: relative;
 }
 .app-header::after {
   content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
-  background: linear-gradient(90deg, transparent, #C9A84C 30%, #E8D08A 50%, #C9A84C 70%, transparent);
+  background: linear-gradient(90deg, transparent, var(--rose) 20%, var(--gold) 50%, var(--rose) 80%, transparent);
 }
 .header-brand {
-  display:flex; align-items:center; gap:20px; padding:20px 0;
-  border-right: 1px solid #2a2620;
+  display:flex; align-items:center;
+  padding: 14px 0;
   padding-right: 32px; margin-right: 32px;
 }
 .header-logo-box {
-  width:52px; height:52px; border-radius:10px;
-  background: linear-gradient(135deg, #1a1510, #0c0b09);
-  border:1px solid #3a3020;
-  display:flex; align-items:center; justify-content:center;
-  position:relative; overflow:hidden;
+  background:transparent; border:none; display:flex; align-items:center;
 }
-.header-logo-box img { width:38px; height:38px; object-fit:contain; }
-.header-logo-initials {
-  font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700;
-  background: linear-gradient(135deg, #C9A84C, #E8D08A);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  letter-spacing:.05em;
-}
-.header-text {}
-.header-name {
-  font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700;
-  color: var(--text); letter-spacing:.03em; line-height:1;
-}
-.header-name span { color:var(--gold); }
-.header-sub {
-  font-family:'Cormorant Garamond',serif; font-size:.85rem; font-weight:300;
-  font-style:italic; color:var(--muted); margin-top:3px; letter-spacing:.04em;
-}
+.header-logo-box img { height:44px; width:auto; object-fit:contain; display:block; }
 .header-actions { margin-left:auto; display:flex; gap:10px; align-items:center; }
-.header-divider { width:1px; background:#2a2620; margin:0; }
 
 /* LAYOUT */
 .main { max-width:1100px; margin:0 auto; padding:40px 20px 80px; }
@@ -86,22 +68,17 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 }
 .section::before {
   content:''; position:absolute; top:0; left:0; width:2px; height:100%;
-  background:linear-gradient(180deg, var(--gold), transparent);
-  opacity:0;
-  transition:.3s;
+  background:linear-gradient(180deg, var(--rose), var(--gold), transparent);
+  opacity:0; transition:.3s;
 }
 .section:hover::before { opacity:1; }
 .section-header {
   display:flex; align-items:center; gap:14px;
-  margin-bottom:24px;
-  padding-bottom:16px;
+  margin-bottom:24px; padding-bottom:16px;
   border-bottom:1px solid var(--border);
 }
 .section-icon { font-size:1.2rem; opacity:.8; }
-.section-title {
-  font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700;
-  letter-spacing:.02em;
-}
+.section-title { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700; letter-spacing:.02em; }
 .section-sub {
   font-family:'Cormorant Garamond',serif; font-style:italic;
   color:var(--muted); font-size:.95rem; margin-top:2px; font-weight:300;
@@ -113,140 +90,112 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
   padding:5px 14px; border-radius:4px; font-size:.72rem; font-weight:500;
   margin-bottom:16px; letter-spacing:.1em; text-transform:uppercase;
 }
-.channel-badge.site { background:rgba(201,168,76,.08); color:#C9A84C; border:1px solid rgba(201,168,76,.2); }
-.channel-badge.insta { background:rgba(212,130,154,.08); color:#D4829A; border:1px solid rgba(212,130,154,.2); }
-.channel-badge.tiktok { background:rgba(139,175,139,.08); color:#8BAF8B; border:1px solid rgba(139,175,139,.2); }
-.channel-badge.whatsapp { background:rgba(107,158,107,.08); color:#6B9E6B; border:1px solid rgba(107,158,107,.2); }
+.channel-badge.site     { background:rgba(201,168,112,.1); color:var(--site-color);     border:1px solid rgba(201,168,112,.25); }
+.channel-badge.insta    { background:rgba(196,24,102,.1);  color:var(--insta-color);    border:1px solid rgba(196,24,102,.25); }
+.channel-badge.tiktok   { background:rgba(139,106,184,.1); color:var(--tiktok-color);   border:1px solid rgba(139,106,184,.25); }
+.channel-badge.whatsapp { background:rgba(74,158,106,.1);  color:var(--whatsapp-color); border:1px solid rgba(74,158,106,.25); }
 
-/* CHANNEL DISABLED TOGGLE */
+/* CHANNEL TOGGLE */
 .channel-toggle {
   display:flex; align-items:center; gap:10px;
-  padding:10px 14px;
-  background:var(--surface2);
-  border-radius:6px;
-  margin-bottom:16px;
-  cursor:pointer;
-  border:1px solid var(--border);
+  padding:10px 14px; background:var(--surface2);
+  border-radius:6px; margin-bottom:16px; cursor:pointer; border:1px solid var(--border);
 }
-.channel-toggle input[type=checkbox] { width:16px; height:16px; accent-color:var(--gold); cursor:pointer; }
-.channel-toggle label {
-  cursor:pointer; color:var(--muted); font-size:.82rem;
-  font-family:'DM Sans',sans-serif; font-weight:300;
-}
+.channel-toggle input[type=checkbox] { width:16px; height:16px; accent-color:var(--rose); cursor:pointer; }
+.channel-toggle label { cursor:pointer; color:var(--muted); font-size:.82rem; font-weight:300; }
 .channel-content.disabled { opacity:.3; pointer-events:none; }
 
-/* FORM GRID */
+/* FORM */
 .form-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin-bottom:20px; }
 .form-group { display:flex; flex-direction:column; gap:8px; }
 .form-group.full { grid-column:1/-1; }
-label {
-  font-family:'DM Sans',sans-serif; font-size:.72rem; font-weight:500;
-  color:var(--muted); text-transform:uppercase; letter-spacing:.1em;
-}
+label { font-size:.72rem; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; }
 input[type=text], input[type=email], input[type=tel], input[type=number], select, textarea {
   background:var(--surface2); border:1px solid var(--border); border-radius:8px;
   color:var(--text); padding:12px 16px; font-size:.95rem; font-family:'DM Sans',sans-serif;
   font-weight:300; transition:.2s; width:100%;
 }
 input:focus, select:focus, textarea:focus {
-  outline:none; border-color:var(--gold); box-shadow:0 0 0 2px rgba(201,168,76,.12);
+  outline:none; border-color:var(--rose);
+  box-shadow:0 0 0 2px rgba(196,24,102,.12);
 }
 input::placeholder, textarea::placeholder { color:var(--muted); opacity:.5; font-style:italic; }
 textarea { resize:vertical; min-height:90px; line-height:1.7; }
-select option { background:#1a1814; }
+select option { background:#1A1630; }
 
-/* NICHO GRID */
+/* NICHO */
 .nicho-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(165px,1fr)); gap:8px; }
 .nicho-item {
   display:flex; align-items:center; gap:10px;
   padding:10px 14px; background:var(--surface2);
   border:1px solid var(--border); border-radius:6px; cursor:pointer;
   transition:.2s; font-size:.82rem; font-weight:300;
-  font-family:'DM Sans',sans-serif;
 }
-.nicho-item:hover { border-color:var(--gold-dim); background:rgba(201,168,76,.05); }
-.nicho-item:has(input:checked) { border-color:var(--gold); background:rgba(201,168,76,.08); }
-.nicho-item input[type=checkbox] { width:14px; height:14px; accent-color:var(--gold); cursor:pointer; }
+.nicho-item:hover { border-color:var(--rose-dark); background:rgba(196,24,102,.05); }
+.nicho-item:has(input:checked) { border-color:var(--rose); background:rgba(196,24,102,.08); }
+.nicho-item input[type=checkbox] { width:14px; height:14px; accent-color:var(--rose); cursor:pointer; }
 
 /* RATING */
 .rating-block {
   background:var(--surface2); border:1px solid var(--border);
-  border-radius:8px; padding:14px 18px; margin-bottom:8px;
-  transition:.2s;
+  border-radius:8px; padding:14px 18px; margin-bottom:8px; transition:.2s;
 }
-.rating-block:hover { border-color:var(--gold-dim); }
+.rating-block:hover { border-color:var(--rose-dark); }
 .rating-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-.rating-label {
-  flex:1; min-width:180px; font-size:.88rem; color:var(--text);
-  font-weight:300; font-family:'DM Sans',sans-serif; line-height:1.4;
-}
+.rating-label { flex:1; min-width:180px; font-size:.88rem; color:var(--text); font-weight:300; line-height:1.4; }
 .rating-stars { display:flex; gap:5px; align-items:center; }
 .star-btn {
   width:34px; height:34px; border-radius:6px; border:1px solid var(--border);
   background:var(--surface); color:var(--muted); font-size:.8rem; font-weight:500;
   cursor:pointer; transition:.15s; display:flex; align-items:center; justify-content:center;
-  font-family:'DM Sans',sans-serif; letter-spacing:0;
+  font-family:'DM Sans',sans-serif;
 }
-.star-btn:hover { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,.08); }
-.star-btn.active { color:#1a1208; border-color:transparent; font-weight:600; }
-.star-0.active { background:#4a4540; color:var(--text); }
-.star-1.active { background:#8B3A3A; }
-.star-2.active { background:#8B6020; }
-.star-3.active { background:#8B7A20; color:#1a1208; }
-.star-4.active { background:#4A7C59; color:#e8f4ee; }
-.star-5.active { background:linear-gradient(135deg,#C9A84C,#E8D08A); }
+.star-btn:hover { border-color:var(--rose); color:var(--rose); background:rgba(196,24,102,.08); }
+.star-btn.active { color:#fff; border-color:transparent; font-weight:600; }
+.star-0.active { background:#3a3550; color:var(--muted); }
+.star-1.active { background:#7B1040; }
+.star-2.active { background:#9B3060; }
+.star-3.active { background:#B8860B; color:#1a1208; }
+.star-4.active { background:#4A7C59; }
+.star-5.active { background:linear-gradient(135deg,var(--rose),var(--gold)); }
 .rating-badge {
   min-width:40px; text-align:center; font-weight:600; font-size:.82rem;
   padding:5px 10px; border-radius:6px; background:var(--surface); color:var(--muted);
-  font-family:'DM Sans',sans-serif;
 }
-
 .add-field-btn {
   display:inline-flex; align-items:center; gap:8px;
   padding:9px 18px; background:transparent; border:1px dashed var(--border);
   border-radius:8px; color:var(--muted); cursor:pointer; font-size:.82rem;
-  transition:.2s; margin-top:8px; font-family:'DM Sans',sans-serif;
-  letter-spacing:.04em;
+  transition:.2s; margin-top:8px; font-family:'DM Sans',sans-serif; letter-spacing:.04em;
 }
-.add-field-btn:hover { border-color:var(--gold); color:var(--gold); }
-
+.add-field-btn:hover { border-color:var(--rose); color:var(--rose); }
 .custom-rating {
-  background:var(--surface2); border:1px dashed var(--gold-dim);
+  background:var(--surface2); border:1px dashed var(--rose-dark);
   border-radius:8px; padding:12px 16px; margin-bottom:8px;
   display:flex; flex-wrap:wrap; align-items:center; gap:12px;
 }
 .custom-rating input[type=text] { flex:1; min-width:140px; padding:8px 12px; }
 .remove-btn {
-  background:transparent; border:1px solid #C0392B; color:#C0392B;
-  width:30px; height:30px; border-radius:6px; cursor:pointer; font-size:.9rem;
-  transition:.2s;
+  background:transparent; border:1px solid var(--danger); color:var(--danger);
+  width:30px; height:30px; border-radius:6px; cursor:pointer; font-size:.9rem; transition:.2s;
 }
-.remove-btn:hover { background:#C0392B; color:#fff; }
+.remove-btn:hover { background:var(--danger); color:#fff; }
 
-/* KPI CARDS */
+/* KPI */
 .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
 .kpi-card { background:var(--surface2); border-radius:8px; padding:18px 20px; border-left:2px solid; }
 .kpi-card.critico { border-color:#C0392B; }
-.kpi-card.alto { border-color:#D4820A; }
-.kpi-card.medio { border-color:#B8860B; }
-.kpi-card.baixo { border-color:#4A7C59; }
-.kpi-urgency {
-  font-size:.68rem; font-weight:500; letter-spacing:.14em;
-  text-transform:uppercase; margin-bottom:8px; font-family:'DM Sans',sans-serif;
-}
+.kpi-card.alto    { border-color:#D4820A; }
+.kpi-card.medio   { border-color:#B8860B; }
+.kpi-card.baixo   { border-color:#4A7C59; }
+.kpi-urgency { font-size:.68rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
 .kpi-card.critico .kpi-urgency { color:#C0392B; }
-.kpi-card.alto .kpi-urgency { color:#D4820A; }
-.kpi-card.medio .kpi-urgency { color:#B8860B; }
-.kpi-card.baixo .kpi-urgency { color:#4A7C59; }
-.kpi-title {
-  font-size:.78rem; color:var(--muted); margin-bottom:6px;
-  font-family:'DM Sans',sans-serif; font-weight:300; letter-spacing:.04em;
-}
-.kpi-value {
-  font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:500;
-  margin-bottom:6px; line-height:1;
-}
-.kpi-desc { font-size:.78rem; color:var(--muted); line-height:1.6; font-weight:300; }
+.kpi-card.alto    .kpi-urgency { color:#D4820A; }
+.kpi-card.medio   .kpi-urgency { color:#B8860B; }
+.kpi-card.baixo   .kpi-urgency { color:#4A7C59; }
+.kpi-title  { font-size:.78rem; color:var(--muted); margin-bottom:6px; font-weight:300; letter-spacing:.04em; }
+.kpi-value  { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:500; margin-bottom:6px; line-height:1; }
+.kpi-desc   { font-size:.78rem; color:var(--muted); line-height:1.6; font-weight:300; }
 
 /* BUTTONS */
 .btn {
@@ -256,36 +205,54 @@ select option { background:#1a1814; }
   font-family:'DM Sans',sans-serif; letter-spacing:.05em;
 }
 .btn-primary {
-  background:linear-gradient(135deg, #C9A84C, #E8D08A);
-  color:#1a1208; font-weight:600;
-  box-shadow:0 2px 12px rgba(201,168,76,.25);
+  background:linear-gradient(135deg, var(--rose-dark), var(--rose));
+  color:#fff; font-weight:600;
+  box-shadow:0 2px 12px rgba(196,24,102,.3);
 }
-.btn-primary:hover { transform:translateY(-1px); box-shadow:0 4px 20px rgba(201,168,76,.35); }
-.btn-success {
-  background:transparent; border:1px solid var(--success); color:var(--success);
-}
+.btn-primary:hover { transform:translateY(-1px); box-shadow:0 4px 20px rgba(196,24,102,.4); }
+.btn-success { background:transparent; border:1px solid var(--success); color:var(--success); }
 .btn-success:hover { background:rgba(74,124,89,.15); }
-.btn-outline {
-  background:transparent; border:1px solid var(--border); color:var(--muted);
-  font-size:.8rem;
-}
+.btn-outline { background:transparent; border:1px solid var(--border); color:var(--muted); font-size:.8rem; }
 .btn-outline:hover { border-color:var(--gold); color:var(--gold); }
-.btn-danger { background:transparent; border:1px solid var(--danger); color:var(--danger); }
-
 .action-bar {
   display:flex; gap:12px; flex-wrap:wrap; margin-top:32px; padding:24px;
-  background:var(--surface); border-radius:12px; border:1px solid var(--border);
-  align-items:center;
+  background:var(--surface); border-radius:12px; border:1px solid var(--border); align-items:center;
 }
 
-/* TABS */
-.tabs { display:flex; gap:4px; background:var(--surface2); padding:6px; border-radius:12px; margin-bottom:24px; flex-wrap:wrap; }
-.tab { padding:10px 18px; border-radius:9px; border:none; background:transparent; color:var(--muted); cursor:pointer; font-size:.9rem; font-weight:500; transition:.2s; font-family:'DM Sans',sans-serif; }
-.tab.active { background:var(--accent); color:#fff; }
+/* FILTER */
+.filter-bar {
+  display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end;
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:14px; padding:20px 22px; margin-bottom:20px;
+}
+.filter-group { display:flex; flex-direction:column; gap:6px; }
+.filter-label { font-size:.72rem; font-weight:500; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; }
+.filter-date {
+  background:var(--surface); border:1px solid var(--border); border-radius:9px;
+  color:var(--text); padding:9px 14px; font-size:.9rem; cursor:pointer; transition:.2s;
+  font-family:'DM Sans',sans-serif;
+}
+.filter-date:focus { outline:none; border-color:var(--rose); }
+.filter-date::-webkit-calendar-picker-indicator { filter:invert(.6); cursor:pointer; }
 
-/* LEADS TABLE */
-.leads-section { display:none; }
-.leads-section.active { display:block; }
+/* METRICS */
+.metrics-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-bottom:20px; }
+.metric-card {
+  background:var(--surface2); border:1px solid var(--border); border-radius:14px;
+  padding:18px 20px; display:flex; align-items:center; gap:16px; transition:.2s;
+}
+.metric-card:hover { border-color:var(--rose-dark); transform:translateY(-1px); }
+.metric-icon { width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; }
+.metric-body { flex:1; }
+.metric-value { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:500; line-height:1; margin-bottom:4px; }
+.metric-label { font-size:.78rem; color:var(--muted); }
+.filter-result-bar {
+  background:rgba(196,24,102,.08); border:1px solid rgba(196,24,102,.2);
+  border-radius:10px; padding:10px 16px; font-size:.88rem; color:var(--rose-light); font-weight:500;
+  margin-bottom:16px; display:none;
+}
+
+/* TABLE */
 .table-wrap { overflow-x:auto; }
 table { width:100%; border-collapse:collapse; font-size:.82rem; }
 th {
@@ -293,90 +260,45 @@ th {
   padding:10px 14px; font-size:.68rem; text-transform:uppercase;
   letter-spacing:.1em; font-weight:500; border-bottom:1px solid var(--border);
 }
-td { padding:11px 14px; border-bottom:1px solid rgba(42,38,32,.5); font-weight:300; }
-tr:hover td { background:rgba(201,168,76,.03); }
-.badge {
-  display:inline-block; padding:3px 10px; border-radius:3px;
-  font-size:.7rem; font-weight:500; letter-spacing:.06em;
-}
-.badge-info { background:rgba(201,168,76,.12); color:var(--gold); border:1px solid rgba(201,168,76,.2); }
+td { padding:11px 14px; border-bottom:1px solid rgba(42,36,69,.5); font-weight:300; }
+tr:hover td { background:rgba(196,24,102,.03); }
+.badge { display:inline-block; padding:3px 10px; border-radius:3px; font-size:.7rem; font-weight:500; letter-spacing:.06em; }
+.badge-info { background:rgba(196,24,102,.12); color:var(--rose-light); border:1px solid rgba(196,24,102,.2); }
 
 /* MESSAGES */
-.msg {
-  padding:12px 18px; border-radius:6px; margin-bottom:20px;
-  font-weight:400; display:none; font-size:.88rem;
-  font-family:'DM Sans',sans-serif; letter-spacing:.02em;
-}
+.msg { padding:12px 18px; border-radius:6px; margin-bottom:20px; font-weight:400; display:none; font-size:.88rem; }
 .msg.success { background:rgba(74,124,89,.1); color:#4A7C59; border:1px solid rgba(74,124,89,.25); }
-.msg.error { background:rgba(192,57,43,.1); color:#C0392B; border:1px solid rgba(192,57,43,.25); }
+.msg.error   { background:rgba(192,57,43,.1); color:#C0392B; border:1px solid rgba(192,57,43,.25); }
 
 /* LOADING */
 .loading-overlay {
   display:none; position:fixed; inset:0;
-  background:rgba(10,8,4,.85); backdrop-filter:blur(4px);
+  background:rgba(8,6,22,.88); backdrop-filter:blur(4px);
   z-index:999; align-items:center; justify-content:center; flex-direction:column; gap:20px;
 }
 .loading-overlay.show { display:flex; }
 .spinner {
   width:44px; height:44px;
-  border:2px solid rgba(201,168,76,.15);
-  border-top:2px solid #C9A84C;
+  border:2px solid rgba(196,24,102,.15);
+  border-top:2px solid var(--rose);
   border-radius:50%; animation:spin 1s linear infinite;
 }
 .loading-overlay p {
   font-family:'Cormorant Garamond',serif; font-style:italic;
-  font-size:1.05rem; color:rgba(201,168,76,.7); letter-spacing:.08em;
+  font-size:1.05rem; color:rgba(232,80,138,.7); letter-spacing:.08em;
 }
 @keyframes spin { to { transform:rotate(360deg); } }
 
-/* CHART CONTAINERS */
+/* CHART */
 .chart-area { background:var(--surface2); border-radius:12px; padding:20px; margin-bottom:20px; }
-.chart-title { font-family:'Syne',sans-serif; font-weight:700; margin-bottom:16px; font-size:1rem; }
 
-
-/* FILTER BAR */
-.filter-bar {
-  display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end;
-  background:var(--surface2); border:1px solid var(--border);
-  border-radius:14px; padding:20px 22px; margin-bottom:20px;
-}
-.filter-group { display:flex; flex-direction:column; gap:6px; }
-.filter-label { font-size:.75rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
-.filter-date {
-  background:var(--surface); border:1px solid var(--border); border-radius:9px;
-  color:var(--text); padding:9px 14px; font-size:.9rem; font-family:"DM Sans",sans-serif;
-  cursor:pointer; transition:.2s;
-}
-.filter-date:focus { outline:none; border-color:var(--accent); }
-.filter-date::-webkit-calendar-picker-indicator { filter:invert(.6); cursor:pointer; }
-.metrics-grid {
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:14px; margin-bottom:20px;
-}
-.metric-card {
-  background:var(--surface2); border:1px solid var(--border);
-  border-radius:14px; padding:18px 20px;
-  display:flex; align-items:center; gap:16px; transition:.2s;
-}
-.metric-card:hover { border-color:var(--accent); transform:translateY(-1px); }
-.metric-icon {
-  width:46px; height:46px; border-radius:12px;
-  display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0;
-}
-.metric-body { flex:1; }
-.metric-value { font-family:"Syne",sans-serif; font-size:1.5rem; font-weight:800; line-height:1; margin-bottom:4px; }
-.metric-label { font-size:.78rem; color:var(--muted); }
-.filter-result-bar {
-  background:rgba(124,92,252,.1); border:1px solid rgba(124,92,252,.25);
-  border-radius:10px; padding:10px 16px;
-  font-size:.88rem; color:var(--accent); font-weight:500;
-}
-/* RESPONSIVE */
 @media(max-width:768px) {
-  .app-header { flex-direction:column; align-items:flex-start; }
-  .header-actions { margin-left:0; }
+  .app-header { flex-direction:column; align-items:flex-start; padding:16px 20px; }
+  .header-actions { margin-left:0; width:100%; justify-content:flex-end; }
   .main { padding:20px 12px 60px; }
   .section { padding:20px; }
+  .filter-bar { flex-direction:column; }
+  .metrics-grid { grid-template-columns:1fr 1fr; }
 }
 </style>
 </head>
@@ -384,31 +306,25 @@ tr:hover td { background:rgba(201,168,76,.03); }
 
 <div class="loading-overlay" id="loadingOverlay">
   <div class="spinner"></div>
-  <p>Gerando relatório...</p>
+  <p>Gerando diagnostico...</p>
 </div>
 
 <header class="app-header">
   <div class="header-brand">
     <div class="header-logo-box">
-      <!-- SUBSTITUA PELA SUA LOGO: adicione aqui <img src="sua-logo.png"> -->
-      <!-- OU deixe as iniciais abaixo -->
-      <span class="header-logo-initials">MV</span>
-    </div>
-    <div class="header-text">
-      <div class="header-name">MV<span>Business</span></div>
-      <div class="header-sub">Diagnóstico de Negócios Digitais</div>
+      <img id="headerLogo" src="" alt="Logo">
     </div>
   </div>
   <div class="header-actions">
-    <button class="btn btn-outline" onclick="showTab('form')" style="font-size:.85rem;padding:10px 20px;">Nova Análise</button>
-    <button class="btn btn-outline" onclick="showTab('leads')" style="font-size:.85rem;padding:10px 20px;">Base de Leads</button>
+    <button class="btn btn-outline" onclick="showTab('form')" style="padding:10px 20px;">Nova Analise</button>
+    <button class="btn btn-outline" onclick="showTab('leads')" style="padding:10px 20px;">Base de Leads</button>
   </div>
 </header>
 
 <main class="main">
   <div id="msg" class="msg"></div>
 
-  <!-- ======================== FORM TAB ======================== -->
+  <!-- FORM TAB -->
   <div id="tab-form">
 
     <!-- DADOS DO CLIENTE -->
@@ -421,30 +337,12 @@ tr:hover td { background:rgba(201,168,76,.03); }
         </div>
       </div>
       <div class="form-grid">
-        <div class="form-group">
-          <label>Nome do Cliente *</label>
-          <input type="text" id="clientName" placeholder="Nome completo">
-        </div>
-        <div class="form-group">
-          <label>Nome do Especialista (Closer) *</label>
-          <input type="text" id="especialista" placeholder="Seu nome">
-        </div>
-        <div class="form-group">
-          <label>Telefone *</label>
-          <input type="tel" id="phone" value="+55" placeholder="+5511999999999">
-        </div>
-        <div class="form-group">
-          <label>Email *</label>
-          <input type="email" id="email" placeholder="email@cliente.com">
-        </div>
-        <div class="form-group">
-          <label>Faturamento Médio (últimos 3 meses) *</label>
-          <input type="number" id="revenue" placeholder="Ex: 10000">
-        </div>
-        <div class="form-group">
-          <label>Objetivo Financeiro Mensal *</label>
-          <input type="number" id="goal" placeholder="Ex: 15000">
-        </div>
+        <div class="form-group"><label>Nome do Cliente *</label><input type="text" id="clientName" placeholder="Nome completo"></div>
+        <div class="form-group"><label>Nome do Especialista (Closer) *</label><input type="text" id="especialista" placeholder="Seu nome"></div>
+        <div class="form-group"><label>Telefone *</label><input type="tel" id="phone" value="+55" placeholder="+5511999999999"></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="email" placeholder="email@cliente.com"></div>
+        <div class="form-group"><label>Faturamento Médio (últimos 3 meses) *</label><input type="number" id="revenue" placeholder="Ex: 10000"></div>
+        <div class="form-group"><label>Objetivo Financeiro Mensal *</label><input type="number" id="goal" placeholder="Ex: 15000"></div>
       </div>
     </div>
 
@@ -470,7 +368,7 @@ tr:hover td { background:rgba(201,168,76,.03); }
         <div class="nicho-item"><input type="checkbox" name="nicho" value="Outros" id="nichoOutros"><label>➕ Outros</label></div>
       </div>
       <div id="outroNichoBox" style="display:none;margin-top:14px;">
-        <div class="form-group"><label>Especifique o nicho</label><input type="text" id="outroNicho" placeholder="Descreva o nicho"></div>
+        <div class="form-group"><label>Especifique o nicho</label><input type="text" id="outroNicho" placeholder="Qual é o nicho?"></div>
       </div>
     </div>
 
@@ -481,58 +379,40 @@ tr:hover td { background:rgba(201,168,76,.03); }
         <div><div class="section-title">Objetivos e Desafios</div></div>
       </div>
       <div class="form-grid">
-        <div class="form-group full">
-          <label>Principal Objetivo nos próximos 6 meses *</label>
-          <textarea id="objetivo6m" placeholder="Ex: Aumentar faturamento para R$ 20.000/mês expandindo para TikTok e Marketplaces"></textarea>
-        </div>
-        <div class="form-group full">
-          <label>Principal Dificuldade a ser solucionada *</label>
-          <textarea id="dificuldade" placeholder="Ex: Baixa conversão no site, falta de presença no TikTok, nenhuma estratégia de retenção"></textarea>
-        </div>
+        <div class="form-group full"><label>Principal Objetivo nos próximos 6 meses *</label><textarea id="objetivo6m" placeholder="Ex: Aumentar faturamento para R$ 20.000/mês expandindo para TikTok e Marketplaces"></textarea></div>
+        <div class="form-group full"><label>Principal Dificuldade a ser solucionada *</label><textarea id="dificuldade" placeholder="Ex: Baixa conversão no site, falta de presença no TikTok, nenhuma estratégia de retenção"></textarea></div>
       </div>
     </div>
 
-    <!-- ======================== SITE ======================== -->
+    <!-- SITE -->
     <div class="section">
       <div class="section-header">
         <span class="section-icon">🌐</span>
-        <div>
-          <div class="section-title">Análise do Site / Loja Virtual</div>
-          <div class="section-sub">Avalie a presença e qualidade da loja online</div>
-        </div>
+        <div><div class="section-title">Análise do Site / Loja Virtual</div><div class="section-sub">Avalie a presença e qualidade da loja online</div></div>
       </div>
-      <div class="channel-badge site">🌐 Site / Loja Virtual</div>
-
+      <div class="channel-badge site">Site / Loja Virtual</div>
       <div class="channel-toggle">
         <input type="checkbox" id="siteDisabled" onchange="toggleChannel('site', this.checked)">
-        <label for="siteDisabled">Cliente <strong>NÃO possui</strong> site ou loja virtual — desabilitar avaliação</label>
+        <label for="siteDisabled">Cliente <strong>NÃO possui</strong> site ou loja virtual</label>
       </div>
-
       <div id="siteContent" class="channel-content">
-        <div id="siteRatings">
-          <!-- gerado pelo JS -->
-        </div>
+        <div id="siteRatings"></div>
         <button class="add-field-btn" onclick="addCustomField('site')">+ Adicionar campo personalizado</button>
         <div id="customFields-site"></div>
       </div>
     </div>
 
-    <!-- ======================== INSTAGRAM ======================== -->
+    <!-- INSTAGRAM -->
     <div class="section">
       <div class="section-header">
         <span class="section-icon">📷</span>
-        <div>
-          <div class="section-title">Análise do Instagram</div>
-          <div class="section-sub">Presença, conteúdo e engajamento no Instagram</div>
-        </div>
+        <div><div class="section-title">Análise do Instagram</div><div class="section-sub">Presença, conteúdo e engajamento</div></div>
       </div>
-      <div class="channel-badge insta">📷 Instagram</div>
-
+      <div class="channel-badge insta">Instagram</div>
       <div class="channel-toggle">
         <input type="checkbox" id="instaDisabled" onchange="toggleChannel('insta', this.checked)">
-        <label for="instaDisabled">Cliente <strong>NÃO possui</strong> Instagram — desabilitar avaliação</label>
+        <label for="instaDisabled">Cliente <strong>NÃO possui</strong> Instagram</label>
       </div>
-
       <div id="instaContent" class="channel-content">
         <div id="instaRatings"></div>
         <button class="add-field-btn" onclick="addCustomField('insta')">+ Adicionar campo personalizado</button>
@@ -540,22 +420,17 @@ tr:hover td { background:rgba(201,168,76,.03); }
       </div>
     </div>
 
-    <!-- ======================== TIKTOK ======================== -->
+    <!-- TIKTOK -->
     <div class="section">
       <div class="section-header">
         <span class="section-icon">🎵</span>
-        <div>
-          <div class="section-title">Análise do TikTok / TikTok Shop</div>
-          <div class="section-sub">Conteúdo, loja e performance na plataforma</div>
-        </div>
+        <div><div class="section-title">Análise do TikTok / TikTok Shop</div><div class="section-sub">Conteúdo, loja e performance</div></div>
       </div>
-      <div class="channel-badge tiktok">🎵 TikTok / TikTok Shop</div>
-
+      <div class="channel-badge tiktok">TikTok / TikTok Shop</div>
       <div class="channel-toggle">
         <input type="checkbox" id="tiktokDisabled" onchange="toggleChannel('tiktok', this.checked)">
-        <label for="tiktokDisabled">Cliente <strong>NÃO possui</strong> TikTok — desabilitar avaliação</label>
+        <label for="tiktokDisabled">Cliente <strong>NÃO possui</strong> TikTok</label>
       </div>
-
       <div id="tiktokContent" class="channel-content">
         <div id="tiktokRatings"></div>
         <button class="add-field-btn" onclick="addCustomField('tiktok')">+ Adicionar campo personalizado</button>
@@ -563,22 +438,17 @@ tr:hover td { background:rgba(201,168,76,.03); }
       </div>
     </div>
 
-    <!-- ======================== WHATSAPP ======================== -->
+    <!-- WHATSAPP -->
     <div class="section">
       <div class="section-header">
         <span class="section-icon">💬</span>
-        <div>
-          <div class="section-title">Análise do WhatsApp</div>
-          <div class="section-sub">Estratégia, grupos, automações e vendas pelo WhatsApp</div>
-        </div>
+        <div><div class="section-title">Análise do WhatsApp</div><div class="section-sub">Estratégia, grupos, automações e vendas</div></div>
       </div>
-      <div class="channel-badge whatsapp">💬 WhatsApp</div>
-
+      <div class="channel-badge whatsapp">WhatsApp</div>
       <div class="channel-toggle">
         <input type="checkbox" id="whatsappDisabled" onchange="toggleChannel('whatsapp', this.checked)">
-        <label for="whatsappDisabled">Cliente <strong>NÃO utiliza</strong> WhatsApp como canal de vendas — desabilitar avaliação</label>
+        <label for="whatsappDisabled">Cliente <strong>NÃO utiliza</strong> WhatsApp como canal de vendas</label>
       </div>
-
       <div id="whatsappContent" class="channel-content">
         <div id="whatsappRatings"></div>
         <button class="add-field-btn" onclick="addCustomField('whatsapp')">+ Adicionar campo personalizado</button>
@@ -590,120 +460,75 @@ tr:hover td { background:rgba(201,168,76,.03); }
     <div class="section">
       <div class="section-header">
         <span class="section-icon">💡</span>
-        <div>
-          <div class="section-title">Orientações do Especialista</div>
-          <div class="section-sub">Suas observações e recomendações personalizadas</div>
-        </div>
+        <div><div class="section-title">Orientações do Especialista</div><div class="section-sub">Observações e recomendações personalizadas</div></div>
       </div>
       <div class="form-group">
         <label>Observações e Recomendações *</label>
-        <textarea id="orientacoes" style="min-height:140px;" placeholder="Descreva os principais pontos observados, recomendações e próximos passos para o cliente..."></textarea>
+        <textarea id="orientacoes" style="min-height:140px;" placeholder="Descreva os principais pontos observados, recomendações e próximos passos..."></textarea>
       </div>
     </div>
 
-    <!-- AÇÕES -->
     <div class="action-bar">
-      <button class="btn btn-primary" onclick="gerarRelatorio()">📄 Gerar Relatório + PDF</button>
-      <button class="btn btn-outline" onclick="limparForm()">🗑️ Limpar Formulário</button>
+      <button class="btn btn-primary" onclick="gerarRelatorio()">Gerar Diagnostico + PDF</button>
+      <button class="btn btn-outline" onclick="limparForm()">Limpar Formulário</button>
     </div>
   </div>
 
-  <!-- ======================== LEADS TAB ======================== -->
+  <!-- LEADS TAB -->
   <div id="tab-leads" style="display:none;">
     <div class="section">
       <div class="section-header">
         <span class="section-icon">👥</span>
-        <div>
-          <div class="section-title">Base de Leads</div>
-          <div class="section-sub">Todos os relatórios gerados — filtre por período e exporte</div>
-        </div>
+        <div><div class="section-title">Base de Leads</div><div class="section-sub">Todos os relatórios gerados — filtre por período e exporte</div></div>
       </div>
 
-      <!-- FILTROS -->
       <div class="filter-bar">
-        <div class="filter-group">
-          <label class="filter-label">De</label>
-          <input type="date" id="filterFrom" class="filter-date" onchange="applyFilter()">
-        </div>
-        <div class="filter-group">
-          <label class="filter-label">Até</label>
-          <input type="date" id="filterTo" class="filter-date" onchange="applyFilter()">
-        </div>
+        <div class="filter-group"><label class="filter-label">De</label><input type="date" id="filterFrom" class="filter-date" onchange="applyFilter()"></div>
+        <div class="filter-group"><label class="filter-label">Até</label><input type="date" id="filterTo" class="filter-date" onchange="applyFilter()"></div>
         <div class="filter-group">
           <label class="filter-label">Especialista</label>
-          <select id="filterEspecialista" class="filter-date" onchange="applyFilter()" style="min-width:160px;">
-            <option value="">Todos</option>
-          </select>
+          <select id="filterEspecialista" class="filter-date" onchange="applyFilter()" style="min-width:160px;"><option value="">Todos</option></select>
         </div>
         <div style="display:flex;gap:8px;align-items:flex-end;">
-          <button class="btn btn-outline" onclick="setQuickFilter('today')" style="padding:10px 16px;font-size:.82rem;">Hoje</button>
-          <button class="btn btn-outline" onclick="setQuickFilter('week')" style="padding:10px 16px;font-size:.82rem;">7 dias</button>
-          <button class="btn btn-outline" onclick="setQuickFilter('month')" style="padding:10px 16px;font-size:.82rem;">30 dias</button>
-          <button class="btn btn-outline" onclick="clearFilter()" style="padding:10px 16px;font-size:.82rem;">Limpar</button>
+          <button class="btn btn-outline" onclick="setQuickFilter('today')" style="padding:10px 16px;font-size:.8rem;">Hoje</button>
+          <button class="btn btn-outline" onclick="setQuickFilter('week')" style="padding:10px 16px;font-size:.8rem;">7 dias</button>
+          <button class="btn btn-outline" onclick="setQuickFilter('month')" style="padding:10px 16px;font-size:.8rem;">30 dias</button>
+          <button class="btn btn-outline" onclick="clearFilter()" style="padding:10px 16px;font-size:.8rem;">Limpar</button>
         </div>
       </div>
 
-      <!-- CARDS DE MÉTRICAS -->
       <div class="metrics-grid" id="metricsGrid">
         <div class="metric-card">
-          <div class="metric-icon" style="background:rgba(124,92,252,.15);color:#7c5cfc;">📋</div>
-          <div class="metric-body">
-            <div class="metric-value" id="metricTotal">0</div>
-            <div class="metric-label">Formulários no período</div>
-          </div>
+          <div class="metric-icon" style="background:rgba(196,24,102,.12);color:var(--rose);">📋</div>
+          <div class="metric-body"><div class="metric-value" id="metricTotal">0</div><div class="metric-label">Formulários no período</div></div>
         </div>
         <div class="metric-card">
-          <div class="metric-icon" style="background:rgba(46,213,115,.15);color:#2ed573;">📈</div>
-          <div class="metric-body">
-            <div class="metric-value" id="metricAvgScore">—</div>
-            <div class="metric-label">Score médio geral</div>
-          </div>
+          <div class="metric-icon" style="background:rgba(74,124,89,.12);color:#4A7C59;">📈</div>
+          <div class="metric-body"><div class="metric-value" id="metricAvgScore">--</div><div class="metric-label">Score médio geral</div></div>
         </div>
         <div class="metric-card">
-          <div class="metric-icon" style="background:rgba(0,201,255,.15);color:#00c9ff;">💰</div>
-          <div class="metric-body">
-            <div class="metric-value" id="metricAvgRevenue">—</div>
-            <div class="metric-label">Faturamento médio</div>
-          </div>
+          <div class="metric-icon" style="background:rgba(201,168,112,.12);color:var(--gold);">💰</div>
+          <div class="metric-body"><div class="metric-value" id="metricAvgRevenue">--</div><div class="metric-label">Faturamento médio</div></div>
         </div>
         <div class="metric-card">
-          <div class="metric-icon" style="background:rgba(255,107,157,.15);color:#ff6b9d;">🎯</div>
-          <div class="metric-body">
-            <div class="metric-value" id="metricAvgGoal">—</div>
-            <div class="metric-label">Meta média</div>
-          </div>
+          <div class="metric-icon" style="background:rgba(139,106,184,.12);color:#8B6AB8;">🎯</div>
+          <div class="metric-body"><div class="metric-value" id="metricAvgGoal">--</div><div class="metric-label">Meta média</div></div>
         </div>
       </div>
 
-      <!-- RESULTADO DO FILTRO -->
-      <div id="filterResult" style="display:none;margin-bottom:16px;">
-        <div class="filter-result-bar">
-          <span id="filterResultText"></span>
-        </div>
-      </div>
+      <div id="filterResult" class="filter-result-bar"><span id="filterResultText"></span></div>
 
-      <!-- AÇÕES -->
       <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
         <button class="btn btn-success" onclick="exportCSV()">Exportar CSV do período</button>
         <button class="btn btn-outline" onclick="loadLeads()">Atualizar</button>
       </div>
 
       <div class="table-wrap">
-        <table id="leadsTable">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Cliente</th>
-              <th>Especialista</th>
-              <th>Telefone</th>
-              <th>Email</th>
-              <th>Nicho</th>
-              <th>Faturamento</th>
-              <th>Meta</th>
-              <th>Score</th>
-              <th>Ação</th>
-            </tr>
-          </thead>
+        <table>
+          <thead><tr>
+            <th>Data</th><th>Cliente</th><th>Especialista</th><th>Telefone</th><th>Email</th>
+            <th>Nicho</th><th>Faturamento</th><th>Meta</th><th>Score</th><th>Ação</th>
+          </tr></thead>
           <tbody id="leadsBody">
             <tr><td colspan="10" style="text-align:center;color:var(--muted);padding:40px;">Nenhum lead cadastrado ainda</td></tr>
           </tbody>
@@ -711,13 +536,11 @@ tr:hover td { background:rgba(201,168,76,.03); }
       </div>
     </div>
   </div>
-
 </main>
 
-<!-- SCRIPTS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>
