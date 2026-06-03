@@ -45,13 +45,12 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 }
 .header-brand {
   display:flex; align-items:center;
-  padding: 14px 0;
-  padding-right: 32px; margin-right: 32px;
+  padding: 12px 0;
 }
 .header-logo-box {
   background:transparent; border:none; display:flex; align-items:center;
+  padding: 4px 0;
 }
-.header-logo-box img { height:44px; width:auto; object-fit:contain; display:block; }
 .header-actions { margin-left:auto; display:flex; gap:10px; align-items:center; }
 
 /* LAYOUT */
@@ -312,7 +311,7 @@ tr:hover td { background:rgba(196,24,102,.03); }
 <header class="app-header">
   <div class="header-brand">
     <div class="header-logo-box">
-      <img id="headerLogo" src="" alt="Logo">
+      <img id="headerLogo" src="" alt="Logo" style="height:48px;width:auto;max-width:220px;object-fit:contain;display:block;">
     </div>
   </div>
   <div class="header-actions">
@@ -541,6 +540,6 @@ tr:hover td { background:rgba(196,24,102,.03); }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="app.js?v=9"></script>
+<script src="app.js?v=11"></script>
 </body>
 </html>
