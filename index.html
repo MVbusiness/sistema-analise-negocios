@@ -37,7 +37,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
   border-bottom: 1px solid #1e1a35;
   padding: 0 40px;
   display: flex; align-items: center; gap: 0;
-  position: relative;
+  position: relative; min-height: 80px;
 }
 .app-header::after {
   content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
@@ -45,7 +45,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 }
 .header-brand {
   display:flex; align-items:center;
-  padding: 12px 0;
+  padding: 8px 0;
 }
 .header-logo-box {
   background:transparent; border:none; display:flex; align-items:center;
@@ -311,7 +311,7 @@ tr:hover td { background:rgba(196,24,102,.03); }
 <header class="app-header">
   <div class="header-brand">
     <div class="header-logo-box">
-      <img id="headerLogo" src="" alt="Logo" style="height:48px;width:auto;max-width:220px;object-fit:contain;display:block;">
+      <img id="headerLogo" src="" alt="Logo" style="height:64px;width:auto;max-width:280px;object-fit:contain;display:block;">
     </div>
   </div>
   <div class="header-actions">
@@ -540,6 +540,6 @@ tr:hover td { background:rgba(196,24,102,.03); }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="app.js?v=11"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>
