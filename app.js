@@ -288,48 +288,44 @@ async function gerarDiagnostico(data) {
 
   const gap = data.goal > 0 ? ((data.goal - data.revenue) / data.revenue * 100).toFixed(1) : 0;
 
-  const prompt = `Voce e um especialista em estrategia digital para e-commerce e negocios online no Brasil.
+  const prompt = `Você é uma especialista em estratégia digital para e-commerce e negócios online no Brasil. Analise os dados abaixo e escreva um diagnóstico executivo COMPLETO, PERSONALIZADO e ESTRATÉGICO em português. Use linguagem direta, empática e profissional.
 
-Analise este negocio e gere um DIAGNOSTICO EXECUTIVO completo e profissional em portugues.
+DADOS DO NEGÓCIO:
+- Cliente: ${data.clientName}
+- Nicho: ${data.nichos.join(', ')}${data.outroNicho ? ' (' + data.outroNicho + ')' : ''}
+- Faturamento atual: R$ ${data.revenue.toLocaleString('pt-BR')}/mês
+- Meta mensal: R$ ${data.goal.toLocaleString('pt-BR')}/mês
+- Crescimento necessário: ${gap}%
+- Objetivo em 6 meses: ${data.objetivo6m}
+- Principal dificuldade: ${data.dificuldade}
 
-=== DADOS DO NEGOCIO ===
-Cliente: ${data.clientName}
-Nicho: ${data.nichos.join(', ')}${data.outroNicho ? ' ('+data.outroNicho+')' : ''}
-Faturamento atual: R$ ${data.revenue.toLocaleString('pt-BR')}/mes
-Meta mensal: R$ ${data.goal.toLocaleString('pt-BR')}/mes
-Gap necessario: ${gap}%
-
-Objetivo 6 meses: ${data.objetivo6m}
-Principal dificuldade: ${data.dificuldade}
-
-=== AVALIACAO DOS CANAIS ===
+AVALIAÇÃO DOS CANAIS (notas de 0 a 5):
 ${canaisDetalhados || 'Nenhum canal avaliado'}
 
-=== KPIs ===
-${data.kpis.map(k => `${k.title}: ${k.value} (urgencia: ${k.urgency})`).join('\n')}
+KPIs CALCULADOS:
+${data.kpis.map(k => '- ' + k.title + ': ' + k.value + ' | Urgência: ' + k.urgency.toUpperCase()).join('\n')}
 
-=== INSTRUCOES ===
-Gere um diagnostico com EXATAMENTE estas secoes (use os titulos em maiusculo):
+ESCREVA EXATAMENTE AS 6 SEÇÕES ABAIXO usando os títulos em MAIÚSCULO. Seja específico, cite dados reais do formulário. Proibido usar asteriscos, markdown ou símbolos. Apenas texto e os títulos.
 
-VISAO GERAL DO NEGOCIO
-(2-3 paragrafos avaliando o momento atual, potencial e principais gaps)
+VISÃO GERAL DO NEGÓCIO
+Escreva 2 parágrafos sobre o momento atual. Cite o nicho, faturamento, meta e gap. Seja honesto sobre o que impede o crescimento.
 
 PONTOS FORTES IDENTIFICADOS
-(liste os 3-4 maiores pontos positivos com base nas notas altas)
+Liste 3 pontos fortes baseados nas maiores notas dos canais. Para cada um, explique como alavancar para crescer mais rápido.
 
-GARGALOS CRITICOS
-(liste os 3-4 maiores problemas que impedem o crescimento, baseado nas notas baixas)
+GARGALOS CRÍTICOS
+Liste 3 gargalos baseados nas menores notas dos canais. Para cada um, explique o impacto direto no faturamento e o que está sendo perdido mensalmente.
 
-PLANO DE ACAO PRIORITARIO
-(liste 5 acoes especificas em ordem de prioridade, com prazo sugerido)
+TRILHA DE SUCESSO — PLANO DE AÇÃO 90 DIAS
+Liste 6 ações específicas e práticas em ordem de prioridade. Para cada ação indique o que fazer, por que fazer e o prazo: Semana 1-2, Semana 3-4, Mês 2 ou Mês 3. Seja muito específico para o nicho ${data.nichos[0]}.
 
-PROJECAO DE CRESCIMENTO
-(analise realista de como atingir a meta de R$ ${data.goal.toLocaleString('pt-BR')}/mes)
+PROJEÇÃO DE CRESCIMENTO
+Explique de forma realista como este negócio pode atingir R$ ${data.goal.toLocaleString('pt-BR')}/mês. Cite quais canais têm mais potencial e a sequência de melhorias que geraria maior impacto no faturamento.
 
-MENSAGEM FINAL AO EMPREENDEDOR
-(1 paragrafo motivacional e direto, personalizado para o nicho ${data.nichos[0]})
+MENSAGEM FINAL
+Escreva 1 parágrafo motivacional e personalizado para ${data.clientName}. Mencione o nicho e o objetivo. Termine com exatamente esta frase: Nossos programas foram criados exatamente para encurtar esse caminho e com método, estratégia e acompanhamento especializado, você não precisa descobrir tudo sozinho. O próximo passo é seu.
 
-Seja especifico, use dados do formulario, evite genericos. Maximo 600 palavras no total.`;
+Máximo 700 palavras no total.`;
 
   try {
     const response = await fetch(
