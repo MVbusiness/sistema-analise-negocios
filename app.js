@@ -271,7 +271,7 @@ function calcKPIs(data) {
 // ============================================================
 // GEMINI AI — Diagnostico Inteligente
 // ============================================================
-const GEMINI_API_KEY = 'AIzaSyCl2vj_bb5RCLtbWJhOiXdApLxK1dx7Cms'; // Cole sua chave do Google AI Studio
+// API Key removida — agora fica segura no Vercel (variável de ambiente) // Cole sua chave do Google AI Studio
 
 async function gerarDiagnostico(data) {
   // Montar contexto detalhado para a IA
@@ -356,33 +356,24 @@ Escreva 1 parágrafo final caloroso, empoderador e personalizado para ${data.cli
 Máximo 900 palavras no total. Seja específico, use os dados reais do formulário, evite respostas genéricas.`;
 
   try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 1024,
-          }
-        })
-      }
-    );
+    // Chamar o proxy seguro do Vercel (API Key nunca exposta)
+    const response = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
 
     if (!response.ok) {
-      let errText = '';
-      try { errText = JSON.stringify(await response.json()); } catch(e) { errText = response.statusText; }
-      console.error('Gemini HTTP ' + response.status + ':', errText);
+      const err = await response.json();
+      console.error('Proxy erro ' + response.status + ':', err);
       return gerarDiagnosticoFallback(data);
     }
 
     const result = await response.json();
-    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const text = result?.text;
 
     if (text && text.length > 100) {
-      console.log('Gemini OK! Diagnostico gerado:', text.substring(0,80));
+      console.log('Gemini OK via proxy! Tamanho:', text.length, 'chars');
       return text;
     } else {
       return gerarDiagnosticoFallback(data);
