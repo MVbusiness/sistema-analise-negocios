@@ -426,11 +426,11 @@ function loadLeads() {
   applyFilter();
 }
 
-function redownloadPDF(id) {
+async function redownloadPDF(id) {
   const lead = getLeads().find(l=>l.id===id);
   if (!lead) { alert('Lead nao encontrado!'); return; }
   lead.kpis = lead.kpis||calcKPIs(lead);
-  lead.aiSummary = lead.aiSummary||gerarDiagnostico(lead);
+  lead.aiSummary = lead.aiSummary||(await gerarDiagnostico(lead));
   document.getElementById('loadingOverlay').classList.add('show');
   gerarPDF(lead).then(()=>document.getElementById('loadingOverlay').classList.remove('show'));
 }
@@ -546,7 +546,7 @@ async function gerarRelatorio() {
   document.getElementById('loadingOverlay').classList.add('show');
   try {
     data.kpis=calcKPIs(data);
-    data.aiSummary=gerarDiagnostico(data);
+    data.aiSummary=await gerarDiagnostico(data);
     salvarLead(data);
     await gerarPDF(data);
     document.getElementById('loadingOverlay').classList.remove('show');
