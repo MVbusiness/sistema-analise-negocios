@@ -288,44 +288,72 @@ async function gerarDiagnostico(data) {
 
   const gap = data.goal > 0 ? ((data.goal - data.revenue) / data.revenue * 100).toFixed(1) : 0;
 
-  const prompt = `Você é uma especialista em estratégia digital para e-commerce e negócios online no Brasil. Analise os dados abaixo e escreva um diagnóstico executivo COMPLETO, PERSONALIZADO e ESTRATÉGICO em português. Use linguagem direta, empática e profissional.
+  const prompt = `Você é um analista especialista em lojas online, e-commerce e estratégia de vendas digitais no Brasil. Tem visão ampla e profunda sobre operações digitais, comportamento de consumidor online e crescimento de negócios.
 
-DADOS DO NEGÓCIO:
-- Cliente: ${data.clientName}
-- Nicho: ${data.nichos.join(', ')}${data.outroNicho ? ' (' + data.outroNicho + ')' : ''}
-- Faturamento atual: R$ ${data.revenue.toLocaleString('pt-BR')}/mês
-- Meta mensal: R$ ${data.goal.toLocaleString('pt-BR')}/mês
-- Crescimento necessário: ${gap}%
-- Objetivo em 6 meses: ${data.objetivo6m}
-- Principal dificuldade: ${data.dificuldade}
+Seu tom é amigável, direto e de conselheiro — como alguém que senta do lado do empreendedor, olha para o negócio com cuidado e aponta exatamente o que precisa ser feito.
 
-AVALIAÇÃO DOS CANAIS (notas de 0 a 5):
+Seu objetivo é interpretar os gargalos desta operação e traçar rotas práticas para que o negócio passe a gerar resultados consistentes.
+
+==============================
+DADOS DO NEGÓCIO
+==============================
+Cliente: ${data.clientName}
+Nicho: ${data.nichos.join(', ')}${data.outroNicho ? ' (' + data.outroNicho + ')' : ''}
+Faturamento atual: R$ ${data.revenue.toLocaleString('pt-BR')}/mês
+Meta mensal desejada: R$ ${data.goal.toLocaleString('pt-BR')}/mês
+Gap de crescimento necessário: ${gap}%
+Objetivo declarado para 6 meses: ${data.objetivo6m}
+Principal dificuldade hoje: ${data.dificuldade}
+
+==============================
+AVALIAÇÃO DOS CANAIS (0 a 5)
+==============================
 ${canaisDetalhados || 'Nenhum canal avaliado'}
 
-KPIs CALCULADOS:
-${data.kpis.map(k => '- ' + k.title + ': ' + k.value + ' | Urgência: ' + k.urgency.toUpperCase()).join('\n')}
+==============================
+KPIs
+==============================
+${data.kpis.map(k => k.title + ': ' + k.value + ' — ' + k.urgency.toUpperCase()).join('\n')}
 
-ESCREVA EXATAMENTE AS 6 SEÇÕES ABAIXO usando os títulos em MAIÚSCULO. Seja específico, cite dados reais do formulário. Proibido usar asteriscos, markdown ou símbolos. Apenas texto e os títulos.
+==============================
+ESTRUTURA DO DIAGNÓSTICO
+==============================
+Escreva EXATAMENTE as seções abaixo, na ordem indicada, usando os títulos em MAIÚSCULO como estão. Sem asteriscos, sem markdown, sem símbolos especiais. Apenas texto corrido e os títulos.
 
-VISÃO GERAL DO NEGÓCIO
-Escreva 2 parágrafos sobre o momento atual. Cite o nicho, faturamento, meta e gap. Seja honesto sobre o que impede o crescimento.
+PANORAMA DO NEGÓCIO
+Escreva 2 parágrafos com uma leitura honesta e empática do momento atual deste negócio. Cite o nicho, o faturamento atual, a meta e o gap. Identifique o padrão geral que você enxerga nos canais avaliados. Fale com o empreendedor diretamente, como um conselheiro.
 
-PONTOS FORTES IDENTIFICADOS
-Liste 3 pontos fortes baseados nas maiores notas dos canais. Para cada um, explique como alavancar para crescer mais rápido.
+O QUE ESTÁ FUNCIONANDO
+Liste 3 pontos positivos identificados nas notas mais altas dos canais. Para cada ponto, explique brevemente por que isso é uma vantagem competitiva e como pode ser potencializado.
 
-GARGALOS CRÍTICOS
-Liste 3 gargalos baseados nas menores notas dos canais. Para cada um, explique o impacto direto no faturamento e o que está sendo perdido mensalmente.
+ONDE ESTÃO OS GARGALOS
+Liste os 3 maiores gargalos identificados nas notas mais baixas. Para cada gargalo, explique de forma clara o impacto direto que isso tem no faturamento e nas vendas hoje.
 
-TRILHA DE SUCESSO — PLANO DE AÇÃO 90 DIAS
-Liste 6 ações específicas e práticas em ordem de prioridade. Para cada ação indique o que fazer, por que fazer e o prazo: Semana 1-2, Semana 3-4, Mês 2 ou Mês 3. Seja muito específico para o nicho ${data.nichos[0]}.
+DIRETRIZES PRÁTICAS POR CANAL
+Para cada canal abaixo que foi avaliado, escreva entre 3 e 5 diretrizes práticas e específicas para melhorar a performance. Se o canal não foi avaliado, ignore-o.
 
-PROJEÇÃO DE CRESCIMENTO
-Explique de forma realista como este negócio pode atingir R$ ${data.goal.toLocaleString('pt-BR')}/mês. Cite quais canais têm mais potencial e a sequência de melhorias que geraria maior impacto no faturamento.
+Site / Loja Virtual:
+(diretrizes específicas baseadas nas notas recebidas)
 
-MENSAGEM FINAL
-Escreva 1 parágrafo motivacional e personalizado para ${data.clientName}. Mencione o nicho e o objetivo. Termine com exatamente esta frase: Nossos programas foram criados exatamente para encurtar esse caminho e com método, estratégia e acompanhamento especializado, você não precisa descobrir tudo sozinho. O próximo passo é seu.
+Instagram:
+(diretrizes específicas baseadas nas notas recebidas)
 
-Máximo 700 palavras no total.`;
+TikTok e TikTok Shop:
+(diretrizes específicas baseadas nas notas recebidas)
+
+WhatsApp:
+(diretrizes específicas baseadas nas notas recebidas)
+
+CHECKLIST DE TAREFAS — PRÓXIMOS 30 DIAS
+Liste entre 8 e 12 tarefas concretas e priorizadas que este negócio deve executar nos próximos 30 dias para começar a mover o ponteiro. Organize em 3 grupos: URGENTE (fazer essa semana), IMPORTANTE (fazer em até 15 dias) e PLANEJAMENTO (estruturar até o fim do mês). Seja específico para o nicho ${data.nichos[0]}.
+
+ROTA PARA A META
+Explique de forma realista e motivadora como este negócio pode atingir R$ ${data.goal.toLocaleString('pt-BR')}/mês. Cite quais canais têm maior potencial de alavancagem e qual a sequência lógica de melhorias que geraria o maior salto de faturamento.
+
+MENSAGEM PARA O EMPREENDEDOR
+Escreva 1 parágrafo final caloroso, empoderador e personalizado para ${data.clientName}. Reconheça a coragem de buscar crescimento, reforce que os dados mostram que o potencial existe, e termine com exatamente este texto: Os nossos programas foram criados para empreendedores exatamente como você — que têm potencial, mas precisam de método, estratégia e direção para encurtar o caminho até o resultado. Você não precisa descobrir tudo sozinho. O próximo passo pode mudar tudo.
+
+Máximo 900 palavras no total. Seja específico, use os dados reais do formulário, evite respostas genéricas.`;
 
   try {
     const response = await fetch(
@@ -367,33 +395,63 @@ Máximo 700 palavras no total.`;
 
 // Fallback caso a IA falhe (sem internet, chave invalida, etc.)
 function gerarDiagnosticoFallback(data) {
-  const avgsText = Object.keys(CHANNELS).map(ch => {
+  const gap = data.goal > 0 ? ((data.goal - data.revenue) / data.revenue * 100).toFixed(1) : 0;
+  const canaisAtivos = Object.keys(CHANNELS).filter(ch => {
     const d = data.channels[ch];
-    if (d.disabled || !Object.keys(d.ratings).length) return null;
-    const avg = calcAvg(d.ratings);
-    if (avg === null) return null;
-    const s = avg>=4?'excelente':avg>=3?'bom':avg>=2?'regular':'critico';
-    return `${CHANNELS[ch].label}: ${avg.toFixed(1)}/5 (${s})`;
-  }).filter(Boolean).join(' | ');
-  const gap = data.goal>0?((data.goal-data.revenue)/data.revenue*100).toFixed(0):0;
+    return !d.disabled && Object.keys(d.ratings).length > 0;
+  });
 
-  return `VISAO GERAL DO NEGOCIO
-Negocio no nicho de ${data.nichos.join(', ')} com faturamento de R$ ${data.revenue.toLocaleString('pt-BR')}/mes. Meta de R$ ${data.goal.toLocaleString('pt-BR')}/mes representa um crescimento de ${gap}%. ${avgsText ? 'Canais avaliados: ' + avgsText + '.' : ''}
+  // Identificar pontos fortes e gargalos
+  let pontosFracos = [], pontosFortes = [];
+  canaisAtivos.forEach(ch => {
+    const d = data.channels[ch];
+    Object.entries(d.ratings).forEach(([item, nota]) => {
+      if (nota <= 2) pontosFracos.push({ canal: CHANNELS[ch].label, item, nota });
+      if (nota >= 4) pontosFortes.push({ canal: CHANNELS[ch].label, item, nota });
+    });
+  });
+  pontosFracos.sort((a,b) => a.nota - b.nota);
+  pontosFortes.sort((a,b) => b.nota - a.nota);
 
-GARGALOS CRITICOS
-Principal dificuldade identificada: ${data.dificuldade}
+  const topGargalos = pontosFracos.slice(0,3).map(p => `- ${p.canal}: ${p.item} (nota ${p.nota}/5)`).join('\n') || '- Avalie os canais para identificar gargalos';
+  const topFortes = pontosFortes.slice(0,3).map(p => `- ${p.canal}: ${p.item} (nota ${p.nota}/5)`).join('\n') || '- Complete a avaliação dos canais';
 
-PLANO DE ACAO PRIORITARIO
-Objetivo declarado para 6 meses: ${data.objetivo6m}
+  return `PANORAMA DO NEGÓCIO
+O negócio de \${data.clientName} no nicho de \${data.nichos.join(', ')} apresenta faturamento de R$ \${data.revenue.toLocaleString('pt-BR')}/mês com meta de R$ \${data.goal.toLocaleString('pt-BR')}/mês — um crescimento de \${gap}% necessário. Há potencial claro de expansão, e os dados coletados mostram caminhos concretos para chegar lá.
 
-ANALISE DOS KPIs
-${data.kpis.map(k=>`- ${k.title}: ${k.value} (${k.urgency.toUpperCase()})`).join('\n')}
+O QUE ESTÁ FUNCIONANDO
+\${topFortes}
 
-PROJECAO DE CRESCIMENTO
-Com as otimizacoes corretas nos canais identificados, o crescimento de ${gap}% e alcancavel em 6 meses.
+ONDE ESTÃO OS GARGALOS
+\${topGargalos}
 
-MENSAGEM FINAL
-Cada dado levantado neste diagnostico e uma oportunidade de crescimento. O caminho esta mapeado — agora e hora de executar.`;
+DIRETRIZES PRÁTICAS POR CANAL
+Site / Loja Virtual: Revise descrições de produtos, velocidade de carregamento e taxa de conversão. Cada ponto abaixo de 3 é uma venda perdida por dia.
+Instagram: Defina linha editorial, aumente frequência e foque em conteúdo que gera desejo e CTA direto.
+TikTok e TikTok Shop: Crie consistência de publicações e ative a loja para capturar intenção de compra.
+WhatsApp: Estruture grupos de clientes, crie ofertas exclusivas e use automações para aumentar recorrência.
+
+CHECKLIST DE TAREFAS — PRÓXIMOS 30 DIAS
+URGENTE (essa semana):
+- Mapear os 3 produtos mais vendidos e otimizar suas páginas
+- Criar calendário editorial para Instagram e TikTok
+- Ativar ou revisar catálogo no WhatsApp Business
+
+IMPORTANTE (até 15 dias):
+- Gravar 5 vídeos para TikTok mostrando os produtos
+- Criar grupo VIP de clientes no WhatsApp
+- Revisar política de frete e frete grátis
+
+PLANEJAMENTO (até o fim do mês):
+- Estruturar estratégia de retenção de clientes
+- Planejar ações promocionais do próximo mês
+- Analisar métricas e ajustar o que não está performando
+
+ROTA PARA A META
+Para atingir R$ \${data.goal.toLocaleString('pt-BR')}/mês, a sequência ideal é: primeiro estabilizar o que já funciona, depois ativar os canais com menor nota e por último escalar com tráfego pago quando a conversão estiver sólida.
+
+MENSAGEM PARA O EMPREENDEDOR
+\${data.clientName}, os dados mostram que você já tem estrutura — o que falta é ajuste e direção. Os nossos programas foram criados para empreendedores exatamente como você — que têm potencial, mas precisam de método, estratégia e direção para encurtar o caminho até o resultado. Você não precisa descobrir tudo sozinho. O próximo passo pode mudar tudo.`;
 }
 
 // ============================================================
