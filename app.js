@@ -268,34 +268,136 @@ function calcKPIs(data) {
 // ============================================================
 // DIAGNOSTICO
 // ============================================================
-function gerarDiagnostico(data) {
+// ============================================================
+// GEMINI AI — Diagnostico Inteligente
+// ============================================================
+const GEMINI_API_KEY = 'AIzaSyCl2vj_bb5RCLtbWJhOiXdApLxK1dx7Cms'; // Cole sua chave do Google AI Studio
+
+async function gerarDiagnostico(data) {
+  // Montar contexto detalhado para a IA
+  const canaisDetalhados = Object.keys(CHANNELS).map(ch => {
+    const d = data.channels[ch];
+    if (d.disabled || !Object.keys(d.ratings).length) return null;
+    const avg = calcAvg(d.ratings);
+    if (avg === null) return null;
+    const itens = Object.entries(d.ratings)
+      .map(([k,v]) => `  - ${k}: ${v}/5`)
+      .join('\n');
+    return `${CHANNELS[ch].label} (media ${avg.toFixed(1)}/5):\n${itens}`;
+  }).filter(Boolean).join('\n\n');
+
+  const gap = data.goal > 0 ? ((data.goal - data.revenue) / data.revenue * 100).toFixed(1) : 0;
+
+  const prompt = `Voce e um especialista em estrategia digital para e-commerce e negocios online no Brasil.
+
+Analise este negocio e gere um DIAGNOSTICO EXECUTIVO completo e profissional em portugues.
+
+=== DADOS DO NEGOCIO ===
+Cliente: ${data.clientName}
+Nicho: ${data.nichos.join(', ')}${data.outroNicho ? ' ('+data.outroNicho+')' : ''}
+Faturamento atual: R$ ${data.revenue.toLocaleString('pt-BR')}/mes
+Meta mensal: R$ ${data.goal.toLocaleString('pt-BR')}/mes
+Gap necessario: ${gap}%
+
+Objetivo 6 meses: ${data.objetivo6m}
+Principal dificuldade: ${data.dificuldade}
+
+=== AVALIACAO DOS CANAIS ===
+${canaisDetalhados || 'Nenhum canal avaliado'}
+
+=== KPIs ===
+${data.kpis.map(k => `${k.title}: ${k.value} (urgencia: ${k.urgency})`).join('\n')}
+
+=== INSTRUCOES ===
+Gere um diagnostico com EXATAMENTE estas secoes (use os titulos em maiusculo):
+
+VISAO GERAL DO NEGOCIO
+(2-3 paragrafos avaliando o momento atual, potencial e principais gaps)
+
+PONTOS FORTES IDENTIFICADOS
+(liste os 3-4 maiores pontos positivos com base nas notas altas)
+
+GARGALOS CRITICOS
+(liste os 3-4 maiores problemas que impedem o crescimento, baseado nas notas baixas)
+
+PLANO DE ACAO PRIORITARIO
+(liste 5 acoes especificas em ordem de prioridade, com prazo sugerido)
+
+PROJECAO DE CRESCIMENTO
+(analise realista de como atingir a meta de R$ ${data.goal.toLocaleString('pt-BR')}/mes)
+
+MENSAGEM FINAL AO EMPREENDEDOR
+(1 paragrafo motivacional e direto, personalizado para o nicho ${data.nichos[0]})
+
+Seja especifico, use dados do formulario, evite genericos. Maximo 600 palavras no total.`;
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1024,
+          }
+        })
+      }
+    );
+
+    if (!response.ok) {
+      const err = await response.json();
+      console.error('Gemini erro:', err);
+      return gerarDiagnosticoFallback(data);
+    }
+
+    const result = await response.json();
+    const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (text) {
+      console.log('Diagnostico gerado pela IA com sucesso!');
+      return text;
+    } else {
+      return gerarDiagnosticoFallback(data);
+    }
+
+  } catch (error) {
+    console.error('Erro ao chamar Gemini:', error);
+    return gerarDiagnosticoFallback(data);
+  }
+}
+
+// Fallback caso a IA falhe (sem internet, chave invalida, etc.)
+function gerarDiagnosticoFallback(data) {
   const avgsText = Object.keys(CHANNELS).map(ch => {
     const d = data.channels[ch];
     if (d.disabled || !Object.keys(d.ratings).length) return null;
     const avg = calcAvg(d.ratings);
-    if (avg===null) return null;
+    if (avg === null) return null;
     const s = avg>=4?'excelente':avg>=3?'bom':avg>=2?'regular':'critico';
     return `${CHANNELS[ch].label}: ${avg.toFixed(1)}/5 (${s})`;
   }).filter(Boolean).join(' | ');
   const gap = data.goal>0?((data.goal-data.revenue)/data.revenue*100).toFixed(0):0;
-  return `DIAGNOSTICO EXECUTIVO
 
-Negocio no nicho de ${data.nichos.join(', ')} com faturamento atual de R$ ${data.revenue.toLocaleString('pt-BR')}/mes e meta de R$ ${data.goal.toLocaleString('pt-BR')}/mes (gap de ${gap}%).
+  return `VISAO GERAL DO NEGOCIO
+Negocio no nicho de ${data.nichos.join(', ')} com faturamento de R$ ${data.revenue.toLocaleString('pt-BR')}/mes. Meta de R$ ${data.goal.toLocaleString('pt-BR')}/mes representa um crescimento de ${gap}%. ${avgsText ? 'Canais avaliados: ' + avgsText + '.' : ''}
 
-CANAIS AVALIADOS
-${avgsText||'Nenhum canal avaliado'}
+GARGALOS CRITICOS
+Principal dificuldade identificada: ${data.dificuldade}
 
-PRINCIPAL DESAFIO
-${data.dificuldade}
-
-OBJETIVO 6 MESES
-${data.objetivo6m}
+PLANO DE ACAO PRIORITARIO
+Objetivo declarado para 6 meses: ${data.objetivo6m}
 
 ANALISE DOS KPIs
 ${data.kpis.map(k=>`- ${k.title}: ${k.value} (${k.urgency.toUpperCase()})`).join('\n')}
 
-RECOMENDACAO
-Foque nos canais com menor pontuacao para gerar o maior impacto no menor tempo. Com as otimizacoes corretas, o crescimento de ${gap}% e alcancavel em 6 meses.`;
+PROJECAO DE CRESCIMENTO
+Com as otimizacoes corretas nos canais identificados, o crescimento de ${gap}% e alcancavel em 6 meses.
+
+MENSAGEM FINAL
+Cada dado levantado neste diagnostico e uma oportunidade de crescimento. O caminho esta mapeado — agora e hora de executar.`;
 }
 
 // ============================================================
