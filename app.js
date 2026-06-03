@@ -275,7 +275,8 @@ function calcKPIs(data) {
 
 async function gerarDiagnostico(data) {
   // Montar contexto detalhado para a IA
-  const canaisDetalhados = Object.keys(CHANNELS).map(ch => {
+  // Canais avaliados com notas
+  const canaisAvaliados = Object.keys(CHANNELS).map(ch => {
     const d = data.channels[ch];
     if (d.disabled || !Object.keys(d.ratings).length) return null;
     const avg = calcAvg(d.ratings);
@@ -285,6 +286,13 @@ async function gerarDiagnostico(data) {
       .join('\n');
     return `${CHANNELS[ch].label} (media ${avg.toFixed(1)}/5):\n${itens}`;
   }).filter(Boolean).join('\n\n');
+
+  // Canais NÃO utilizados (marcados como desativados)
+  const canaisNaoUtilizados = Object.keys(CHANNELS)
+    .filter(ch => data.channels[ch].disabled)
+    .map(ch => CHANNELS[ch].label);
+
+  const canaisDetalhados = canaisAvaliados;
 
   const gap = data.goal > 0 ? ((data.goal - data.revenue) / data.revenue * 100).toFixed(1) : 0;
 
@@ -306,9 +314,14 @@ Objetivo declarado para 6 meses: ${data.objetivo6m}
 Principal dificuldade hoje: ${data.dificuldade}
 
 ==============================
-AVALIAÇÃO DOS CANAIS (0 a 5)
+CANAIS AVALIADOS COM NOTAS (0 a 5)
 ==============================
 ${canaisDetalhados || 'Nenhum canal avaliado'}
+
+==============================
+CANAIS QUE O CLIENTE NAO UTILIZA ATUALMENTE
+==============================
+${canaisNaoUtilizados.length > 0 ? canaisNaoUtilizados.join(', ') : 'Todos os canais foram avaliados'}
 
 ==============================
 KPIs
@@ -330,19 +343,21 @@ ONDE ESTÃO OS GARGALOS
 Liste os 3 maiores gargalos identificados nas notas mais baixas. Para cada gargalo, explique de forma clara o impacto direto que isso tem no faturamento e nas vendas hoje.
 
 DIRETRIZES PRÁTICAS POR CANAL
-Para cada canal abaixo que foi avaliado, escreva entre 3 e 5 diretrizes práticas e específicas para melhorar a performance. Se o canal não foi avaliado, ignore-o.
+Para cada canal AVALIADO, escreva 3 a 5 diretrizes práticas e específicas para melhorar a performance com base nas notas recebidas.
+
+Para cada canal NÃO UTILIZADO (listado em "Canais não utilizados"), NÃO dê diretrizes operacionais. Em vez disso, escreva 3 a 4 frases explicando: (1) por que este canal faz sentido para o nicho \${data.nichos[0]}, (2) qual oportunidade de faturamento ele representa, (3) um primeiro passo simples para começar. Use linguagem de convite e oportunidade, não de obrigação.
 
 Site / Loja Virtual:
-(diretrizes específicas baseadas nas notas recebidas)
+(se avaliado: diretrizes baseadas nas notas | se não utilizado: oportunidade de entrar neste canal)
 
 Instagram:
-(diretrizes específicas baseadas nas notas recebidas)
+(se avaliado: diretrizes baseadas nas notas | se não utilizado: oportunidade de entrar neste canal)
 
 TikTok e TikTok Shop:
-(diretrizes específicas baseadas nas notas recebidas)
+(se avaliado: diretrizes baseadas nas notas | se não utilizado: oportunidade de entrar neste canal)
 
 WhatsApp:
-(diretrizes específicas baseadas nas notas recebidas)
+(se avaliado: diretrizes baseadas nas notas | se não utilizado: oportunidade de entrar neste canal)
 
 CHECKLIST DE TAREFAS — PRÓXIMOS 30 DIAS
 Liste entre 8 e 12 tarefas concretas e priorizadas que este negócio deve executar nos próximos 30 dias para começar a mover o ponteiro. Organize em 3 grupos: URGENTE (fazer essa semana), IMPORTANTE (fazer em até 15 dias) e PLANEJAMENTO (estruturar até o fim do mês). Seja específico para o nicho ${data.nichos[0]}.
