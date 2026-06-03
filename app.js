@@ -650,6 +650,7 @@ async function gerarRelatorio() {
 async function gerarPDF(data) {
   const pages = [];
 
+  // Renderiza página com altura fixa (conteúdo simples)
   const renderPage = async (htmlContent) => {
     const div = document.createElement('div');
     div.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;height:1123px;background:#FDFAF8;font-family:DM Sans,Arial,sans-serif;overflow:hidden;';
@@ -666,6 +667,35 @@ async function gerarPDF(data) {
     });
     document.body.removeChild(div);
     pages.push(canvas.toDataURL('image/jpeg', 0.92));
+  };
+
+  // Renderiza conteúdo longo quebrando em múltiplas páginas A4
+  const renderPageLonga = async (htmlContent) => {
+    const PAGE_H = 1123;
+    const div = document.createElement('div');
+    div.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#FDFAF8;font-family:DM Sans,Arial,sans-serif;';
+    div.innerHTML = htmlContent;
+    document.body.appendChild(div);
+    await new Promise(r => setTimeout(r, 400));
+
+    const totalH = div.scrollHeight;
+    const numPages = Math.ceil(totalH / PAGE_H);
+
+    for (let i = 0; i < numPages; i++) {
+      const canvas = await html2canvas(div, {
+        scale: 2,
+        backgroundColor: '#FDFAF8',
+        logging: false,
+        useCORS: true,
+        width: 794,
+        height: PAGE_H,
+        y: i * PAGE_H,
+        windowHeight: totalH
+      });
+      pages.push(canvas.toDataURL('image/jpeg', 0.92));
+    }
+
+    document.body.removeChild(div);
   };
 
   // Pré-renderizar gráficos
@@ -687,6 +717,7 @@ async function gerarPDF(data) {
     *{margin:0;padding:0;box-sizing:border-box;}
     body,div{font-family:'DM Sans',Arial,sans-serif;}
     .page{width:794px;height:1123px;background:#FDFAF8;overflow:hidden;position:relative;}
+    .page-long{width:794px;background:#FDFAF8;}
   </style>`;
 
   // CAPA — imagem personalizada da Sabrina Nunes
@@ -812,7 +843,7 @@ async function gerarPDF(data) {
       : '<div style="height:8px;"></div>';
   }).join('');
 
-  await renderPage(`${base}<div class="page" style="padding:50px;">
+  await renderPageLonga(`${base}<div style="width:794px;min-height:1123px;padding:50px;background:#FDFAF8;font-family:DM Sans,Arial,sans-serif;">
     <div style="font-size:8px;letter-spacing:.2em;color:#C9A870;text-transform:uppercase;margin-bottom:4px;">MVBusiness &middot; Relatorio de Analise</div>
     <div style="height:1px;background:linear-gradient(90deg,#C41866,${gold},transparent);margin-bottom:28px;"></div>
     <div style="font-size:18px;font-weight:800;color:${brown};margin-bottom:4px;">Diagnostico Executivo</div>
@@ -827,7 +858,7 @@ async function gerarPDF(data) {
       <span style="font-size:8px;color:#C0A8D0;">MVBusiness &middot; Sistema de Analise de Negocios Digitais</span>
       <span style="font-size:8px;color:#C0A8D0;">${data.date}</span>
     </div>
-  </div>`);
+</div>`);
 
   // Combinar todas as páginas em um PDF usando canvas
   await mergePagesToPDF(pages, `Analise_${data.clientName.replace(/\s+/g,'_')}_${data.id}.pdf`);
