@@ -9,75 +9,75 @@ const CAPA_IMG = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QC8RXhpZgA
 const CHANNELS = {
   site: {
     label: 'Site / Loja Virtual', color: '#C9A84C',
-    potencia: 'Potencia do Site',
+    potencia: 'Potência do Site',
     fields: [
-      'Design e UX (experiencia do usuario)',
+      'Design e UX (experiência do usuário)',
       'Proposta de valor clara',
       'Qualidade das imagens de produto',
-      'Uso de videos na exibicao de produto',
-      'Descricao de produtos completa e atrativa',
-      'Formas de pagamento disponiveis',
+      'Uso de vídeos na exibição de produto',
+      'Descrição de produtos completa e atrativa',
+      'Formas de pagamento disponíveis',
       'Velocidade de carregamento',
-      'Seguranca (selos, certificados)',
-      'Politica de frete',
-      'Preco de frete competitivo',
-      'Politica de frete gratis',
-      'Trafego para o site',
-      'Analise e metricas do site',
-      'Taxa de conversao',
-      'Pagina Quem Somos estruturada',
-      'Politica de troca e devolucao',
+      'Segurança (selos, certificados)',
+      'Política de frete',
+      'Preço de frete competitivo',
+      'Política de frete grátis',
+      'Tráfego para o site',
+      'Análise e métricas do site',
+      'Taxa de conversão',
+      'Página Quem Somos estruturada',
+      'Política de troca e devolução',
       'Banners atualizados com CTA',
-      'Planejamento de acoes e campanhas',
+      'Planejamento de ações e campanhas',
     ]
   },
   insta: {
     label: 'Instagram', color: '#C41866',
-    potencia: 'Potencia do Instagram',
+    potencia: 'Potência do Instagram',
     fields: [
       'Identidade visual consistente',
-      'Frequencia de publicacoes',
+      'Frequência de publicações',
       'Taxa de engajamento',
-      'Qualidade do conteudo (fotos, reels, carrosseis)',
+      'Qualidade do conteúdo (fotos, reels, carrosséis)',
       'Bio otimizada com CTA claro',
       'Stories e Highlights estrategicos',
-      'Audiencia alinhada ao nicho',
-      'Frequencia de Lives',
-      'Existencia de automacao (ManyChat)',
-      'Legendas com CTAs de acao',
+      'Audiência alinhada ao nicho',
+      'Frequência de Lives',
+      'Existência de automação (ManyChat)',
+      'Legendas com CTAs de ação',
       'Linha editorial definida',
       'Alinhamento com persona',
     ]
   },
   tiktok: {
     label: 'TikTok / TikTok Shop', color: '#8B6AB8',
-    potencia: 'Potencia do TikTok',
+    potencia: 'Potência do TikTok',
     fields: [
-      'Consistencia e frequencia de videos',
+      'Consistência e frequência de vídeos',
       'Taxa de views por video',
-      'Uso de tendencias relevantes',
-      'Qualidade de producao dos videos',
+      'Uso de tendências relevantes',
+      'Qualidade de produção dos vídeos',
       'Loja criada no TikTok Shop',
       'Quantidade de produtos cadastrados',
       'Uso de afiliados e quantidade',
-      'Pratica de Lives na plataforma',
-      'Cadastro em promocoes da plataforma',
-      'Integracao de produtos (catalogo)',
-      'Engajamento (comentarios, duetos)',
+      'Prática de Lives na plataforma',
+      'Cadastro em promoções da plataforma',
+      'Integração de produtos (catálogo)',
+      'Engajamento (comentários, duetos)',
     ]
   },
   whatsapp: {
     label: 'WhatsApp', color: '#4A9E6A',
-    potencia: 'Potencia do WhatsApp',
+    potencia: 'Potência do WhatsApp',
     fields: [
-      'Captacao e criacao de grupos de clientes',
+      'Captação e criação de grupos de clientes',
       'Estrategias de ofertas exclusivas no canal',
       'Engajamento e relacionamento com leads',
       'Uso de mensagens com API oficial',
       'Volume de ofertas criadas no canal',
-      'Uso de catalogo de produtos',
-      'Frequencia de broadcasts / disparos',
-      'Automacao de mensagens (chatbot)',
+      'Uso de catálogo de produtos',
+      'Frequência de broadcasts / disparos',
+      'Automação de mensagens (chatbot)',
     ]
   }
 };
@@ -258,10 +258,10 @@ function calcKPIs(data) {
   let weakCh=null, weakVal=Infinity;
   Object.entries(avgs).forEach(([ch,a])=>{ if(a!==null && a<weakVal){weakVal=a;weakCh=ch;} });
   return [
-    { title:'CRESCIMENTO NECESSARIO', value:`${gap.toFixed(1)}%`, urgency: gap>100?'critico':gap>50?'alto':'medio', desc:`De R$ ${data.revenue.toLocaleString('pt-BR')} para R$ ${data.goal.toLocaleString('pt-BR')} por mes` },
-    { title:'SAUDE DIGITAL', value:`${saude.toFixed(0)}%`, urgency: saude<40?'critico':saude<60?'alto':saude<80?'medio':'baixo', desc:`Nota media: ${globalAvg.toFixed(1)}/5 em todos os canais` },
+    { title:'CRESCIMENTO NECESSÁRIO', value:`${gap.toFixed(1)}%`, urgency: gap>100?'critico':gap>50?'alto':'medio', desc:`De R$ ${data.revenue.toLocaleString('pt-BR')} para R$ ${data.goal.toLocaleString('pt-BR')} por mes` },
+    { title:'SAÚDE DIGITAL', value:`${saude.toFixed(0)}%`, urgency: saude<40?'critico':saude<60?'alto':saude<80?'medio':'baixo', desc:`Nota media: ${globalAvg.toFixed(1)}/5 em todos os canais` },
     { title:'CANAL COM MAIOR POTENCIAL', value: weakCh?CHANNELS[weakCh].label:'N/A', urgency: weakVal<2?'critico':weakVal<3?'alto':'medio', desc: weakCh?`${CHANNELS[weakCh].label} com nota ${weakVal.toFixed(1)}/5 - maior oportunidade`:'Todos os canais desativados' },
-    { title:'READINESS PARA ESCALAR', value: globalAvg<2?'NAO PRONTO':globalAvg<3?'PARCIAL':globalAvg<4?'PRONTO':'EXCELENTE', urgency: globalAvg<2?'critico':globalAvg<3?'alto':globalAvg<4?'medio':'baixo', desc: globalAvg<2?'Necessita reestruturacao antes de escalar':globalAvg<3?'Ajustes antes de escalar':'Estruturado - pronto para escalar' },
+    { title:'READINESS PARA ESCALAR', value: globalAvg<2?'NÃO PRONTO':globalAvg<3?'PARCIAL':globalAvg<4?'PRONTO':'EXCELENTE', urgency: globalAvg<2?'critico':globalAvg<3?'alto':globalAvg<4?'medio':'baixo', desc: globalAvg<2?'Necessita reestruturacao antes de escalar':globalAvg<3?'Ajustes antes de escalar':'Estruturado - pronto para escalar' },
   ];
 }
 
@@ -368,7 +368,13 @@ Explique de forma realista e motivadora como este negócio pode atingir R$ ${dat
 MENSAGEM PARA O EMPREENDEDOR
 Escreva 1 parágrafo final caloroso, empoderador e personalizado para ${data.clientName}. Reconheça a coragem de buscar crescimento, reforce que os dados mostram que o potencial existe, e termine com exatamente este texto: Os nossos programas foram criados para empreendedores exatamente como você — que têm potencial, mas precisam de método, estratégia e direção para encurtar o caminho até o resultado. Você não precisa descobrir tudo sozinho. O próximo passo pode mudar tudo.
 
-Máximo 900 palavras no total. Seja específico, use os dados reais do formulário, evite respostas genéricas.`;
+Máximo 900 palavras no total. Seja específico, use os dados reais do formulário, evite respostas genéricas.
+
+REGRAS DE FORMATAÇÃO OBRIGATÓRIAS:
+- NUNCA use hifens (-) no início de frases ou listas. Escreva em parágrafos corridos ou use numeração (1. 2. 3.) quando precisar listar.
+- Escreva de forma natural, fluida e humana — como se estivesse conversando com o empreendedor.
+- Não use bullet points, asteriscos, negrito ou qualquer marcação de texto.
+- Use apenas os títulos em MAIÚSCULO como separadores de seção.`;
 
   try {
     // Chamar o proxy seguro do Vercel (API Key nunca exposta)
@@ -756,7 +762,7 @@ async function gerarPDF(data) {
       <div style="font-size:11px;color:#1A0820;line-height:1.6;">${data.dificuldade}</div>
     </div>
 
-    <div style="font-size:9px;letter-spacing:.16em;color:#9B7AB0;text-transform:uppercase;margin-bottom:14px;font-weight:600;">KPIs E NIVEL DE URGENCIA</div>
+    <div style="font-size:9px;letter-spacing:.16em;color:#9B7AB0;text-transform:uppercase;margin-bottom:14px;font-weight:600;">KPIs E NÍVEL DE URGÊNCIA</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
       ${data.kpis.map(k=>`
         <div style="background:${urgBg[k.urgency]||'#F5F0E8'};border:1px solid ${urgColors[k.urgency]}44;border-left:3px solid ${urgColors[k.urgency]};border-radius:8px;padding:16px;">
@@ -780,8 +786,8 @@ async function gerarPDF(data) {
     <div style="font-size:8px;letter-spacing:.2em;color:#C9A870;text-transform:uppercase;margin-bottom:4px;">MVBusiness &middot; Relatorio de Analise</div>
     <div style="height:1px;background:linear-gradient(90deg,#C41866,${gold},transparent);margin-bottom:32px;"></div>
     <div style="text-align:center;margin-bottom:32px;">
-      <div style="font-size:28px;font-weight:800;color:${brown};margin-bottom:6px;">MAPA DE NEGOCIO</div>
-      <div style="font-size:11px;color:#9B7AB0;">Visao geral da presenca digital por canal &middot; pontuacao de 0 a 5</div>
+      <div style="font-size:28px;font-weight:800;color:${brown};margin-bottom:6px;">MAPA DE NEGÓCIO</div>
+      <div style="font-size:11px;color:#9B7AB0;">Visão geral da presença digital por canal &middot; pontuação de 0 a 5</div>
     </div>
     ${radarURL?`<div style="text-align:center;background:#F5EEF8;border:1px solid #E0D5EC;border-radius:12px;padding:20px;margin-bottom:24px;"><img src="${radarURL}" style="width:500px;height:500px;object-fit:contain;"></div>`:'<div style="text-align:center;padding:60px;color:'+muted+';">Minimo 2 canais para o grafico radar</div>'}
     <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">${legendHTML}</div>
@@ -797,7 +803,7 @@ async function gerarPDF(data) {
     const pct = avg!==null?(avg/5)*100:0;
     const statusInfo = v => {
       if(v===0) return ['N/AVAL','#888'];
-      if(v<=1) return ['CRITICO','#C0392B'];
+      if(v<=1) return ['CRÍTICO','#C0392B'];
       if(v<=2) return ['FRACO','#D4820A'];
       if(v<=3) return ['REGULAR','#B8860B'];
       if(v<=4) return ['BOM','#4A7C59'];
@@ -821,7 +827,7 @@ async function gerarPDF(data) {
           <div style="font-size:10px;color:${muted};margin-top:2px;">${cfg.label}</div>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:9px;color:#9B7AB0;">MEDIA GERAL</div>
+          <div style="font-size:9px;color:#9B7AB0;">MÉDIA GERAL</div>
           <div style="font-size:28px;font-weight:800;color:${cfg.color};">${avg!==null?avg.toFixed(1):'--'}<span style="font-size:14px;color:#9B7AB0;">/5</span></div>
         </div>
       </div>
@@ -852,10 +858,10 @@ async function gerarPDF(data) {
   await renderPageLonga(`${base}<div style="width:794px;min-height:1123px;padding:50px;background:#FDFAF8;font-family:DM Sans,Arial,sans-serif;">
     <div style="font-size:8px;letter-spacing:.2em;color:#C9A870;text-transform:uppercase;margin-bottom:4px;">MVBusiness &middot; Relatorio de Analise</div>
     <div style="height:1px;background:linear-gradient(90deg,#C41866,${gold},transparent);margin-bottom:28px;"></div>
-    <div style="font-size:18px;font-weight:800;color:${brown};margin-bottom:4px;">Diagnostico Executivo</div>
-    <div style="font-size:10px;color:#9B7AB0;font-style:italic;margin-bottom:20px;">Analise gerada automaticamente com base nos dados coletados</div>
+    <div style="font-size:18px;font-weight:800;color:${brown};margin-bottom:4px;">Diagnóstico Executivo</div>
+    <div style="font-size:10px;color:#9B7AB0;font-style:italic;margin-bottom:20px;">Análise gerada automaticamente com base nos dados coletados</div>
     <div style="background:#F5EEF8;border:1px solid #E0D5EC;border-radius:10px;padding:24px;margin-bottom:28px;">${diagHTML}</div>
-    <div style="font-size:18px;font-weight:800;color:${brown};margin-bottom:4px;">Orientacoes do Especialista</div>
+    <div style="font-size:18px;font-weight:800;color:${brown};margin-bottom:4px;">Orientações do Especialista</div>
     <div style="font-size:10px;color:#9B7AB0;font-style:italic;margin-bottom:16px;">${data.especialista} &middot; ${data.date}</div>
     <div style="background:#F5EEF8;border:1px solid ${gold}55;border-left:3px solid ${gold};border-radius:10px;padding:24px;">
       ${data.orientacoes.split('\n').map(l=>`<p style="font-size:10px;color:#1A0820;line-height:1.7;margin-bottom:4px;">${l||'&nbsp;'}</p>`).join('')}
