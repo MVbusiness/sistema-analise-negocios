@@ -296,6 +296,26 @@ async function gerarDiagnostico(data) {
 
   const gap = data.goal > 0 ? ((data.goal - data.revenue) / data.revenue * 100).toFixed(1) : 0;
 
+  // Gerar dinamicamente as instruções de canal para o Gemini
+  const blocoCanais = Object.keys(CHANNELS).map(ch => {
+    const d = data.channels[ch];
+    const label = CHANNELS[ch].label;
+
+    if (d.disabled) {
+      // Canal não utilizado: pedir sugestão de entrada como nova fonte de receita
+      return label + ' (CLIENTE NÃO UTILIZA ESTE CANAL):\nEste cliente não utiliza ' + label + ' atualmente. Escreva 3 frases convidando-o a considerar este canal como uma nova fonte de faturamento, explicando: por que faz sentido para o nicho ' + data.nichos[0] + ', qual oportunidade representa e um primeiro passo simples para começar. Tom de oportunidade, não de obrigação.';
+    }
+
+    if (!Object.keys(d.ratings).length) return null;
+
+    const avg = calcAvg(d.ratings);
+    const itensDetalhados = Object.entries(d.ratings)
+      .map(([k, v]) => k + ': ' + v + '/5')
+      .join(', ');
+
+    return label + ' (avaliado — média ' + (avg !== null ? avg.toFixed(1) : '?') + '/5):\nItens avaliados: ' + itensDetalhados + '\nEscreva 4 diretrizes práticas específicas para melhorar este canal com base nas notas acima.';
+  }).filter(Boolean).join('\n\n');
+
   const prompt = `Você é um analista especialista em lojas online, e-commerce e estratégia de vendas digitais no Brasil. Tem visão ampla e profunda sobre operações digitais, comportamento de consumidor online e crescimento de negócios.
 
 Seu tom é amigável, direto e de conselheiro — como alguém que senta do lado do empreendedor, olha para o negócio com cuidado e aponta exatamente o que precisa ser feito.
@@ -343,21 +363,7 @@ ONDE ESTÃO OS GARGALOS
 Liste os 3 maiores gargalos identificados nas notas mais baixas. Para cada gargalo, explique de forma clara o impacto direto que isso tem no faturamento e nas vendas hoje.
 
 DIRETRIZES PRÁTICAS POR CANAL
-Para cada canal AVALIADO, escreva 3 a 5 diretrizes práticas e específicas para melhorar a performance com base nas notas recebidas.
-
-Para cada canal NÃO UTILIZADO (listado em "Canais não utilizados"), NÃO dê diretrizes operacionais. Em vez disso, escreva 3 a 4 frases explicando: (1) por que este canal faz sentido para o nicho \${data.nichos[0]}, (2) qual oportunidade de faturamento ele representa, (3) um primeiro passo simples para começar. Use linguagem de convite e oportunidade, não de obrigação.
-
-Site / Loja Virtual:
-(se avaliado: diretrizes baseadas nas notas | se não utilizado: oportunidade de entrar neste canal)
-
-Instagram:
-(se avaliado: diretrizes baseadas nas notas | se não utilizado: oportunidade de entrar neste canal)
-
-TikTok e TikTok Shop:
-(se avaliado: diretrizes baseadas nas notas | se não utilizado: oportunidade de entrar neste canal)
-
-WhatsApp:
-(se avaliado: diretrizes baseadas nas notas | se não utilizado: oportunidade de entrar neste canal)
+\${blocoCanais}
 
 CHECKLIST DE TAREFAS — PRÓXIMOS 30 DIAS
 Liste entre 8 e 12 tarefas concretas e priorizadas que este negócio deve executar nos próximos 30 dias para começar a mover o ponteiro. Organize em 3 grupos: URGENTE (fazer essa semana), IMPORTANTE (fazer em até 15 dias) e PLANEJAMENTO (estruturar até o fim do mês). Seja específico para o nicho ${data.nichos[0]}.
