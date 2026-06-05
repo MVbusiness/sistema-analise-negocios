@@ -449,11 +449,12 @@ Escreva 1 parágrafo final caloroso, empoderador e personalizado para ${data.cli
 
 Máximo 900 palavras no total. Seja específico, use os dados reais do formulário, evite respostas genéricas.
 
-REGRAS DE FORMATAÇÃO OBRIGATÓRIAS:
-- NUNCA use hifens (-) no início de frases ou listas. Escreva em parágrafos corridos ou use numeração (1. 2. 3.) quando precisar listar.
-- Escreva de forma natural, fluida e humana — como se estivesse conversando com o empreendedor.
-- Não use bullet points, asteriscos, negrito ou qualquer marcação de texto.
-- Use apenas os títulos em MAIÚSCULO como separadores de seção.`;
+REGRAS DE FORMATAÇÃO — CRÍTICAS, SIGA À RISCA:
+Proibido usar asteriscos (*), hashtags (#), negrito (**texto**), itálico (*texto*), hifens no início de frases, bullet points ou qualquer marcação de markdown.
+Proibido usar numeração com ponto (1. 2. 3.) para listar itens.
+Escreva APENAS em parágrafos corridos, de forma natural e humana, como uma conversa direta com o empreendedor.
+Use SOMENTE os títulos em MAIÚSCULO (como estão definidos nas seções) como separadores.
+Nenhum outro tipo de formatação é permitido. Texto limpo, corrido e fluente.`;
 
   try {
     // Chamar o proxy seguro do Vercel (API Key nunca exposta)
@@ -791,13 +792,18 @@ async function gerarPDF(data) {
   const renderPageLonga = async (htmlContent) => {
     const PAGE_H = 1123;
     const div = document.createElement('div');
-    div.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#FDFAF8;font-family:DM Sans,Arial,sans-serif;';
+    div.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#FDFAF8;font-family:DM Sans,Arial,sans-serif;overflow:visible;';
     div.innerHTML = htmlContent;
     document.body.appendChild(div);
-    await new Promise(r => setTimeout(r, 400));
-
-    const totalH = div.scrollHeight;
-    const numPages = Math.ceil(totalH / PAGE_H);
+    
+    // Aguardar renderização completa incluindo fontes
+    await new Promise(r => setTimeout(r, 600));
+    
+    // Forçar reflow para garantir altura correta
+    const totalH = Math.max(div.scrollHeight, div.offsetHeight, div.getBoundingClientRect().height);
+    const numPages = Math.max(1, Math.ceil(totalH / PAGE_H));
+    
+    console.log('renderPageLonga: totalH=' + totalH + ' numPages=' + numPages);
 
     for (let i = 0; i < numPages; i++) {
       const canvas = await html2canvas(div, {
@@ -808,7 +814,9 @@ async function gerarPDF(data) {
         width: 794,
         height: PAGE_H,
         y: i * PAGE_H,
-        windowHeight: totalH
+        scrollY: -(i * PAGE_H),
+        windowWidth: 794,
+        windowHeight: PAGE_H
       });
       pages.push(canvas.toDataURL('image/jpeg', 0.92));
     }
@@ -872,7 +880,7 @@ async function gerarPDF(data) {
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
       ${data.kpis.map(k=>`
         <div style="background:${urgBg[k.urgency]||'#F5F0E8'};border:1px solid ${urgColors[k.urgency]}44;border-left:3px solid ${urgColors[k.urgency]};border-radius:8px;padding:16px;">
-          <div style="font-size:8px;color:${urgColors[k.urgency]};text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:4px;">${k.urgency.toUpperCase()}</div>
+          <div style="font-size:8px;color:${urgColors[k.urgency]};text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:4px;">${{critico:'CRÍTICO',alto:'ALTO',medio:'MÉDIO',baixo:'BAIXO'}[k.urgency]||k.urgency.toUpperCase()}</div>
           <div style="font-size:9px;color:#9B7AB0;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">${k.title}</div>
           <div style="font-size:24px;font-weight:800;color:${urgColors[k.urgency]};margin-bottom:5px;">${k.value}</div>
           <div style="font-size:9px;color:#9B7AB0;line-height:1.5;">${k.desc}</div>
@@ -913,7 +921,7 @@ async function gerarPDF(data) {
       if(v<=2) return ['FRACO','#D4820A'];
       if(v<=3) return ['REGULAR','#B8860B'];
       if(v<=4) return ['BOM','#4A7C59'];
-      return ['OTIMO','#2D6A4F'];
+      return ['ÓTIMO','#2D6A4F'];
     };
     const rows = Object.entries(d.ratings).map(([label,val],i)=>{
       const [status,color]=statusInfo(val);
@@ -954,11 +962,20 @@ async function gerarPDF(data) {
   }
 
   // DIAGNOSTICO + ORIENTACOES
-  const diagHTML = data.aiSummary.split('\n').map(l=>{
-    const isTitle = l===l.toUpperCase()&&l.trim().length>3;
-    return l.trim()
-      ? `<p style="font-size:${isTitle?'9':'10'}px;color:${isTitle?'#C9A870':'#1A0820'};font-weight:${isTitle?'700':'400'};line-height:1.6;margin-bottom:${isTitle?'8':'4'}px;${isTitle?'text-transform:uppercase;letter-spacing:.1em;':''}">${l}</p>`
-      : '<div style="height:8px;"></div>';
+  // Limpar markdown do Gemini antes de renderizar
+  const cleanSummary = (data.aiSummary || '')
+    .replace(/\*\*(.*?)\*\*/g, '$1')   // remover **negrito**
+    .replace(/\*(.*?)\*/g, '$1')          // remover *itálico*
+    .replace(/#{1,6}\s/g, '')             // remover # títulos
+    .replace(/^\d+\.\s/gm, '')          // remover 1. 2. 3.
+    .replace(/^[-•]\s/gm, '')            // remover - bullet
+    .trim();
+
+  const diagHTML = cleanSummary.split('\n').map(l=>{
+    const clean = l.trim();
+    if (!clean) return '<div style="height:6px;"></div>';
+    const isTitle = clean === clean.toUpperCase() && clean.length > 3 && !/[0-9]/.test(clean);
+    return `<p style="font-size:${isTitle?'8.5':'10'}px;color:${isTitle?'#C9A870':'#1A0820'};font-weight:${isTitle?'700':'400'};line-height:1.7;margin-bottom:${isTitle?'10':'5'}px;${isTitle?'text-transform:uppercase;letter-spacing:.12em;margin-top:14px;':''}">${clean}</p>`;
   }).join('');
 
   await renderPageLonga(`${base}<div style="width:794px;min-height:1123px;padding:50px;background:#FDFAF8;font-family:DM Sans,Arial,sans-serif;">
