@@ -183,15 +183,15 @@ select option { background:#1A1630; }
 /* KPI */
 .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
 .kpi-card { background:var(--surface2); border-radius:8px; padding:18px 20px; border-left:2px solid; }
-.kpi-card.critico { border-color:#C0392B; }
-.kpi-card.alto    { border-color:#D4820A; }
-.kpi-card.medio   { border-color:#B8860B; }
-.kpi-card.baixo   { border-color:#4A7C59; }
+.kpi-card.imediato { border-color:#C0392B; }
+.kpi-card.atencao { border-color:#D4820A; }
+.kpi-card.oportunidade { border-color:#B8860B; }
+.kpi-card.forte { border-color:#4A7C59; }
 .kpi-urgency { font-size:.68rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
-.kpi-card.critico .kpi-urgency { color:#C0392B; }
-.kpi-card.alto    .kpi-urgency { color:#D4820A; }
-.kpi-card.medio   .kpi-urgency { color:#B8860B; }
-.kpi-card.baixo   .kpi-urgency { color:#4A7C59; }
+.kpi-card.imediato .kpi-urgency { color:#C0392B; }
+.kpi-card.atencao .kpi-urgency { color:#D4820A; }
+.kpi-card.oportunidade .kpi-urgency { color:#B8860B; }
+.kpi-card.forte .kpi-urgency { color:#4A7C59; }
 .kpi-title  { font-size:.78rem; color:var(--muted); margin-bottom:6px; font-weight:300; letter-spacing:.04em; }
 .kpi-value  { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:500; margin-bottom:6px; line-height:1; }
 .kpi-desc   { font-size:.78rem; color:var(--muted); line-height:1.6; font-weight:300; }
@@ -540,6 +540,6 @@ tr:hover td { background:rgba(196,24,102,.03); }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="app.js?v=22"></script>
+<script src="app.js?v=23"></script>
 </body>
 </html>
