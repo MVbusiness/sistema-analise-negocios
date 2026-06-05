@@ -899,10 +899,10 @@ async function gerarPDF(data) {
     const avg = calcAvg(d.ratings);
     const pct = avg!==null?(avg/5)*100:0;
     const statusInfo = v => {
-      if(v===0) return ['N/AVAL','#888'];
-      if(v<=1) return ['CRÍTICO','#C0392B'];
-      if(v<=2) return ['FRACO','#D4820A'];
-      if(v<=3) return ['REGULAR','#B8860B'];
+      if(v===0) return ['N/AVALIADO','#888'];
+      if(v<=1) return ['ATENÇÃO URGENTE','#C0392B'];
+      if(v<=2) return ['PRECISA MELHORAR','#D4820A'];
+      if(v<=3) return ['MÉDIO','#B8860B'];
       if(v<=4) return ['BOM','#4A7C59'];
       return ['ÓTIMO','#2D6A4F'];
     };
