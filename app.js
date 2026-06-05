@@ -389,72 +389,55 @@ async function gerarDiagnostico(data) {
     return label + ' (avaliado — média ' + (avg !== null ? avg.toFixed(1) : '?') + '/5):\nItens avaliados: ' + itensDetalhados + '\nEscreva 4 diretrizes práticas específicas para melhorar este canal com base nas notas acima.';
   }).filter(Boolean).join('\n\n');
 
-  const prompt = `Você é um analista especialista em lojas online, e-commerce e estratégia de vendas digitais no Brasil. Tem visão ampla e profunda sobre operações digitais, comportamento de consumidor online e crescimento de negócios.
+  const prompt = `Você é a Sabrina Nunes, mentora estratégica especialista em crescimento de negócios digitais e e-commerce no Brasil. Seu estilo é de uma mentora próxima: direta, inspiradora, que faz o empreendedor enxergar o que está perdendo e acreditar no caminho para crescer.
 
-Seu tom é amigável, direto e de conselheiro — como alguém que senta do lado do empreendedor, olha para o negócio com cuidado e aponta exatamente o que precisa ser feito.
+DADOS DO NEGÓCIO:
+- Empreendedor: ${data.clientName}
+- Nicho: ${data.nichos.join(', ')}${data.outroNicho ? ' (' + data.outroNicho + ')' : ''}
+- Faturamento atual: R$ ${data.revenue.toLocaleString('pt-BR')}/mês
+- Meta: R$ ${data.goal.toLocaleString('pt-BR')}/mês
+- Gap para a meta: ${gap}%
+- Principal dificuldade: ${data.dificuldade}
+- Objetivo em 6 meses: ${data.objetivo6m}
 
-Seu objetivo é interpretar os gargalos desta operação e traçar rotas práticas para que o negócio passe a gerar resultados consistentes.
-
-==============================
-DADOS DO NEGÓCIO
-==============================
-Cliente: ${data.clientName}
-Nicho: ${data.nichos.join(', ')}${data.outroNicho ? ' (' + data.outroNicho + ')' : ''}
-Faturamento atual: R$ ${data.revenue.toLocaleString('pt-BR')}/mês
-Meta mensal desejada: R$ ${data.goal.toLocaleString('pt-BR')}/mês
-Gap de crescimento necessário: ${gap}%
-Objetivo declarado para 6 meses: ${data.objetivo6m}
-Principal dificuldade hoje: ${data.dificuldade}
-
-==============================
-CANAIS AVALIADOS COM NOTAS (0 a 5)
-==============================
+AVALIAÇÃO DOS CANAIS:
 ${canaisDetalhados || 'Nenhum canal avaliado'}
 
-==============================
-CANAIS QUE O CLIENTE NAO UTILIZA ATUALMENTE
-==============================
-${canaisNaoUtilizados.length > 0 ? canaisNaoUtilizados.join(', ') : 'Todos os canais foram avaliados'}
+CANAIS QUE NÃO UTILIZA:
+${canaisNaoUtilizados.length > 0 ? canaisNaoUtilizados.join(', ') : 'Utiliza todos os canais'}
 
-==============================
-KPIs
-==============================
-${data.kpis.map(k => k.title + ': ' + k.value + ' — ' + k.urgency.toUpperCase()).join('\n')}
+KPIs:
+${data.kpis.map(k => k.title + ': ' + k.value + ' (' + k.urgency + ')').join(' | ')}
 
-==============================
-ESTRUTURA DO DIAGNÓSTICO
-==============================
-Escreva EXATAMENTE as seções abaixo, na ordem indicada, usando os títulos em MAIÚSCULO como estão. Sem asteriscos, sem markdown, sem símbolos especiais. Apenas texto corrido e os títulos.
+INSTRUÇÕES:
+Escreva o diagnóstico abaixo. Use EXATAMENTE os títulos em maiúsculo como separadores. Sem asteriscos, sem hifens no início de frases, sem negrito, sem listas numeradas. Apenas parágrafos corridos e fluentes.
 
 PANORAMA DO NEGÓCIO
-Escreva 2 parágrafos com uma leitura honesta e empática do momento atual deste negócio. Cite o nicho, o faturamento atual, a meta e o gap. Identifique o padrão geral que você enxerga nos canais avaliados. Fale com o empreendedor diretamente, como um conselheiro.
+Dois parágrafos. Dirija-se ao ${data.clientName} pelo nome. Mostre que você leu os dados com cuidado. Aponte o potencial real do negócio e crie senso de urgência sobre o que está sendo perdido agora por falta de ajustes. Cite números reais do diagnóstico.
 
-O QUE ESTÁ FUNCIONANDO
-Liste 3 pontos positivos identificados nas notas mais altas dos canais. Para cada ponto, explique brevemente por que isso é uma vantagem competitiva e como pode ser potencializado.
+O QUE JÁ ESTÁ FUNCIONANDO
+Um parágrafo destacando os 2 ou 3 pontos com melhor avaliação. Mostre como esses pontos são uma base sólida para crescer.
 
-ONDE ESTÃO OS GARGALOS
-Liste os 3 maiores gargalos identificados nas notas mais baixas. Para cada gargalo, explique de forma clara o impacto direto que isso tem no faturamento e nas vendas hoje.
+ONDE ESTÃO AS PERDAS
+Um parágrafo contundente sobre os 2 ou 3 gargalos mais críticos (menores notas). Para cada um, diga de forma direta o impacto financeiro que isso representa. Crie urgência real.
 
 DIRETRIZES PRÁTICAS POR CANAL
-\${blocoCanais}
+${blocoCanais}
 
-CHECKLIST DE TAREFAS — PRÓXIMOS 30 DIAS
-Liste entre 8 e 12 tarefas concretas e priorizadas que este negócio deve executar nos próximos 30 dias para começar a mover o ponteiro. Organize em 3 grupos: URGENTE (fazer essa semana), IMPORTANTE (fazer em até 15 dias) e PLANEJAMENTO (estruturar até o fim do mês). Seja específico para o nicho ${data.nichos[0]}.
+PLANO DE AÇÃO — PRÓXIMOS 30 DIAS
+Três grupos de ações, escritos em parágrafos corridos (não em listas):
+ESTA SEMANA: as 2 ou 3 ações mais urgentes para o nicho ${data.nichos[0]}.
+EM ATÉ 15 DIAS: as próximas prioridades para consolidar a operação.
+ATÉ O FIM DO MÊS: ações de planejamento e estruturação para o próximo nível.
 
 ROTA PARA A META
-Explique de forma realista e motivadora como este negócio pode atingir R$ ${data.goal.toLocaleString('pt-BR')}/mês. Cite quais canais têm maior potencial de alavancagem e qual a sequência lógica de melhorias que geraria o maior salto de faturamento.
+Um parágrafo mostrando de forma realista e motivadora o caminho de R$ ${data.revenue.toLocaleString('pt-BR')} para R$ ${data.goal.toLocaleString('pt-BR')} por mês. Cite qual canal tem maior potencial de alavancagem. Mostre que o crescimento de ${gap}% é possível com os ajustes certos.
 
-MENSAGEM PARA O EMPREENDEDOR
-Escreva 1 parágrafo final caloroso, empoderador e personalizado para ${data.clientName}. Reconheça a coragem de buscar crescimento, reforce que os dados mostram que o potencial existe, e termine com exatamente este texto: Os nossos programas foram criados para empreendedores exatamente como você — que têm potencial, mas precisam de método, estratégia e direção para encurtar o caminho até o resultado. Você não precisa descobrir tudo sozinho. O próximo passo pode mudar tudo.
+MENSAGEM FINAL
+Um parágrafo caloroso e empoderador diretamente para ${data.clientName}. Reconheça a coragem de estar aqui buscando clareza. Finalize com esta frase exata, sem alterar nada: "Os nossos programas foram criados para empreendedores exatamente como você — que têm potencial, mas precisam de método, estratégia e direção para encurtar o caminho até o resultado. Você não precisa descobrir tudo sozinho. O próximo passo pode mudar tudo."
 
-Máximo 900 palavras no total. Seja específico, use os dados reais do formulário, evite respostas genéricas.
-
-REGRAS DE FORMATAÇÃO — CRÍTICAS, SIGA À RISCA:
-Proibido usar asteriscos (*), hashtags (#), negrito (**texto**), itálico (*texto*), hifens no início de frases, bullet points ou qualquer marcação de markdown.
-Proibido usar numeração com ponto (1. 2. 3.) para listar itens.
-Escreva APENAS em parágrafos corridos, de forma natural e humana, como uma conversa direta com o empreendedor.
-Use SOMENTE os títulos em MAIÚSCULO (como estão definidos nas seções) como separadores.
-Nenhum outro tipo de formatação é permitido. Texto limpo, corrido e fluente.`;
+REGRAS ABSOLUTAS DE FORMATAÇÃO:
+Proibido usar asteriscos, hashtags, negrito, hifens no início de frases, bullet points ou numeração com ponto. Somente parágrafos corridos e os títulos em maiúsculo. Máximo 800 palavras.`;
 
   try {
     // Chamar o proxy seguro do Vercel (API Key nunca exposta)
