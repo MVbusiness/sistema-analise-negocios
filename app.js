@@ -331,10 +331,10 @@ function calcKPIs(data) {
   let weakCh=null, weakVal=Infinity;
   Object.entries(avgs).forEach(([ch,a])=>{ if(a!==null && a<weakVal){weakVal=a;weakCh=ch;} });
   return [
-    { title:'CRESCIMENTO NECESSÁRIO', value:`${gap.toFixed(1)}%`, urgency: gap>100?'critico':gap>50?'alto':'medio', desc:`De R$ ${data.revenue.toLocaleString('pt-BR')} para R$ ${data.goal.toLocaleString('pt-BR')} por mes` },
-    { title:'SAÚDE DIGITAL', value:`${saude.toFixed(0)}%`, urgency: saude<40?'critico':saude<60?'alto':saude<80?'medio':'baixo', desc:`Nota media: ${globalAvg.toFixed(1)}/5 em todos os canais` },
-    { title:'CANAL COM MAIOR POTENCIAL', value: weakCh?CHANNELS[weakCh].label:'N/A', urgency: weakVal<2?'critico':weakVal<3?'alto':'medio', desc: weakCh?`${CHANNELS[weakCh].label} com nota ${weakVal.toFixed(1)}/5 - maior oportunidade`:'Todos os canais desativados' },
-    { title:'READINESS PARA ESCALAR', value: globalAvg<2?'NÃO PRONTO':globalAvg<3?'PARCIAL':globalAvg<4?'PRONTO':'EXCELENTE', urgency: globalAvg<2?'critico':globalAvg<3?'alto':globalAvg<4?'medio':'baixo', desc: globalAvg<2?'Necessita reestruturacao antes de escalar':globalAvg<3?'Ajustes antes de escalar':'Estruturado - pronto para escalar' },
+    { title:'CRESCIMENTO NECESSÁRIO', value:`${gap.toFixed(1)}%`, urgency: gap>100?'imediato':gap>50?'atencao':'oportunidade', desc:`De R$ ${data.revenue.toLocaleString('pt-BR')} para R$ ${data.goal.toLocaleString('pt-BR')} por mes` },
+    { title:'SAÚDE DIGITAL', value:`${saude.toFixed(0)}%`, urgency: saude<40?'imediato':saude<60?'atencao':saude<80?'oportunidade':'forte', desc:`Nota media: ${globalAvg.toFixed(1)}/5 em todos os canais` },
+    { title:'CANAL COM MAIOR POTENCIAL', value: weakCh?CHANNELS[weakCh].label:'N/A', urgency: weakVal<2?'imediato':weakVal<3?'atencao':'oportunidade', desc: weakCh?`${CHANNELS[weakCh].label} com nota ${weakVal.toFixed(1)}/5 - maior oportunidade`:'Todos os canais desativados' },
+    { title:'PREPARO PARA ESCALAR', value: globalAvg<2?'ESTRUTURAR PRIMEIRO':globalAvg<3?'QUASE PRONTO':globalAvg<4?'PRONTO PARA CRESCER':'PRONTO PARA ESCALAR', urgency: globalAvg<2?'imediato':globalAvg<3?'atencao':globalAvg<4?'oportunidade':'forte', desc: globalAvg<2?'Estruture os canais antes de investir em tráfego':globalAvg<3?'Pequenos ajustes e você estará pronto para crescer':'Negócio estruturado — hora de escalar com confiança' },
   ];
 }
 
@@ -821,7 +821,7 @@ async function gerarPDF(data) {
   const cream = '#FAF0F5';
   const brown = '#1A0820';
   const muted = '#7A6080';
-  const urgColors = { critico:'#C0392B', alto:'#D4820A', medio:'#B8860B', baixo:'#4A7C59' };
+  const urgColors = { imediato:'#C0392B', atencao:'#D4820A', oportunidade:'#B8860B', forte:'#4A7C59' };
   const base = `<style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body,div{font-family:'DM Sans',Arial,sans-serif;}
@@ -835,7 +835,7 @@ async function gerarPDF(data) {
   </div>`, true);
 
   // DADOS + KPIs
-  const urgBg={critico:'#FDF0F0',alto:'#FDF6EE',medio:'#FDFBEE',baixo:'#EFF8F3'};
+  const urgBg={imediato:'#FDF0F0',atencao:'#FDF6EE',oportunidade:'#FDFBEE',forte:'#EFF8F3'};
   await renderPage(`${base}<div class="page" style="padding:50px 50px;">
     <div style="font-size:8px;letter-spacing:.2em;color:#C9A870;text-transform:uppercase;margin-bottom:4px;">MVBusiness &middot; Relatorio de Analise</div>
     <div style="height:1px;background:linear-gradient(90deg,#C41866,${gold},transparent);margin-bottom:32px;"></div>
@@ -859,11 +859,11 @@ async function gerarPDF(data) {
       <div style="font-size:11px;color:#1A0820;line-height:1.6;">${data.dificuldade}</div>
     </div>
 
-    <div style="font-size:9px;letter-spacing:.16em;color:#9B7AB0;text-transform:uppercase;margin-bottom:14px;font-weight:600;">KPIs E NÍVEL DE URGÊNCIA</div>
+    <div style="font-size:9px;letter-spacing:.16em;color:#9B7AB0;text-transform:uppercase;margin-bottom:14px;font-weight:600;">KPIs E PRIORIDADES</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
       ${data.kpis.map(k=>`
         <div style="background:${urgBg[k.urgency]||'#F5F0E8'};border:1px solid ${urgColors[k.urgency]}44;border-left:3px solid ${urgColors[k.urgency]};border-radius:8px;padding:16px;">
-          <div style="font-size:8px;color:${urgColors[k.urgency]};text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:4px;">${{critico:'CRÍTICO',alto:'ALTO',medio:'MÉDIO',baixo:'BAIXO'}[k.urgency]||k.urgency.toUpperCase()}</div>
+          <div style="font-size:8px;color:${urgColors[k.urgency]};text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:4px;">${{'imediato':'AÇÃO IMEDIATA','atencao':'PRECISA DE ATENÇÃO','oportunidade':'OPORTUNIDADE','forte':'PONTO FORTE'}[k.urgency]||k.urgency.toUpperCase()}</div>
           <div style="font-size:9px;color:#9B7AB0;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">${k.title}</div>
           <div style="font-size:24px;font-weight:800;color:${urgColors[k.urgency]};margin-bottom:5px;">${k.value}</div>
           <div style="font-size:9px;color:#9B7AB0;line-height:1.5;">${k.desc}</div>
