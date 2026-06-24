@@ -942,12 +942,40 @@ async function gerarPDF(data) {
     </div>
 </div>`);
 
+  // PÁGINA FINAL — CTA WHATSAPP
+  const whatsappLink = 'https://wa.me/5519971445971?text=Fiz%20a%20analise%20de%20negocio%20e%20quero%20saber%20como%20crescer%20meus%20resultados';
+  // Coordenadas reais do botão dentro da página 794x1123 (medidas via renderização)
+  const btnBox = { x: 197, y: 655.47, w: 400, h: 64 };
+  await renderPage(`${base}<div class="page" style="padding:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1A0820,#2A1040);position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,#C41866,${gold},#C41866);"></div>
+    <div style="position:absolute;top:90px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#C41866,${gold});display:flex;align-items:center;justify-content:center;font-size:28px;">✓</div>
+    <div style="position:absolute;width:300px;height:300px;border-radius:50%;border:1px solid rgba(201,168,76,.15);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div style="position:absolute;width:420px;height:420px;border-radius:50%;border:1px solid rgba(196,24,102,.1);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+    <div style="text-align:center;padding:0 70px;position:relative;z-index:2;">
+      <div style="font-size:11px;letter-spacing:.25em;color:${gold};text-transform:uppercase;margin-bottom:22px;">Pronto para o próximo passo?</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:32px;font-weight:500;color:#fff;line-height:1.45;margin-bottom:18px;">
+        Sua análise está completa.<br>Agora é hora de transformar<br>diagnóstico em crescimento real.
+      </div>
+      <div style="font-size:13px;color:#C9B8D0;line-height:1.8;margin-bottom:48px;max-width:480px;margin-left:auto;margin-right:auto;">
+        Fale agora com nossa equipe e descubra o caminho mais rápido para sair de onde você está e chegar na meta que você definiu.
+      </div>
+      <div style="width:${btnBox.w}px;height:${btnBox.h}px;margin:0 auto;background:linear-gradient(135deg,#25D366,#1FAE54);border-radius:14px;display:flex;align-items:center;justify-content:center;gap:12px;box-shadow:0 8px 24px rgba(37,211,102,.4);">
+        <span style="font-size:22px;">💬</span>
+        <span style="font-size:16px;font-weight:700;color:#fff;letter-spacing:.02em;">FALAR NO WHATSAPP AGORA</span>
+      </div>
+      <div style="margin-top:24px;font-size:9px;color:#8A7090;letter-spacing:.04em;">Toque ou clique no botão acima para iniciar a conversa</div>
+    </div>
+    <div style="position:absolute;bottom:36px;left:0;right:0;text-align:center;font-size:8px;color:#5A4860;letter-spacing:.15em;text-transform:uppercase;">MVBusiness &middot; Sistema de Análise de Negócios Digitais</div>
+  </div>`);
+  const ctaPageIndex = pages.length; // página recém-adicionada (1-indexed)
+  const ctaLinkBox = btnBox;
+
   // Combinar todas as páginas em um PDF usando canvas
-  await mergePagesToPDF(pages, `Analise_${data.clientName.replace(/\s+/g,'_')}_${data.id}.pdf`);
+  await mergePagesToPDF(pages, `Analise_${data.clientName.replace(/\s+/g,'_')}_${data.id}.pdf`, { pageIndex: ctaPageIndex, box: ctaLinkBox, url: whatsappLink });
 }
 
 // Combina imagens JPEG em um PDF sem usar jsPDF (pure canvas + Blob)
-async function mergePagesToPDF(pageDataURLs, filename) {
+async function mergePagesToPDF(pageDataURLs, filename, linkInfo) {
   // Usar jsPDF apenas para montar as páginas (sem texto — só imagens)
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
@@ -955,6 +983,16 @@ async function mergePagesToPDF(pageDataURLs, filename) {
     if (i > 0) doc.addPage();
     doc.addImage(url, 'JPEG', 0, 0, 210, 297);
   });
+  // Adiciona área clicável (link) sobre a página indicada
+  if (linkInfo && linkInfo.pageIndex >= 1) {
+    doc.setPage(linkInfo.pageIndex);
+    // Converter coordenadas de pixel (base 794x1123) para mm (A4 = 210x297mm)
+    const mmX = (linkInfo.box.x / 794) * 210;
+    const mmY = (linkInfo.box.y / 1123) * 297;
+    const mmW = (linkInfo.box.w / 794) * 210;
+    const mmH = (linkInfo.box.h / 1123) * 297;
+    doc.link(mmX, mmY, mmW, mmH, { url: linkInfo.url });
+  }
   doc.save(filename);
 }
 
