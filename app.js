@@ -84,73 +84,44 @@ const CHANNELS = {
     label: 'Site / Loja Virtual', color: '#C9A84C',
     potencia: 'Potência do Site',
     fields: [
-      'Design e UX (experiência do usuário)',
-      'Proposta de valor clara',
-      'Qualidade das imagens de produto',
-      'Uso de vídeos na exibição de produto',
-      'Descrição de produtos completa e atrativa',
-      'Formas de pagamento disponíveis',
-      'Velocidade de carregamento',
-      'Segurança (selos, certificados)',
-      'Política de frete',
-      'Preço de frete competitivo',
-      'Política de frete grátis',
-      'Tráfego para o site',
-      'Análise e métricas do site',
-      'Taxa de conversão',
-      'Página Quem Somos estruturada',
-      'Política de troca e devolução',
-      'Banners atualizados com CTA',
-      'Planejamento de ações e campanhas',
+      'De 0 a 5, quanto sua loja virtual deixa claro, logo de início, o que sua marca vende, para quem vende e quais produtos a cliente deve comprar primeiro?',
+      'De 0 a 5, quanto as páginas dos seus produtos ajudam a cliente a decidir a compra, com boas fotos, descrição simples, medidas, materiais, benefícios, preço e informações importantes?',
+      'De 0 a 5, quanto seu site passa segurança para uma pessoa comprar sem precisar chamar no WhatsApp antes?',
+      'De 0 a 5, quanto é fácil comprar pelo celular no seu site, desde encontrar o produto até finalizar o pagamento?',
+      'De 0 a 5, quanto seu site aproveita as visitantes para gerar venda ou contato, usando estratégias como cupom, captura de WhatsApp ou e-mail, carrinho abandonado, combos, produtos relacionados ou remarketing?',
     ]
   },
   insta: {
     label: 'Instagram', color: '#C41866',
     potencia: 'Potência do Instagram',
     fields: [
-      'Identidade visual consistente',
-      'Frequência de publicações',
-      'Taxa de engajamento',
-      'Qualidade do conteúdo (fotos, reels, carrosséis)',
-      'Bio otimizada com CTA claro',
-      'Stories e Highlights estrategicos',
-      'Audiência alinhada ao nicho',
-      'Frequência de Lives',
-      'Existência de automação (ManyChat)',
-      'Legendas com CTAs de ação',
-      'Linha editorial definida',
-      'Alinhamento com persona',
+      'De 0 a 5, quanto o seu Instagram deixa claro, logo nos primeiros segundos, o que sua marca vende, para quem vende e por que a cliente deveria comprar de você?',
+      'De 0 a 5, quanto o seu conteúdo no Instagram faz a cliente desejar seus produtos e entender como eles entram na vida dela?',
+      'De 0 a 5, quanto seus stories têm uma rotina clara de relacionamento, bastidores, prova social, oferta e chamada para compra?',
+      'De 0 a 5, quanto o seu Instagram consegue transformar seguidores em clientes, levando as pessoas para o WhatsApp, site, direct ou grupo de vendas?',
+      'De 0 a 5, quanto você acompanha quais conteúdos trazem mais alcance, engajamento, cliques, directs e vendas?',
     ]
   },
   tiktok: {
     label: 'TikTok / TikTok Shop', color: '#8B6AB8',
     potencia: 'Potência do TikTok',
     fields: [
-      'Consistência e frequência de vídeos',
-      'Taxa de views por video',
-      'Uso de tendências relevantes',
-      'Qualidade de produção dos vídeos',
-      'Loja criada no TikTok Shop',
-      'Quantidade de produtos cadastrados',
-      'Uso de afiliados e quantidade',
-      'Prática de Lives na plataforma',
-      'Cadastro em promoções da plataforma',
-      'Integração de produtos (catálogo)',
-      'Engajamento (comentários, duetos)',
+      'De 0 a 5, quanto sua marca publica vídeos no TikTok com frequência e intenção clara de atrair novas pessoas?',
+      'De 0 a 5, quanto seus vídeos são feitos pensando na linguagem do TikTok, com ganchos rápidos, demonstração do produto, bastidores, tendências ou conteúdos mais espontâneos?',
+      'De 0 a 5, quanto seus vídeos mostram seus produtos de forma clara, com uso, benefício, detalhes, comparação, prova social ou motivo para comprar?',
+      'De 0 a 5, quanto o seu TikTok está conectado com algum caminho de compra, como TikTok Shop, WhatsApp, site, link na bio, live ou afiliados?',
+      'De 0 a 5, quanto você analisa quais vídeos trazem mais visualizações, retenção, cliques, comentários, seguidores e vendas?',
     ]
   },
   whatsapp: {
     label: 'WhatsApp', color: '#4A9E6A',
     potencia: 'Potência do WhatsApp',
     fields: [
-      'Captação e criação de grupos de clientes',
-      'Estrategias de ofertas exclusivas no canal',
-      'Engajamento e relacionamento com leads',
-      'Uso de mensagens com API oficial',
-      'Volume de ofertas criadas no canal',
-      'Uso de catálogo de produtos',
-      'Frequência de broadcasts / disparos',
-      'Automação de mensagens (chatbot)',
+      'De 0 a 5, quanto sua base de contatos no WhatsApp está organizada por tipo de cliente, interesse, compra anterior, origem ou momento de compra?',
+      'De 0 a 5, quanto sua marca capta novos contatos para o WhatsApp de forma constante, vindo do Instagram, TikTok, site, loja física, campanhas ou grupos?',
+      'De 0 a 5, quanto seu atendimento no WhatsApp segue um processo claro, com saudação, entendimento da necessidade, oferta certa, quebra de objeção e fechamento?',
+      'De 0 a 5, quanto você usa o WhatsApp para se relacionar e vender com frequência, através de grupos, listas, lançamentos, pré-vendas, reposições, ofertas exclusivas ou campanhas?',
+      'De 0 a 5, quanto sua marca faz follow-up com quem demonstrou interesse, recupera carrinhos ou conversas perdidas, API oficial e estimula a recompra de quem já comprou?',
     ]
   }
 };
@@ -272,7 +243,6 @@ function collectData() {
     outroNicho: nichos.includes('Outros') ? document.getElementById('outroNicho').value : '',
     objetivo6m: document.getElementById('objetivo6m').value.trim(),
     dificuldade: document.getElementById('dificuldade').value.trim(),
-    orientacoes: document.getElementById('orientacoes').value.trim(),
     channels: {}
   };
   Object.keys(CHANNELS).forEach(ch => {
@@ -299,11 +269,10 @@ function validateData(d) {
   if (!d.phone || d.phone==='+55') return 'Telefone obrigatorio';
   if (!d.email) return 'Email obrigatorio';
   if (!d.revenue) return 'Faturamento obrigatorio';
-  if (!d.goal) return 'Objetivo financeiro obrigatorio';
+  if (!d.goal) return 'Meta de vendas de 2026 obrigatoria';
   if (!d.nichos.length) return 'Selecione pelo menos um nicho';
   if (!d.objetivo6m) return 'Objetivo de 6 meses obrigatorio';
   if (!d.dificuldade) return 'Dificuldade principal obrigatoria';
-  if (!d.orientacoes) return 'Orientacoes do especialista sao obrigatorias';
   return null;
 }
 
@@ -910,12 +879,12 @@ async function gerarPDF(data) {
       const [status,color]=statusInfo(val);
       const barW=(val/5)*100;
       return `<tr style="background:${i%2===0?'#F5EEF8':'#FDFAF8'};">
-        <td style="padding:8px 12px;font-size:10px;color:#1A0820;">${label}</td>
-        <td style="padding:8px 12px;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:80px;height:5px;background:#E8DFF0;border-radius:3px;overflow:hidden;"><div style="height:100%;width:${barW}%;background:${cfg.color};border-radius:3px;"></div></div><span style="font-size:10px;font-weight:700;color:${cfg.color};">${val}/5</span></div></td>
-        <td style="padding:8px 12px;font-size:9px;font-weight:700;color:${color};">${status}</td>
+        <td style="padding:10px 12px;font-size:9px;color:#1A0820;line-height:1.5;width:60%;vertical-align:top;">${label}</td>
+        <td style="padding:10px 12px;vertical-align:top;white-space:nowrap;"><div style="display:flex;align-items:center;gap:6px;"><div style="width:60px;height:5px;background:#E8DFF0;border-radius:3px;overflow:hidden;"><div style="height:100%;width:${barW}%;background:${cfg.color};border-radius:3px;"></div></div><span style="font-size:10px;font-weight:700;color:${cfg.color};">${val}/5</span></div></td>
+        <td style="padding:10px 12px;font-size:8.5px;font-weight:700;color:${color};vertical-align:top;white-space:nowrap;">${status}</td>
       </tr>`;
     }).join('');
-    await renderPage(`${base}<div class="page" style="padding:40px 50px;">
+    await renderPageLonga(`${base}<div style="width:794px;min-height:1123px;padding:40px 50px;background:#FDFAF8;font-family:DM Sans,Arial,sans-serif;">
       <div style="font-size:8px;letter-spacing:.2em;color:#C9A870;text-transform:uppercase;margin-bottom:4px;">MVBusiness &middot; Relatorio de Analise</div>
       <div style="height:1px;background:linear-gradient(90deg,#C41866,${gold},transparent);margin-bottom:20px;"></div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
@@ -932,9 +901,9 @@ async function gerarPDF(data) {
         <div style="height:100%;width:${pct}%;background:${cfg.color};border-radius:3px;"></div>
       </div>
       ${barURLs[ch]?`<div style="background:#F5EEF8;border:1px solid #E0D5EC;border-radius:8px;padding:10px;margin-bottom:16px;"><img src="${barURLs[ch]}" style="width:100%;height:200px;object-fit:contain;"></div>`:''}
-      <table style="width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;">
+      <table style="width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;table-layout:fixed;">
         <thead><tr style="background:#EDE5F5;">
-          <th style="padding:8px 12px;text-align:left;font-size:8px;color:#9B7AB0;text-transform:uppercase;letter-spacing:.1em;">Item Avaliado</th>
+          <th style="padding:8px 12px;text-align:left;font-size:8px;color:#9B7AB0;text-transform:uppercase;letter-spacing:.1em;width:60%;">Item Avaliado</th>
           <th style="padding:8px 12px;text-align:left;font-size:8px;color:#9B7AB0;text-transform:uppercase;letter-spacing:.1em;">Nota</th>
           <th style="padding:8px 12px;text-align:left;font-size:8px;color:#9B7AB0;text-transform:uppercase;letter-spacing:.1em;">Status</th>
         </tr></thead>
@@ -944,7 +913,7 @@ async function gerarPDF(data) {
     </div>`);
   }
 
-  // DIAGNOSTICO + ORIENTACOES
+  // DIAGNOSTICO EXECUTIVO
   // Limpar markdown do Gemini antes de renderizar
   const cleanSummary = (data.aiSummary || '')
     .replace(/\*\*(.*?)\*\*/g, '$1')   // remover **negrito**
@@ -967,11 +936,6 @@ async function gerarPDF(data) {
     <div style="font-size:18px;font-weight:800;color:${brown};margin-bottom:4px;">Diagnóstico Executivo</div>
     <div style="font-size:10px;color:#9B7AB0;font-style:italic;margin-bottom:20px;">Análise gerada automaticamente com base nos dados coletados</div>
     <div style="background:#F5EEF8;border:1px solid #E0D5EC;border-radius:10px;padding:24px;margin-bottom:28px;">${diagHTML}</div>
-    <div style="font-size:18px;font-weight:800;color:${brown};margin-bottom:4px;">Orientações do Especialista</div>
-    <div style="font-size:10px;color:#9B7AB0;font-style:italic;margin-bottom:16px;">${data.especialista} &middot; ${data.date}</div>
-    <div style="background:#F5EEF8;border:1px solid ${gold}55;border-left:3px solid ${gold};border-radius:10px;padding:24px;">
-      ${data.orientacoes.split('\n').map(l=>`<p style="font-size:10px;color:#1A0820;line-height:1.7;margin-bottom:4px;">${l||'&nbsp;'}</p>`).join('')}
-    </div>
     <div style="position:absolute;bottom:24px;left:50px;right:50px;border-top:1px solid #E0D5EC;padding-top:16px;display:flex;justify-content:space-between;">
       <span style="font-size:8px;color:#C0A8D0;">MVBusiness &middot; Sistema de Analise de Negocios Digitais</span>
       <span style="font-size:8px;color:#C0A8D0;">${data.date}</span>
