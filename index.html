@@ -27,6 +27,7 @@
   --insta-color:     #C41866;
   --tiktok-color:    #8B6AB8;
   --whatsapp-color:  #4A9E6A;
+  --figital-color:   #3E8FA0;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
@@ -93,6 +94,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 .channel-badge.insta    { background:rgba(196,24,102,.1);  color:var(--insta-color);    border:1px solid rgba(196,24,102,.25); }
 .channel-badge.tiktok   { background:rgba(139,106,184,.1); color:var(--tiktok-color);   border:1px solid rgba(139,106,184,.25); }
 .channel-badge.whatsapp { background:rgba(74,158,106,.1);  color:var(--whatsapp-color); border:1px solid rgba(74,158,106,.25); }
+.channel-badge.figital  { background:rgba(62,143,160,.1);  color:var(--figital-color);  border:1px solid rgba(62,143,160,.25); }
 
 /* CHANNEL TOGGLE */
 .channel-toggle {
@@ -455,6 +457,24 @@ tr:hover td { background:rgba(196,24,102,.03); }
       </div>
     </div>
 
+    <!-- FIGITAL -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-icon">📍</span>
+        <div><div class="section-title">Análise Figital</div><div class="section-sub">Parcerias, eventos e ações presenciais que geram alcance digital</div></div>
+      </div>
+      <div class="channel-badge figital">Figital (Presencial + Digital)</div>
+      <div class="channel-toggle">
+        <input type="checkbox" id="figitalDisabled" onchange="toggleChannel('figital', this.checked)">
+        <label for="figitalDisabled">Cliente <strong>NÃO realiza</strong> ações presenciais ou parcerias locais</label>
+      </div>
+      <div id="figitalContent" class="channel-content">
+        <div id="figitalRatings"></div>
+        <button class="add-field-btn" onclick="addCustomField('figital')">+ Adicionar campo personalizado</button>
+        <div id="customFields-figital"></div>
+      </div>
+    </div>
+
     <div class="action-bar">
       <button class="btn btn-primary" onclick="gerarRelatorio()">Gerar Diagnostico + PDF</button>
       <button class="btn btn-outline" onclick="limparForm()">Limpar Formulário</button>
@@ -528,6 +548,6 @@ tr:hover td { background:rgba(196,24,102,.03); }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="app.js?v=25"></script>
+<script src="app.js?v=26"></script>
 </body>
 </html>

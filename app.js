@@ -123,12 +123,23 @@ const CHANNELS = {
       'De 0 a 5, quanto você usa o WhatsApp para se relacionar e vender com frequência, através de grupos, listas, lançamentos, pré-vendas, reposições, ofertas exclusivas ou campanhas?',
       'De 0 a 5, quanto sua marca faz follow-up com quem demonstrou interesse, recupera carrinhos ou conversas perdidas, API oficial e estimula a recompra de quem já comprou?',
     ]
+  },
+  figital: {
+    label: 'Figital (Presencial + Digital)', color: '#3E8FA0',
+    potencia: 'Potência Figital',
+    fields: [
+      'De 0 a 5, quanto sua marca cria parcerias com lojas, profissionais, influenciadoras, marcas ou negócios da sua cidade para atrair novos clientes?',
+      'De 0 a 5, quanto sua marca realiza eventos, encontros, lançamentos, cafés, provadores, experiências ou momentos especiais para se aproximar das clientes e gerar venda?',
+      'De 0 a 5, quanto sua marca participa de eventos, feiras, bazares, encontros ou ações presenciais do seu segmento para captar novos clientes?',
+      'De 0 a 5, quanto sua marca aproveita atendimentos presenciais, eventos, loja física, entregas ou encontros para captar contatos no WhatsApp, Instagram ou lista de clientes?',
+      'De 0 a 5, quanto suas ações presenciais são divulgadas, acompanhadas e reaproveitadas no Instagram, WhatsApp, TikTok ou site para gerar mais alcance e vendas?',
+    ]
   }
 };
 
 const state = {
-  ratings: { site:{}, insta:{}, tiktok:{}, whatsapp:{} },
-  disabled: { site:false, insta:false, tiktok:false, whatsapp:false },
+  ratings: { site:{}, insta:{}, tiktok:{}, whatsapp:{}, figital:{} },
+  disabled: { site:false, insta:false, tiktok:false, whatsapp:false, figital:false },
 };
 
 document.addEventListener('DOMContentLoaded', () => {
